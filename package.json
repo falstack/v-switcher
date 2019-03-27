@@ -1,0 +1,38 @@
+{
+  "name": "vue-layout-tab",
+  "version": "0.1.15",
+  "main": "dist/vue-layout-tab.umd.min.js",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "vue",
+    "layout",
+    "tab"
+  ],
+  "author": "falstack <icesilt@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/falstack/vue-layout-tab/issues"
+  },
+  "homepage": "https://github.com/falstack/vue-layout-tab",
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "build": "vue-cli-service build --target lib --name vue-layout-tab src/VueLayoutTab.vue",
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit"
+  },
+  "dependencies": {
+    "vue": "^2.6.6"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.5.0",
+    "@vue/cli-plugin-eslint": "^3.5.0",
+    "@vue/cli-service": "^3.5.0",
+    "@vue/eslint-config-prettier": "^4.0.1",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "vue-template-compiler": "^2.5.21"
+  }
+}
