@@ -10,7 +10,29 @@
 export default {
   name: 'VueLayoutTab',
   components: {},
-  props: {},
+  props: {
+    headers: {
+      type: Array,
+      required: true
+    },
+    defaultIndex: {
+      type: Number,
+      default: 0
+    },
+    routable: {
+      type: Boolean,
+      default: false
+    },
+    anchor: {
+      type: Boolean,
+      default: true
+    },
+    align: {
+      type: String,
+      default: 'around',
+      validate: val => ~['around', 'start', 'center', 'end'].indexOf(val)
+    }
+  },
   data() {
     return {}
   },
