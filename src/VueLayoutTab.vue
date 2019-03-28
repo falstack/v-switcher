@@ -1,10 +1,10 @@
 <style lang="scss">
 .tab-container {
-  > header {
+  &-header {
     font-size: 0;
     border-bottom: 1px solid #f0f0f0;
 
-    div {
+    &-item {
       display: inline-block;
       height: 40px;
       line-height: 40px;
