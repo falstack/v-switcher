@@ -13,6 +13,12 @@
 
     &-start {
       text-align: left;
+      display: flex;
+      flex-direction: row;
+
+      .tab-header-item {
+        flex-shrink: 0;
+      }
     }
 
     &-end {
