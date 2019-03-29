@@ -20,6 +20,7 @@ body {
     <VueLayoutTable
       :headers="headers"
       :default-index="1"
+      :animated="true"
     >
       <template slot="0">
         第一个tab

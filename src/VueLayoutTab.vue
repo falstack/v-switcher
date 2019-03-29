@@ -1,5 +1,7 @@
 <style lang="scss">
 .tab {
+  overflow: hidden;
+
   &-header {
     position: relative;
     font-size: 0;
@@ -20,7 +22,8 @@
     &-anchor {
       position: absolute;
       left: 0;
-      transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+      transition-property: transform;
+      transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
     }
 
     &-item {
@@ -48,6 +51,15 @@
       }
     }
   }
+
+  &-content {
+    &-animated {
+      display: flex;
+      flex-direction: row;
+      transition-property: transform;
+      transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+    }
+  }
 }
 </style>
 
@@ -70,10 +82,15 @@
         <slot name="anchor"></slot>
       </div>
     </div>
-    <div v-if="!routable" class="tab-content">
+    <div
+      v-if="!routable"
+      class="tab-content"
+      :class="{ 'tab-content-animated': animated }"
+      :style="computeContentStyle"
+    >
       <div
         v-for="(item, index) in headers"
-        v-show="index === focusIndex"
+        :style="computePanelStyle(index)"
         :key="index"
         class="tab-body-panel"
       >
@@ -104,6 +121,14 @@ export default {
       type: Boolean,
       default: true
     },
+    animated: {
+      type: Boolean,
+      default: false
+    },
+    duration: {
+      type: Number,
+      default: 300
+    },
     align: {
       type: String,
       default: 'around',
@@ -127,7 +152,23 @@ export default {
       if (this.align !== 'around') {
         return {}
       }
-      return { width: `${100 / this.headers.length}%` }
+      return this.aroundHeaderWidth
+    },
+    aroundHeaderWidth() {
+      return {
+        width: `${100 / this.headers.length}%`
+      }
+    },
+    computeContentStyle() {
+      if (this.animated) {
+        return {
+          width: `${this.headers.length * 100}%`,
+          transform: `translateX(${(this.focusIndex / this.headers.length) *
+            -100}%)`,
+          transitionDuration: `${this.duration}ms`
+        }
+      }
+      return {}
     }
   },
   watch: {
@@ -140,18 +181,30 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.bindAnchor(this.focusIndex)
+      this.computeAnchorStyle(this.focusIndex)
     })
   },
   methods: {
-    bindAnchor(index) {
+    computePanelStyle(index) {
+      if (this.animated) {
+        return this.aroundHeaderWidth
+      }
+      if (this.focusIndex !== index) {
+        return {
+          display: 'none'
+        }
+      }
+      return {}
+    },
+    computeAnchorStyle(index) {
       if (!this.anchor) {
         return
       }
       const tab = this.$refs.tab[index]
       this.anchorStyle = {
         width: `${tab.offsetWidth}px`,
-        transform: `translateX(${tab.offsetLeft}px)`
+        transform: `translateX(${tab.offsetLeft}px)`,
+        transitionDuration: `${this.duration}ms`
       }
     },
     computeItemText(item) {
@@ -178,7 +231,7 @@ export default {
       }
       this.focusIndex = index
       this.$emit('change', index)
-      this.bindAnchor(index)
+      this.computeAnchorStyle(index)
     }
   }
 }
