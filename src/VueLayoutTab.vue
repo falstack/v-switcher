@@ -3,13 +3,22 @@
   transition-property: transform;
   transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
 }
+
+$default-header-height: 40px;
+$default-border-height: 1px;
+
 .tab {
   overflow: hidden;
 
   &-header {
     position: relative;
     font-size: 0;
-    border-bottom: 1px solid #e7e7e7;
+
+    &-wrap {
+      height: $default-header-height;
+      border-bottom: $default-border-height solid #e7e7e7;
+      box-sizing: border-box;
+    }
 
     &-center {
       text-align: center;
@@ -37,12 +46,13 @@
     }
 
     &-item {
+      height: 100%;
       display: inline-block;
-      height: 40px;
-      line-height: 40px;
+      line-height: $default-header-height - $default-border-height;
       text-align: center;
       font-size: 13px;
       color: #757575;
+      background-color: #fff;
 
       &.is-active {
         position: relative;
@@ -74,21 +84,27 @@
 
 <template>
   <div class="tab">
-    <div class="tab-header" :class="`tab-header-${align}`" :style="headerStyle">
+    <div class="tab-header-wrap">
       <div
-        v-for="(item, index) in headers"
-        :key="index"
-        :class="{ 'is-active': index === focusIndex }"
-        :style="headerItemStyle"
-        ref="tab"
-        class="tab-header-item"
-        @click="handleTabSwitch(index)"
+        class="tab-header"
+        :class="`tab-header-${align}`"
+        :style="headerStyle"
       >
-        <i v-if="computeItemIcon(item)" :class="computeItemIcon(item)"></i>
-        <span v-text="computeItemText(item)"></span>
-      </div>
-      <div class="tab-header-anchor" :style="anchorStyle">
-        <slot name="anchor"></slot>
+        <div
+          v-for="(item, index) in headers"
+          :key="index"
+          :class="{ 'is-active': index === focusIndex }"
+          :style="headerItemStyle"
+          ref="tab"
+          class="tab-header-item"
+          @click="handleTabSwitch(index)"
+        >
+          <i v-if="computeItemIcon(item)" :class="computeItemIcon(item)"></i>
+          <span v-text="computeItemText(item)"></span>
+        </div>
+        <div class="tab-header-anchor" :style="anchorStyle">
+          <slot name="anchor"></slot>
+        </div>
       </div>
     </div>
     <div

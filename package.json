@@ -1,6 +1,6 @@
 {
   "name": "vue-layout-tab",
-  "version": "0.1.15",
+  "version": "0.1.0",
   "main": "dist/vue-layout-tab.umd.min.js",
   "files": [
     "dist"

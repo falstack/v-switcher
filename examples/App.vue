@@ -2,6 +2,12 @@
 body {
   margin: 0;
 
+  .banner {
+    height: 200px;
+    background-color: #4fc08d;
+    color: #fff;
+  }
+
   .tab {
     &-header {
       &-anchor {
@@ -21,14 +27,114 @@ body {
 
 <template>
   <div id="app">
-    <VueLayoutTable
+    <div class="banner">vue layout tab</div>
+    <VueLayoutTab
       :headers="headers"
       :default-index="1"
       :animated="true"
       align="start"
     >
       <template slot="0">
-        第一个tab
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
+        <p>100</p>
       </template>
       <template slot="1">
         第二个tab
@@ -54,17 +160,17 @@ body {
       <template slot="8">
         第九个tab
       </template>
-    </VueLayoutTable>
+    </VueLayoutTab>
   </div>
 </template>
 
 <script>
-import VueLayoutTable from '../src/VueLayoutTab'
+import VueLayoutTab from '../src/VueLayoutTab'
 
 export default {
   name: 'app',
   components: {
-    VueLayoutTable
+    VueLayoutTab
   },
   data() {
     return {
