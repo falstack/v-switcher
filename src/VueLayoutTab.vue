@@ -114,6 +114,9 @@ $default-border-height: 1px;
         :class="`tab-header-${align}`"
         :style="headerStyle"
       >
+        <div class="tab-header-anchor" :style="anchorStyle">
+          <slot name="anchor"></slot>
+        </div>
         <div
           v-for="(item, index) in headers"
           :key="index"
@@ -125,9 +128,6 @@ $default-border-height: 1px;
         >
           <i v-if="computeItemIcon(item)" :class="computeItemIcon(item)"></i>
           <span v-text="computeItemText(item)"></span>
-        </div>
-        <div class="tab-header-anchor" :style="anchorStyle">
-          <slot name="anchor"></slot>
         </div>
       </div>
     </div>
