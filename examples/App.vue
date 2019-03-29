@@ -13,12 +13,8 @@ body {
       &-anchor {
         bottom: 0;
         height: 100%;
-        background-color: #f25d8e;
+        background-color: #ff6881;
         opacity: 0.1;
-      }
-
-      &-item {
-        padding: 0 20px;
       }
     }
   }

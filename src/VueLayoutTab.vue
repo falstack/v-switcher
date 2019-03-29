@@ -16,7 +16,7 @@ $default-border-height: 1px;
 
     &-wrap {
       height: $default-header-height;
-      border-bottom: $default-border-height solid #e7e7e7;
+      border-bottom: $default-border-height solid #e5e5e5;
       box-sizing: border-box;
     }
 
@@ -35,6 +35,13 @@ $default-border-height: 1px;
       }
     }
 
+    &-center,
+    &-start {
+      .tab-header-item {
+        padding: 0 25px;
+      }
+    }
+
     &-end {
       text-align: right;
     }
@@ -50,22 +57,22 @@ $default-border-height: 1px;
       display: inline-block;
       line-height: $default-header-height - $default-border-height;
       text-align: center;
-      font-size: 13px;
-      color: #757575;
-      background-color: #fff;
+      font-size: 15px;
+      color: #657786;
 
       &.is-active {
         position: relative;
-        color: #f25d8e;
+        color: #14171a;
 
         &:after {
           content: '';
           position: absolute;
           bottom: 0;
           left: 50%;
-          width: 56px;
+          width: 48px;
           max-width: 100%;
-          border-bottom: 2px solid #f25d8e;
+          border-bottom: 4px solid #ff6881;
+          border-radius: 2px;
           transform: translateX(-50%);
         }
       }
