@@ -1,4 +1,8 @@
 <style lang="scss">
+@mixin transition {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
 .tab {
   overflow: hidden;
 
@@ -15,6 +19,7 @@
       text-align: left;
       display: flex;
       flex-direction: row;
+      @include transition();
 
       .tab-header-item {
         flex-shrink: 0;
@@ -28,8 +33,7 @@
     &-anchor {
       position: absolute;
       left: 0;
-      transition-property: transform;
-      transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+      @include transition();
     }
 
     &-item {
@@ -62,8 +66,7 @@
     &-animated {
       display: flex;
       flex-direction: row;
-      transition-property: transform;
-      transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+      @include transition();
     }
   }
 }
@@ -71,7 +74,7 @@
 
 <template>
   <div class="tab">
-    <div class="tab-header" :class="`tab-header-${align}`">
+    <div class="tab-header" :class="`tab-header-${align}`" :style="headerStyle">
       <div
         v-for="(item, index) in headers"
         :key="index"
@@ -92,7 +95,7 @@
       v-if="!routable"
       class="tab-content"
       :class="{ 'tab-content-animated': animated }"
-      :style="computeContentStyle"
+      :style="contentStyle"
     >
       <div
         v-for="(item, index) in headers"
@@ -150,10 +153,15 @@ export default {
     }
     return {
       focusIndex,
-      anchorStyle: {}
+      anchorStyle: {},
+      headerStyle: {},
+      headerLeft: 0
     }
   },
   computed: {
+    headerCount() {
+      return this.headers.length
+    },
     headerItemStyle() {
       if (this.align !== 'around') {
         return {}
@@ -162,14 +170,14 @@ export default {
     },
     aroundHeaderWidth() {
       return {
-        width: `${100 / this.headers.length}%`
+        width: `${100 / this.headerCount}%`
       }
     },
-    computeContentStyle() {
+    contentStyle() {
       if (this.animated) {
         return {
-          width: `${this.headers.length * 100}%`,
-          transform: `translateX(${(this.focusIndex / this.headers.length) *
+          width: `${this.headerCount * 100}%`,
+          transform: `translateX(${(this.focusIndex / this.headerCount) *
             -100}%)`,
           transitionDuration: `${this.duration}ms`
         }
@@ -187,10 +195,45 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.computeAnchorStyle(this.focusIndex)
+      this.computeAnchorStyle()
+      this.computeHeaderStyle(0)
     })
   },
   methods: {
+    computeHeaderStyle(lastFocusIndex) {
+      if (this.align !== 'start') {
+        return
+      }
+      const index = this.focusIndex
+      const tabs = this.$refs.tab
+      const isToRight = index > lastFocusIndex
+      let checkTab
+      if (isToRight) {
+        checkTab =
+          index === this.headerCount - 1 ? tabs[index] : tabs[index + 1]
+      } else {
+        checkTab = index ? tabs[index - 1] : tabs[0]
+      }
+      const { offsetLeft, offsetWidth } = checkTab
+      const { innerWidth } = window
+      const rect = checkTab.getBoundingClientRect()
+      let left = this.headerLeft
+      if (
+        isToRight &&
+        !(rect.left < innerWidth && rect.right < innerWidth) &&
+        offsetWidth + offsetLeft > innerWidth
+      ) {
+        left = innerWidth - offsetWidth - offsetLeft
+      }
+      if (!isToRight && (rect.left < 0 || rect.right < 0)) {
+        left = -offsetLeft
+      }
+      this.headerLeft = left
+      this.headerStyle = {
+        transform: `translateX(${left}px)`,
+        transitionDuration: `${this.duration}ms`
+      }
+    },
     computePanelStyle(index) {
       if (this.animated) {
         return this.aroundHeaderWidth
@@ -202,11 +245,11 @@ export default {
       }
       return {}
     },
-    computeAnchorStyle(index) {
+    computeAnchorStyle() {
       if (!this.anchor) {
         return
       }
-      const tab = this.$refs.tab[index]
+      const tab = this.$refs.tab[this.focusIndex]
       this.anchorStyle = {
         width: `${tab.offsetWidth}px`,
         transform: `translateX(${tab.offsetLeft}px)`,
@@ -235,9 +278,11 @@ export default {
           params: this.$route.params
         })
       }
+      const lastIndex = this.focusIndex
       this.focusIndex = index
       this.$emit('change', index)
-      this.computeAnchorStyle(index)
+      this.computeAnchorStyle()
+      this.computeHeaderStyle(lastIndex)
     }
   }
 }
