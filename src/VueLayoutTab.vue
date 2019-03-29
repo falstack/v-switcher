@@ -1,20 +1,38 @@
 <style lang="scss">
-.tab-container {
+.tab {
   &-header {
+    position: relative;
     font-size: 0;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #e7e7e7;
+
+    &-center {
+      text-align: center;
+    }
+
+    &-start {
+      text-align: left;
+    }
+
+    &-end {
+      text-align: right;
+    }
+
+    &-anchor {
+      position: absolute;
+      left: 0;
+    }
 
     &-item {
       display: inline-block;
       height: 40px;
       line-height: 40px;
       text-align: center;
-      font-size: 14px;
-      color: gray;
+      font-size: 13px;
+      color: #757575;
 
       &.is-active {
         position: relative;
-        color: #f25d8e !important;
+        color: #f25d8e;
 
         &:after {
           content: '';
@@ -23,22 +41,8 @@
           left: 50%;
           width: 56px;
           max-width: 100%;
-          border-bottom: 1px solid #f25d8e;
+          border-bottom: 2px solid #f25d8e;
           transform: translateX(-50%);
-        }
-
-        &:before {
-          content: '';
-          position: absolute;
-          margin-left: -3px;
-          left: 50%;
-          bottom: 1px;
-          width: 0;
-          height: 0;
-          border: 3px solid #f25d8e;
-          border-top-width: 0;
-          border-left-color: transparent;
-          border-right-color: transparent;
         }
       }
     }
@@ -47,34 +51,32 @@
 </style>
 
 <template>
-  <section class="tab-container">
-    <div class="tab-container-header">
+  <div class="tab">
+    <div class="tab-header" :class="`tab-header-${align}`">
       <div
         v-for="(item, index) in headers"
         :key="index"
         :class="{ 'is-active': index === focusIndex }"
-        :style="{ width: `${100 / headers.length}%` }"
-        class="tab-container-header-item"
+        :style="headerItemStyle"
+        class="tab-header-item"
         @click="handleTabSwitch(index)"
       >
-        <i v-if="computeItemIcon(item)" :class="computeItemIcon(item)" ></i>
-        <span v-text="computeItemText(item)" ></span>
+        <i v-if="computeItemIcon(item)" :class="computeItemIcon(item)"></i>
+        <span v-text="computeItemText(item)"></span>
       </div>
+      <div class="tab-header-anchor"></div>
     </div>
-    <div
-      v-if="!routable"
-      class="tab-container-body"
-    >
+    <div v-if="!routable" class="tab-content">
       <div
         v-for="(item, index) in headers"
         v-show="index === focusIndex"
         :key="index"
-        class="tab-container-body-panel"
+        class="tab-body-panel"
       >
         <slot :name="index" />
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -115,6 +117,14 @@ export default {
       focusIndex
     }
   },
+  computed: {
+    headerItemStyle() {
+      if (this.align !== 'around') {
+        return {}
+      }
+      return { width: `${100 / this.headers.length}%` }
+    }
+  },
   watch: {
     $route(newVal) {
       this.focusIndex = this.headers.map(_ => _.route).indexOf(newVal.name)
@@ -123,7 +133,18 @@ export default {
       this.focusIndex = newVal.map(_ => _.route).indexOf(this.$route.name)
     }
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.bindAnchor(this.focusIndex)
+    })
+  },
   methods: {
+    bindAnchor(index) {
+      if (!this.anchor) {
+        return
+      }
+      console.log(index)
+    },
     computeItemText(item) {
       if (typeof item === 'string') {
         return item
@@ -148,6 +169,7 @@ export default {
       }
       this.focusIndex = index
       this.$emit('change', index)
+      this.bindAnchor(index)
     }
   }
 }
