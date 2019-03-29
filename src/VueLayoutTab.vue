@@ -79,6 +79,23 @@ $default-border-height: 1px;
       @include transition();
     }
   }
+
+  &-content-swipe {
+    overflow: hidden;
+    visibility: hidden;
+    position: relative;
+
+    .tab-content {
+      overflow: hidden;
+      position: relative;
+
+      &-panel {
+        float: left;
+        width: 100%;
+        position: relative;
+      }
+    }
+  }
 }
 </style>
 
@@ -107,25 +124,28 @@ $default-border-height: 1px;
         </div>
       </div>
     </div>
-    <div
-      v-if="!routable"
-      class="tab-content"
-      :class="{ 'tab-content-animated': animated }"
-      :style="contentStyle"
-    >
+    <div v-if="!routable" :class="{ 'tab-content-swipe': swipe }" ref="content">
       <div
-        v-for="(item, index) in headers"
-        :style="computePanelStyle(index)"
-        :key="index"
-        class="tab-body-panel"
+        class="tab-content"
+        :class="{ 'tab-content-animated': animated && !swipe }"
+        :style="contentStyle"
       >
-        <slot :name="index" />
+        <div
+          v-for="(item, index) in headers"
+          :style="computePanelStyle(index)"
+          :key="index"
+          class="tab-content-panel"
+        >
+          <slot :name="index" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Swipe from './swipe'
+
 export default {
   name: 'VueLayoutTab',
   components: {},
@@ -158,6 +178,10 @@ export default {
       type: String,
       default: 'around',
       validate: val => ~['around', 'start', 'center', 'end'].indexOf(val)
+    },
+    swipe: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -171,7 +195,8 @@ export default {
       focusIndex,
       anchorStyle: {},
       headerStyle: {},
-      headerLeft: 0
+      headerLeft: 0,
+      swiper: null
     }
   },
   computed: {
@@ -190,6 +215,9 @@ export default {
       }
     },
     contentStyle() {
+      if (this.swipe) {
+        return {}
+      }
       if (this.animated) {
         return {
           width: `${this.headerCount * 100}%`,
@@ -213,9 +241,27 @@ export default {
     this.$nextTick(() => {
       this.computeAnchorStyle()
       this.computeHeaderStyle(0)
+      this.initSwiper()
     })
   },
   methods: {
+    initSwiper() {
+      if (!this.swipe) {
+        return
+      }
+      this.swiper = Swipe(this.$refs.content, {
+        startSlide: this.focusIndex,
+        speed: this.duration,
+        continuous: false,
+        callback: this.handleTabSwitch
+      })
+    },
+    moveSwiper() {
+      if (!this.swipe) {
+        return
+      }
+      this.swiper.slide(this.focusIndex, this.duration)
+    },
     computeHeaderStyle(lastFocusIndex) {
       if (this.align !== 'start') {
         return
@@ -251,6 +297,9 @@ export default {
       }
     },
     computePanelStyle(index) {
+      if (this.swipe) {
+        return {}
+      }
       if (this.animated) {
         return this.aroundHeaderWidth
       }
@@ -299,6 +348,7 @@ export default {
       this.$emit('change', index)
       this.computeAnchorStyle()
       this.computeHeaderStyle(lastIndex)
+      this.moveSwiper()
     }
   }
 }

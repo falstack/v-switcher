@@ -32,6 +32,7 @@ body {
       :headers="headers"
       :default-index="1"
       :animated="true"
+      :swipe="true"
       align="start"
     >
       <template slot="0">
