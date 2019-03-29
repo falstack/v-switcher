@@ -20,6 +20,7 @@
     &-anchor {
       position: absolute;
       left: 0;
+      transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
     }
 
     &-item {
@@ -58,13 +59,16 @@
         :key="index"
         :class="{ 'is-active': index === focusIndex }"
         :style="headerItemStyle"
+        ref="tab"
         class="tab-header-item"
         @click="handleTabSwitch(index)"
       >
         <i v-if="computeItemIcon(item)" :class="computeItemIcon(item)"></i>
         <span v-text="computeItemText(item)"></span>
       </div>
-      <div class="tab-header-anchor"></div>
+      <div class="tab-header-anchor" :style="anchorStyle">
+        <slot name="anchor"></slot>
+      </div>
     </div>
     <div v-if="!routable" class="tab-content">
       <div
@@ -114,7 +118,8 @@ export default {
       focusIndex = this.defaultIndex
     }
     return {
-      focusIndex
+      focusIndex,
+      anchorStyle: {}
     }
   },
   computed: {
@@ -143,7 +148,11 @@ export default {
       if (!this.anchor) {
         return
       }
-      console.log(index)
+      const tab = this.$refs.tab[index]
+      this.anchorStyle = {
+        width: `${tab.offsetWidth}px`,
+        transform: `translateX(${tab.offsetLeft}px)`
+      }
     },
     computeItemText(item) {
       if (typeof item === 'string') {

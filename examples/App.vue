@@ -6,8 +6,9 @@ body {
     &-header {
       &-anchor {
         bottom: 0;
-        height: 2px;
+        height: 100%;
         background-color: #f25d8e;
+        opacity: 0.1;
       }
     }
   }
