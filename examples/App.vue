@@ -23,15 +23,22 @@ body {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    padding-top: 10px;
 
     li {
-      display: block;
-      height: 100px;
-      line-height: 100px;
-      margin: 10px 0;
-      padding-left: 50px;
-      background-color: #d3d3d3;
+      padding: 0 10px 10px;
+
+      div {
+        height: 100px;
+        line-height: 100px;
+        text-align: center;
+        border-radius: 5px;
+      }
     }
+  }
+
+  .end {
+    text-align: center;
   }
 }
 </style>
@@ -43,25 +50,19 @@ body {
       :headers="headers"
       :default-index="0"
       :animated="true"
-      :swipe="true"
+      :sticky="true"
       align="start"
     >
       <template slot="0">
-        <VueScroll
-          :data="list"
-          :refresh="test"
-          :load-more="getData"
-        >
+        <VueScroll :data="list" :refresh="test" :load-more="getData">
           <ul class="demo-list">
-            <li
-              v-for="item in list"
-              :key="item.id"
-              :style="{ width: `${item.width}px`, backgroundColor: item.style.color }"
-            >
-              {{ item.index + 1 }}
+            <li v-for="item in list" :key="item.id">
+              <div :style="{ backgroundColor: item.style.color }">
+                {{ item.index + 1 }}
+              </div>
             </li>
           </ul>
-          <div>- end -</div>
+          <div class="end">- end -</div>
         </VueScroll>
       </template>
       <template slot="1">
@@ -169,75 +170,47 @@ body {
         <p>end</p>
       </template>
       <template slot="2">
-        <VueScroll
-          :data="list"
-          :refresh="test"
-          :load-more="getData"
-        >
+        <VueScroll :data="list" :refresh="test" :load-more="getData">
           <ul class="demo-list">
-            <li
-              v-for="item in list"
-              :key="item.id"
-              :style="{ width: `${item.width}px`, backgroundColor: item.style.color }"
-            >
-              {{ item.index + 1 }}
+            <li v-for="item in list" :key="item.id">
+              <div :style="{ backgroundColor: item.style.color }">
+                {{ item.index + 1 }}
+              </div>
             </li>
           </ul>
-          <div>- end -</div>
         </VueScroll>
       </template>
       <template slot="3">
-        <VueScroll
-          :data="list"
-          :refresh="test"
-          :load-more="getData"
-        >
+        <VueScroll :data="list" :refresh="test" :load-more="getData">
           <ul class="demo-list">
-            <li
-              v-for="item in list"
-              :key="item.id"
-              :style="{ width: `${item.width}px`, backgroundColor: item.style.color }"
-            >
-              {{ item.index + 1 }}
+            <li v-for="item in list" :key="item.id">
+              <div :style="{ backgroundColor: item.style.color }">
+                {{ item.index + 1 }}
+              </div>
             </li>
           </ul>
-          <div>- end -</div>
         </VueScroll>
       </template>
       <template slot="4">
-        <VueScroll
-          :data="list"
-          :refresh="test"
-          :load-more="getData"
-        >
+        <VueScroll :data="list" :refresh="test" :load-more="getData">
           <ul class="demo-list">
-            <li
-              v-for="item in list"
-              :key="item.id"
-              :style="{ width: `${item.width}px`, backgroundColor: item.style.color }"
-            >
-              {{ item.index + 1 }}
+            <li v-for="item in list" :key="item.id">
+              <div :style="{ backgroundColor: item.style.color }">
+                {{ item.index + 1 }}
+              </div>
             </li>
           </ul>
-          <div>- end -</div>
         </VueScroll>
       </template>
       <template slot="5">
-        <VueScroll
-          :data="list"
-          :refresh="test"
-          :load-more="getData"
-        >
+        <VueScroll :data="list" :refresh="test" :load-more="getData">
           <ul class="demo-list">
-            <li
-              v-for="item in list"
-              :key="item.id"
-              :style="{ width: `${item.width}px`, backgroundColor: item.style.color }"
-            >
-              {{ item.index + 1 }}
+            <li v-for="item in list" :key="item.id">
+              <div :style="{ backgroundColor: item.style.color }">
+                {{ item.index + 1 }}
+              </div>
             </li>
           </ul>
-          <div>- end -</div>
         </VueScroll>
       </template>
       <template slot="6">

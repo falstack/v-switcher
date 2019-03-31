@@ -5,7 +5,11 @@
 </style>
 
 <template>
-  <div class="vue-scroll"><slot></slot></div>
+  <div class="vue-scroll">
+    <div>
+      <slot></slot>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -56,7 +60,7 @@ export default {
       if (this.loadMore) {
         this.scroll.on('scrollEnd', () => {
           // 滚动到底部
-          if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+          if (this.scroll.y <= this.scroll.maxScrollY + 50) {
             this.loadMore()
           }
         })

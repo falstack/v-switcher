@@ -13,6 +13,7 @@ $default-border-height: 1px;
   &-header {
     position: relative;
     font-size: 0;
+    z-index: 1;
 
     &-wrap {
       height: $default-header-height;
@@ -86,8 +87,9 @@ $default-border-height: 1px;
       @include transition();
     }
 
-    &-scroll {
+    &-sticky {
       height: 100vh;
+      box-sizing: border-box;
 
       .tab-content-panel {
         height: 100%;
@@ -147,7 +149,7 @@ $default-border-height: 1px;
         class="tab-content"
         :class="[
           { 'tab-content-animated': animated && !swipe },
-          { 'tab-content-scroll': useBetterScroll }
+          { 'tab-content-sticky': sticky }
         ]"
         :style="contentStyle"
       >
@@ -206,6 +208,10 @@ export default {
     swipe: {
       type: Boolean,
       default: false
+    },
+    sticky: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -239,9 +245,10 @@ export default {
       }
     },
     contentStyle() {
-      const style = {
-        paddingTop: `${this.tabHeight}px`,
-        marginTop: `-${this.tabHeight}px`
+      const style = {}
+      if (this.sticky) {
+        style.paddingTop = `${this.tabHeight}px`
+        style.marginTop = `-${this.tabHeight}px`
       }
       if (this.swipe) {
         return style
@@ -253,12 +260,6 @@ export default {
         style.transitionDuration = `${this.duration}ms`
       }
       return style
-    },
-    useBetterScroll() {
-      if (this.$isServer) {
-        return false
-      }
-      return 'ontouchstart' in document.documentElement && this.swipe
     }
   },
   watch: {
