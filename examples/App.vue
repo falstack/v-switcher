@@ -61,22 +61,184 @@ body {
               {{ item.index + 1 }}
             </li>
           </ul>
+          <div>- end -</div>
         </VueScroll>
       </template>
       <template slot="1">
-        第二个tab
+        <p>start</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>123</p>
+        <p>end</p>
       </template>
       <template slot="2">
-        第三个tab
+        <VueScroll
+          :data="list"
+          :refresh="test"
+          :load-more="getData"
+        >
+          <ul class="demo-list">
+            <li
+              v-for="item in list"
+              :key="item.id"
+              :style="{ width: `${item.width}px`, backgroundColor: item.style.color }"
+            >
+              {{ item.index + 1 }}
+            </li>
+          </ul>
+          <div>- end -</div>
+        </VueScroll>
       </template>
       <template slot="3">
-        第四个tab
+        <VueScroll
+          :data="list"
+          :refresh="test"
+          :load-more="getData"
+        >
+          <ul class="demo-list">
+            <li
+              v-for="item in list"
+              :key="item.id"
+              :style="{ width: `${item.width}px`, backgroundColor: item.style.color }"
+            >
+              {{ item.index + 1 }}
+            </li>
+          </ul>
+          <div>- end -</div>
+        </VueScroll>
       </template>
       <template slot="4">
-        第五个tab
+        <VueScroll
+          :data="list"
+          :refresh="test"
+          :load-more="getData"
+        >
+          <ul class="demo-list">
+            <li
+              v-for="item in list"
+              :key="item.id"
+              :style="{ width: `${item.width}px`, backgroundColor: item.style.color }"
+            >
+              {{ item.index + 1 }}
+            </li>
+          </ul>
+          <div>- end -</div>
+        </VueScroll>
       </template>
       <template slot="5">
-        第六个tab
+        <VueScroll
+          :data="list"
+          :refresh="test"
+          :load-more="getData"
+        >
+          <ul class="demo-list">
+            <li
+              v-for="item in list"
+              :key="item.id"
+              :style="{ width: `${item.width}px`, backgroundColor: item.style.color }"
+            >
+              {{ item.index + 1 }}
+            </li>
+          </ul>
+          <div>- end -</div>
+        </VueScroll>
       </template>
       <template slot="6">
         第七个tab

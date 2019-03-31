@@ -91,6 +91,8 @@ $default-border-height: 1px;
 
       .tab-content-panel {
         height: 100%;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
       }
     }
   }
