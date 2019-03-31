@@ -51,6 +51,7 @@ body {
       :default-index="0"
       :animated="true"
       :sticky="true"
+      :swipe="true"
       align="start"
     >
       <template slot="0">
@@ -255,7 +256,7 @@ export default {
   },
   methods: {
     test() {
-      console.log('test')
+      console.log('refresh')
     },
     getData() {
       return new Promise(resolve => {
