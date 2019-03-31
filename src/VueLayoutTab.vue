@@ -85,6 +85,14 @@ $default-border-height: 1px;
       flex-direction: row;
       @include transition();
     }
+
+    &-scroll {
+      height: 100vh;
+
+      .tab-content-panel {
+        height: 100%;
+      }
+    }
   }
 
   &-content-swipe {
@@ -95,6 +103,7 @@ $default-border-height: 1px;
     .tab-content {
       overflow: hidden;
       position: relative;
+      box-sizing: border-box;
 
       &-panel {
         float: left;
@@ -134,7 +143,10 @@ $default-border-height: 1px;
     <div v-if="!routable" :class="{ 'tab-content-swipe': swipe }" ref="content">
       <div
         class="tab-content"
-        :class="{ 'tab-content-animated': animated && !swipe }"
+        :class="[
+          { 'tab-content-animated': animated && !swipe },
+          { 'tab-content-scroll': useBetterScroll }
+        ]"
         :style="contentStyle"
       >
         <div
@@ -155,11 +167,14 @@ import Swipe from './swipe'
 
 export default {
   name: 'VueLayoutTab',
-  components: {},
   props: {
     headers: {
       type: Array,
       required: true
+    },
+    tabHeight: {
+      type: Number,
+      default: 40
     },
     defaultIndex: {
       type: Number,
@@ -222,18 +237,26 @@ export default {
       }
     },
     contentStyle() {
+      const style = {
+        paddingTop: `${this.tabHeight}px`,
+        marginTop: `-${this.tabHeight}px`
+      }
       if (this.swipe) {
-        return {}
+        return style
       }
       if (this.animated) {
-        return {
-          width: `${this.headerCount * 100}%`,
-          transform: `translateX(${(this.focusIndex / this.headerCount) *
-            -100}%)`,
-          transitionDuration: `${this.duration}ms`
-        }
+        style.width = `${this.headerCount * 100}%`
+        style.transform = `translateX(${(this.focusIndex / this.headerCount) *
+          -100}%)`
+        style.transitionDuration = `${this.duration}ms`
       }
-      return {}
+      return style
+    },
+    useBetterScroll() {
+      if (this.$isServer) {
+        return false
+      }
+      return 'ontouchstart' in document.documentElement && this.swipe
     }
   },
   watch: {

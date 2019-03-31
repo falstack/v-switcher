@@ -18,6 +18,21 @@ body {
       }
     }
   }
+
+  .demo-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: block;
+      height: 100px;
+      line-height: 100px;
+      margin: 10px 0;
+      padding-left: 50px;
+      background-color: #d3d3d3;
+    }
+  }
 }
 </style>
 
@@ -26,112 +41,27 @@ body {
     <div class="banner">vue layout tab</div>
     <VueLayoutTab
       :headers="headers"
-      :default-index="1"
+      :default-index="0"
       :animated="true"
       :swipe="true"
       align="start"
     >
       <template slot="0">
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
-        <p>100</p>
+        <VueScroll
+          :data="list"
+          :refresh="test"
+          :load-more="getData"
+        >
+          <ul class="demo-list">
+            <li
+              v-for="item in list"
+              :key="item.id"
+              :style="{ width: `${item.width}px`, backgroundColor: item.style.color }"
+            >
+              {{ item.index + 1 }}
+            </li>
+          </ul>
+        </VueScroll>
       </template>
       <template slot="1">
         第二个tab
@@ -163,10 +93,13 @@ body {
 
 <script>
 import VueLayoutTab from '../src/VueLayoutTab'
+import VueScroll from './VueScroll'
+import ItemFactory from './item-factory'
 
 export default {
   name: 'app',
   components: {
+    VueScroll,
     VueLayoutTab
   },
   data() {
@@ -181,8 +114,28 @@ export default {
         'tab-7',
         'tab-8',
         'tab-9'
-      ]
+      ],
+      list: []
     }
+  },
+  methods: {
+    test() {
+      console.log('test')
+    },
+    getData() {
+      return new Promise(resolve => {
+        if (this.list.length >= 50) {
+          return resolve()
+        }
+        setTimeout(() => {
+          this.list = this.list.concat(ItemFactory.get(10))
+          resolve()
+        }, 500)
+      })
+    }
+  },
+  mounted() {
+    this.getData()
   }
 }
 </script>

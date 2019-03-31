@@ -23,6 +23,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "better-scroll": "^1.15.1",
     "vue": "^2.6.6"
   },
   "devDependencies": {
