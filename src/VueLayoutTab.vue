@@ -9,18 +9,23 @@ $default-border-height: 1px;
 $active-item-border-height: 2px;
 $active-item-color: #ff6881;
 
-.tab {
+.v-switcher {
   overflow: hidden;
 
   &-header {
     position: relative;
     font-size: 0;
     z-index: 1;
+    flex-grow: 1;
 
     &-wrap {
       height: $default-header-height;
       border-bottom: $default-border-height solid #e5e5e5;
       box-sizing: border-box;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
     }
 
     &-center {
@@ -33,14 +38,14 @@ $active-item-color: #ff6881;
       flex-direction: row;
       @include transition();
 
-      .tab-header-item {
+      .v-switcher-header-item {
         flex-shrink: 0;
       }
     }
 
     &-center,
     &-start {
-      .tab-header-item {
+      .v-switcher-header-item {
         padding: 0 25px;
       }
     }
@@ -91,47 +96,65 @@ $active-item-color: #ff6881;
       padding-top: $default-header-height;
       margin-top: -$default-header-height;
 
-      .tab-content-panel {
+      .v-switcher-content-panel {
         height: 100%;
         overflow: auto;
         -webkit-overflow-scrolling: touch;
       }
     }
-  }
 
-  &-content-swipe {
-    overflow: hidden;
-    visibility: hidden;
-    position: relative;
-
-    .tab-content {
+    &-swipe {
       overflow: hidden;
+      visibility: hidden;
       position: relative;
-      box-sizing: border-box;
 
-      &-panel {
-        float: left;
-        width: 100%;
+      .v-switcher-content {
+        overflow: hidden;
         position: relative;
+        box-sizing: border-box;
+
+        &-panel {
+          float: left;
+          width: 100%;
+          position: relative;
+        }
       }
     }
+
+    &-wrap {
+      position: relative;
+    }
+  }
+
+  &-indicator {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 </style>
 
 <template>
   <div
-    class="tab"
+    class="v-switcher"
+    :class="{ 'v-switcher-focus': cursorInner }"
     @mouseenter="cursorInner = true"
     @mouseleave="cursorInner = false"
   >
-    <div class="tab-header-wrap">
+    <div class="v-switcher-header-wrap">
+      <div ref="headerBefore"><slot name="header-before"></slot></div>
       <div
-        class="tab-header"
-        :class="`tab-header-${align}`"
+        class="v-switcher-header"
+        :class="`v-switcher-header-${align}`"
         :style="headerStyle"
       >
-        <div class="tab-header-anchor" :style="anchorStyle">
+        <div class="v-switcher-header-anchor" :style="anchorStyle">
           <slot name="anchor"></slot>
         </div>
         <div
@@ -140,23 +163,29 @@ $active-item-color: #ff6881;
           :class="{ 'is-active': index === focusIndex }"
           :style="headerItemStyle"
           ref="tab"
-          class="tab-header-item"
+          class="v-switcher-header-item"
           @click="handleTabSwitch(index)"
           @mouseenter="handleMouseEvent(index)"
         >
-          <div class="tab-header-item-cell">
+          <div class="v-switcher-header-item-cell">
             <i v-if="computeItemIcon(item)" :class="computeItemIcon(item)"></i>
             <span v-text="computeItemText(item)"></span>
           </div>
         </div>
       </div>
+      <div ref="headerAfter"><slot name="header-after"></slot></div>
     </div>
-    <div v-if="!routable" :class="{ 'tab-content-swipe': swipe }" ref="content">
+    <div
+      v-if="!routable"
+      class="v-switcher-content-wrap"
+      :class="{ 'v-switcher-content-swipe': swipe }"
+      ref="content"
+    >
       <div
-        class="tab-content"
+        class="v-switcher-content"
         :class="[
-          { 'tab-content-animated': animated && !swipe },
-          { 'tab-content-sticky': sticky }
+          { 'v-switcher-content-animated': animated && !swipe },
+          { 'v-switcher-content-sticky': sticky }
         ]"
         :style="contentStyle"
       >
@@ -164,10 +193,18 @@ $active-item-color: #ff6881;
           v-for="(item, index) in headers"
           :style="computePanelStyle(index)"
           :key="index"
-          class="tab-content-panel"
+          class="v-switcher-content-panel"
         >
           <slot :name="index" />
         </div>
+      </div>
+      <div v-if="indicator" class="v-switcher-indicator">
+        <button @click="switchTrigger(false)">
+          <slot name="btn-prev">prev</slot>
+        </button>
+        <button @click="switchTrigger(true)">
+          <slot name="btn-next">next</slot>
+        </button>
       </div>
     </div>
   </div>
@@ -220,6 +257,10 @@ export default {
     autoplay: {
       type: Number,
       default: 0
+    },
+    indicator: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -285,6 +326,7 @@ export default {
       this.computeAnchorStyle()
       this.computeHeaderStyle(0)
       this.initSwiper()
+      this.initCarousel()
     })
     if (this.sticky) {
       window.addEventListener('resize', this.computeContentHeight)
@@ -299,26 +341,29 @@ export default {
     }
   },
   methods: {
+    initCarousel() {
+      if (!this.autoplay) {
+        return
+      }
+      this.timer = window.setInterval(() => {
+        if (this.cursorInner) {
+          return
+        }
+        this.switchTrigger(true)
+      }, this.autoplay)
+    },
     initSwiper() {
-      if (!this.swipe && !this.autoplay) {
+      if (!this.swipe) {
         return
       }
       this.swiper = Swipe(this.$refs.content, {
         startSlide: this.focusIndex,
         speed: this.duration,
-        continuous: !!this.autoplay,
+        continuous: !!this.autoplay || this.indicator,
         callback: this.handleTabSwitch
       })
-      if (this.autoplay) {
-        this.timer = window.setInterval(() => {
-          if (this.cursorInner) {
-            return
-          }
-          this.swiper.next()
-        }, this.autoplay)
-      }
     },
-    moveSwiper() {
+    triggerSwiper() {
       if (!this.swipe) {
         return
       }
@@ -341,18 +386,19 @@ export default {
       } else {
         checkTab = index ? tabs[index - 1] : tabs[0]
       }
-      const { offsetLeft, offsetWidth } = checkTab
+      let { offsetLeft, offsetWidth } = checkTab
       const { innerWidth } = window
       const rect = checkTab.getBoundingClientRect()
+      const beforeWidth = this.$refs.headerBefore.offsetWidth
       let left = this.headerLeft
       if (
         isToRight &&
         !(rect.left < innerWidth && rect.right < innerWidth) &&
-        offsetWidth + offsetLeft > innerWidth
+        beforeWidth + offsetWidth + offsetLeft > innerWidth
       ) {
-        left = innerWidth - offsetWidth - offsetLeft
+        left = innerWidth - offsetWidth - offsetLeft - beforeWidth
       }
-      if (!isToRight && (rect.left < 0 || rect.right < 0)) {
+      if (!isToRight && (rect.left < beforeWidth || rect.right < 0)) {
         left = -offsetLeft
       }
       this.headerLeft = left
@@ -410,13 +456,30 @@ export default {
       this.$emit('change', index)
       this.computeAnchorStyle()
       this.computeHeaderStyle(lastIndex)
-      this.moveSwiper()
+      this.triggerSwiper()
     },
     handleMouseEvent(index) {
       if (this.trigger !== 'hover') {
         return
       }
       this.handleTabSwitch(index)
+    },
+    switchTrigger(isNext) {
+      let result
+      if (isNext) {
+        if (this.focusIndex === this.headerCount - 1) {
+          result = 0
+        } else {
+          result = this.focusIndex + 1
+        }
+      } else {
+        if (this.focusIndex === 0) {
+          result = this.headerCount - 1
+        } else {
+          result = this.focusIndex - 1
+        }
+      }
+      this.handleTabSwitch(result)
     }
   }
 }

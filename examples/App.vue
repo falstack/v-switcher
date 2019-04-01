@@ -8,7 +8,7 @@ body {
     color: #fff;
   }
 
-  .tab {
+  .v-switcher {
     &-header {
       &-anchor {
         bottom: 0;
