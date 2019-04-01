@@ -88,7 +88,6 @@ $default-border-height: 1px;
     }
 
     &-sticky {
-      height: 100vh;
       box-sizing: border-box;
 
       .tab-content-panel {
@@ -188,10 +187,6 @@ export default {
       type: Boolean,
       default: false
     },
-    anchor: {
-      type: Boolean,
-      default: true
-    },
     animated: {
       type: Boolean,
       default: false
@@ -226,7 +221,8 @@ export default {
       anchorStyle: {},
       headerStyle: {},
       headerLeft: 0,
-      swiper: null
+      swiper: null,
+      windowHeight: this.$isServer ? 0 : window.innerHeight
     }
   },
   computed: {
@@ -249,6 +245,7 @@ export default {
       if (this.sticky) {
         style.paddingTop = `${this.tabHeight}px`
         style.marginTop = `-${this.tabHeight}px`
+        style.height = `${this.windowHeight}px`
       }
       if (this.swipe) {
         return style
@@ -276,6 +273,11 @@ export default {
       this.computeHeaderStyle(0)
       this.initSwiper()
     })
+    if (this.sticky) {
+      window.addEventListener('resize', () => {
+        this.windowHeight = window.innerHeight
+      })
+    }
   },
   methods: {
     initSwiper() {
@@ -344,9 +346,6 @@ export default {
       return {}
     },
     computeAnchorStyle() {
-      if (!this.anchor) {
-        return
-      }
       const tab = this.$refs.tab[this.focusIndex]
       this.anchorStyle = {
         width: `${tab.offsetWidth}px`,
@@ -364,7 +363,7 @@ export default {
       if (typeof item === 'string' || !item.icon) {
         return false
       }
-      return `iconfont ic-${item.replace('ic-', '')}`
+      return `iconfont ic-${item.icon.replace('ic-', '')}`
     },
     handleTabSwitch(index) {
       if (this.focusIndex === index) {
