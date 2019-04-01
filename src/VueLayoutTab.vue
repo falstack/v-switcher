@@ -6,6 +6,8 @@
 
 $default-header-height: 40px;
 $default-border-height: 1px;
+$active-item-border-height: 2px;
+$active-item-color: #ff6881;
 
 .tab {
   overflow: hidden;
@@ -60,22 +62,19 @@ $default-border-height: 1px;
       text-align: center;
       font-size: 15px;
       color: #657786;
+      user-select: none;
 
-      &.is-active {
-        position: relative;
-        color: #14171a;
+      &-cell {
+        display: inline-block;
+        line-height: $default-header-height - $default-border-height -
+          $active-item-border-height;
+        height: $default-header-height - $default-border-height -
+          $active-item-border-height;
+      }
 
-        &:after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 50%;
-          width: 48px;
-          max-width: 100%;
-          border-bottom: 4px solid #ff6881;
-          border-radius: 2px;
-          transform: translateX(-50%);
-        }
+      &.is-active &-cell {
+        color: $active-item-color;
+        border-bottom: $active-item-border-height solid $active-item-color;
       }
     }
   }
@@ -89,6 +88,8 @@ $default-border-height: 1px;
 
     &-sticky {
       box-sizing: border-box;
+      padding-top: $default-header-height;
+      margin-top: -$default-header-height;
 
       .tab-content-panel {
         height: 100%;
@@ -138,8 +139,10 @@ $default-border-height: 1px;
           class="tab-header-item"
           @click="handleTabSwitch(index)"
         >
-          <i v-if="computeItemIcon(item)" :class="computeItemIcon(item)"></i>
-          <span v-text="computeItemText(item)"></span>
+          <div class="tab-header-item-cell">
+            <i v-if="computeItemIcon(item)" :class="computeItemIcon(item)"></i>
+            <span v-text="computeItemText(item)"></span>
+          </div>
         </div>
       </div>
     </div>
@@ -174,10 +177,6 @@ export default {
     headers: {
       type: Array,
       required: true
-    },
-    tabHeight: {
-      type: Number,
-      default: 40
     },
     defaultIndex: {
       type: Number,
@@ -243,8 +242,6 @@ export default {
     contentStyle() {
       const style = {}
       if (this.sticky) {
-        style.paddingTop = `${this.tabHeight}px`
-        style.marginTop = `-${this.tabHeight}px`
         style.height = `${this.windowHeight}px`
       }
       if (this.swipe) {

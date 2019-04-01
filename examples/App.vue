@@ -46,14 +46,7 @@ body {
 <template>
   <div id="app">
     <div class="banner">vue layout tab</div>
-    <VueLayoutTab
-      :headers="headers"
-      :default-index="0"
-      :animated="true"
-      :sticky="true"
-      :swipe="true"
-      align="start"
-    >
+    <VueLayoutTab :headers="headers" align="start" :swipe="true">
       <template slot="0">
         <VueScroll :data="list" :refresh="test" :load-more="getData">
           <ul class="demo-list">
