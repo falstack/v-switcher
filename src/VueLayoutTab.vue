@@ -120,7 +120,11 @@ $active-item-color: #ff6881;
 </style>
 
 <template>
-  <div class="tab">
+  <div
+    class="tab"
+    @mouseenter="cursorInner = true"
+    @mouseleave="cursorInner = false"
+  >
     <div class="tab-header-wrap">
       <div
         class="tab-header"
@@ -138,6 +142,7 @@ $active-item-color: #ff6881;
           ref="tab"
           class="tab-header-item"
           @click="handleTabSwitch(index)"
+          @mouseenter="handleMouseEvent(index)"
         >
           <div class="tab-header-item-cell">
             <i v-if="computeItemIcon(item)" :class="computeItemIcon(item)"></i>
@@ -199,6 +204,11 @@ export default {
       default: 'around',
       validate: val => ~['around', 'start', 'center', 'end'].indexOf(val)
     },
+    trigger: {
+      type: String,
+      default: 'click',
+      validate: val => ~['click', 'hover'].indexOf(val)
+    },
     swipe: {
       type: Boolean,
       default: false
@@ -206,6 +216,10 @@ export default {
     sticky: {
       type: Boolean,
       default: false
+    },
+    autoplay: {
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -216,9 +230,11 @@ export default {
       focusIndex = this.defaultIndex
     }
     return {
+      cursorInner: false,
       focusIndex,
       anchorStyle: {},
       headerStyle: {},
+      timer: 0,
       headerLeft: 0,
       swiper: null,
       windowHeight: this.$isServer ? 0 : window.innerHeight
@@ -271,28 +287,45 @@ export default {
       this.initSwiper()
     })
     if (this.sticky) {
-      window.addEventListener('resize', () => {
-        this.windowHeight = window.innerHeight
-      })
+      window.addEventListener('resize', this.computeContentHeight)
+    }
+  },
+  beforeDestroy() {
+    if (this.sticky) {
+      window.removeEventListener('resize', this.computeContentHeight)
+    }
+    if (this.timer) {
+      window.clearInterval(this.timer)
     }
   },
   methods: {
     initSwiper() {
-      if (!this.swipe) {
+      if (!this.swipe && !this.autoplay) {
         return
       }
       this.swiper = Swipe(this.$refs.content, {
         startSlide: this.focusIndex,
         speed: this.duration,
-        continuous: false,
+        continuous: !!this.autoplay,
         callback: this.handleTabSwitch
       })
+      if (this.autoplay) {
+        this.timer = window.setInterval(() => {
+          if (this.cursorInner) {
+            return
+          }
+          this.swiper.next()
+        }, this.autoplay)
+      }
     },
     moveSwiper() {
       if (!this.swipe) {
         return
       }
       this.swiper.slide(this.focusIndex, this.duration)
+    },
+    computeContentHeight() {
+      this.windowHeight = window.innerHeight
     },
     computeHeaderStyle(lastFocusIndex) {
       if (this.align !== 'start') {
@@ -378,6 +411,12 @@ export default {
       this.computeAnchorStyle()
       this.computeHeaderStyle(lastIndex)
       this.moveSwiper()
+    },
+    handleMouseEvent(index) {
+      if (this.trigger !== 'hover') {
+        return
+      }
+      this.handleTabSwitch(index)
     }
   }
 }
