@@ -24,11 +24,11 @@ yarn add vue-layout-tab
 | name | type | default  | required | meaning |
 | --- | --- | --- | --- | --- |
 | headers | <Array> | [] | Y | tab-header 的数组，支持 icon |
-| tab-height | <Number> | 40 | N | tab-header 的高度 |
+| tab-height | <Number> | 40 | N | tab-header 的高度，px |
 | default-index | <Number> | 0 | N | 默认选中的 tab index |
 | routable | <Boolean> | false | N | 设为 true 则为路由模式 |
 | animated | <Boolean> | false | N | 是否支持切换动画 | 
-| duration | <Number> | 300 | N | 切换动画的市场，ms |
+| duration | <Number> | 300 | N | 切换动画的时长，ms |
 | align | <String> | around | N | tab 的展示模式 ['around', 'start', 'center', 'end'] |
 | swipe | <Boolean> | false | N | 是否支持左右手势滑动 | 
 | sticky | <Boolean> | true | N | 是否让 tab-header 吸附在页面顶部 |
