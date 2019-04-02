@@ -158,7 +158,7 @@ $active-item-color: #ff6881;
           <slot name="anchor"></slot>
         </div>
         <div
-          v-for="(item, index) in headers"
+          v-for="(item, index) in formatHeaders"
           :key="index"
           :class="{ 'is-active': index === focusIndex }"
           :style="headerItemStyle"
@@ -168,8 +168,8 @@ $active-item-color: #ff6881;
           @mouseenter="handleMouseEvent(index)"
         >
           <div class="v-switcher-header-item-cell">
-            <i v-if="computeItemIcon(item)" :class="computeItemIcon(item)"></i>
-            <span v-text="computeItemText(item)"></span>
+            <i v-if="item.icon" :class="item.icon"></i>
+            <span v-text="item.text"></span>
           </div>
         </div>
       </div>
@@ -282,6 +282,16 @@ export default {
     }
   },
   computed: {
+    formatHeaders() {
+      const result = []
+      this.headers.forEach((item, index) => {
+        result.push({
+          text: this.computeItemText(item, index),
+          icon: this.computeItemIcon(item, index)
+        })
+      })
+      return result
+    },
     headerCount() {
       return this.headers.length
     },
@@ -434,17 +444,33 @@ export default {
         transitionDuration: `${this.duration}ms`
       }
     },
-    computeItemText(item) {
+    computeItemText(item, curIndex) {
+      let result
       if (typeof item === 'string') {
-        return item
+        result = item
+      } else {
+        result = item.label || item.name || item.text
+        if (this.focusIndex === curIndex) {
+          const temp =
+            item['label-active'] || item['name-active'] || item['text-active']
+          if (temp) {
+            result = temp
+          }
+        }
       }
-      return item.label || item.name || item.text
+      return result
     },
-    computeItemIcon(item) {
+    computeItemIcon(item, curIndex) {
+      let result
       if (typeof item === 'string' || !item.icon) {
-        return false
+        result = ''
+      } else {
+        result = `iconfont ic-${item.icon.replace('ic-', '')}`
+        if (this.focusIndex === curIndex && item['icon-active']) {
+          result = `iconfont ic-${item['icon-active'].replace('ic-', '')}`
+        }
       }
-      return `iconfont ic-${item.icon.replace('ic-', '')}`
+      return result
     },
     handleTabSwitch(index) {
       if (this.focusIndex === index) {

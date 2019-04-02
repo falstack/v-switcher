@@ -161,7 +161,20 @@ export default {
         'tab-9'
       ],
       headerCenter: ['关注', '推荐', '最新'],
-      headerRight: ['最新', '最热']
+      headerRight: [
+        {
+          name: '最新',
+          icon: 'ios',
+          'name-active': '最新的',
+          'icon-active': 'wechat'
+        },
+        {
+          name: '最热',
+          icon: 'android',
+          'name-active': '最热的',
+          'icon-active': 'weibo'
+        }
+      ]
     }
   }
 }

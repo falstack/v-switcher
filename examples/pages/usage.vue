@@ -12,9 +12,7 @@ export default {
   name: 'Usage',
   components: {},
   props: {},
-  data() {
-    return {}
-  },
+  data() {},
   computed: {},
   watch: {},
   created() {},
