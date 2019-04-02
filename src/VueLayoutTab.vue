@@ -13,18 +13,6 @@ $active-item-color: #ff6881;
   overflow: hidden;
   position: relative;
 
-  &-autoplay {
-    height: 100%;
-
-    .v-switcher-content {
-      height: 100%;
-
-      &-wrap {
-        height: 100%;
-      }
-    }
-  }
-
   &-header {
     position: relative;
     font-size: 0;
@@ -156,7 +144,7 @@ $active-item-color: #ff6881;
 <template>
   <div
     class="v-switcher"
-    :class="{ 'v-switcher-focus': cursorInner, 'v-switcher-autoplay': autoplay }"
+    :class="{ 'v-switcher-focus': cursorInner }"
     @mouseenter="cursorInner = true"
     @mouseleave="cursorInner = false"
   >
