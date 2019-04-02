@@ -2,24 +2,25 @@
 body {
   margin: 0;
 
+  .header {
+    .v-switcher {
+      &-header {
+        &-anchor {
+          bottom: 0;
+          height: 100%;
+          background-color: #ff6881;
+          opacity: 0.1;
+        }
+      }
+    }
+  }
+
   .banner {
     height: 200px;
     background-color: #4fc08d;
     color: #fff;
   }
-
   /*
-  .v-switcher {
-    &-header {
-      &-anchor {
-        bottom: 0;
-        height: 100%;
-        background-color: #ff6881;
-        opacity: 0.1;
-      }
-    }
-  }
-
   .demo-list {
     list-style-type: none;
     margin: 0;
@@ -79,7 +80,7 @@ body {
 
 <template>
   <div id="app">
-    <div class="container">
+    <div class="container header">
       <VueLayoutTab :headers="headers" :routable="true" align="start"></VueLayoutTab>
     </div>
     <div class="banner">vue layout tab</div>
