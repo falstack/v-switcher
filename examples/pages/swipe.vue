@@ -1,0 +1,53 @@
+<style lang="scss">
+</style>
+
+<template>
+  <div id="swipe">
+    <h1>手势切换（仅支持移动端）</h1>
+    <section>
+      <main>
+        <VueLayoutTab :headers="headers" :swipe="true">
+          <div class="demo-item" slot="0">
+            第一个tab
+          </div>
+          <div class="demo-item" slot="1">
+            第二个tab
+          </div>
+          <div class="demo-item" slot="2">
+            第三个tab
+          </div>
+          <div class="demo-item" slot="3">
+            第四个tab
+          </div>
+          <div class="demo-item" slot="4">
+            第五个tab
+          </div>
+        </VueLayoutTab>
+      </main>
+    </section>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Swipe',
+  components: {},
+  props: {},
+  data() {
+    return {
+      headers: [
+        'tab-1',
+        'tab-2',
+        'tab-3',
+        'tab-4',
+        'tab-5'
+      ]
+    }
+  },
+  computed: {},
+  watch: {},
+  created() {},
+  mounted() {},
+  methods: {}
+}
+</script>

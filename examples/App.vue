@@ -8,6 +8,7 @@ body {
     color: #fff;
   }
 
+  /*
   .v-switcher {
     &-header {
       &-anchor {
@@ -40,231 +41,86 @@ body {
   .end {
     text-align: center;
   }
+  */
+
+  .container {
+    width: 1280px;
+    max-width: 100%;
+    margin: 0 auto;
+
+    section {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 50px;
+
+      main {
+        width: 900px;
+        max-width: 100%;
+      }
+
+      aside {
+        flex-grow: 1;
+      }
+    }
+  }
+
+  .demo-item {
+    background-color: #e5e9ef;
+    height: 400px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
 }
 </style>
 
 <template>
   <div id="app">
+    <div class="container">
+      <VueLayoutTab :headers="headers" :routable="true" align="start"></VueLayoutTab>
+    </div>
     <div class="banner">vue layout tab</div>
-    <VueLayoutTab :headers="headers" align="start">
-      <template slot="0">
-        <VueScroll :data="list" :refresh="test" :load-more="getData">
-          <ul class="demo-list">
-            <li v-for="item in list" :key="item.id">
-              <div :style="{ backgroundColor: item.style.color }">
-                {{ item.index + 1 }}
-              </div>
-            </li>
-          </ul>
-          <div class="end">- end -</div>
-        </VueScroll>
-      </template>
-      <template slot="1">
-        <p>start</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>123</p>
-        <p>end</p>
-      </template>
-      <template slot="2">
-        <VueScroll :data="list" :refresh="test" :load-more="getData">
-          <ul class="demo-list">
-            <li v-for="item in list" :key="item.id">
-              <div :style="{ backgroundColor: item.style.color }">
-                {{ item.index + 1 }}
-              </div>
-            </li>
-          </ul>
-        </VueScroll>
-      </template>
-      <template slot="3">
-        <VueScroll :data="list" :refresh="test" :load-more="getData">
-          <ul class="demo-list">
-            <li v-for="item in list" :key="item.id">
-              <div :style="{ backgroundColor: item.style.color }">
-                {{ item.index + 1 }}
-              </div>
-            </li>
-          </ul>
-        </VueScroll>
-      </template>
-      <template slot="4">
-        <VueScroll :data="list" :refresh="test" :load-more="getData">
-          <ul class="demo-list">
-            <li v-for="item in list" :key="item.id">
-              <div :style="{ backgroundColor: item.style.color }">
-                {{ item.index + 1 }}
-              </div>
-            </li>
-          </ul>
-        </VueScroll>
-      </template>
-      <template slot="5">
-        <VueScroll :data="list" :refresh="test" :load-more="getData">
-          <ul class="demo-list">
-            <li v-for="item in list" :key="item.id">
-              <div :style="{ backgroundColor: item.style.color }">
-                {{ item.index + 1 }}
-              </div>
-            </li>
-          </ul>
-        </VueScroll>
-      </template>
-      <template slot="6">
-        第七个tab
-      </template>
-      <template slot="7">
-        第八个tab
-      </template>
-      <template slot="8">
-        第九个tab
-      </template>
-    </VueLayoutTab>
+    <div class="container">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
-import VueLayoutTab from '../src/VueLayoutTab'
-import VueScroll from './VueScroll'
-import ItemFactory from './item-factory'
-
 export default {
   name: 'app',
-  components: {
-    VueScroll,
-    VueLayoutTab
-  },
   data() {
     return {
       headers: [
-        'tab-1',
-        'tab-2',
-        'tab-3',
-        'tab-4',
-        'tab-5',
-        'tab-6',
-        'tab-7',
-        'tab-8',
-        'tab-9'
-      ],
-      list: []
-    }
-  },
-  methods: {
-    test() {
-      console.log('refresh')
-    },
-    getData() {
-      return new Promise(resolve => {
-        if (this.list.length >= 50) {
-          return resolve()
+        {
+          name: '首页',
+          route: 'index'
+        },
+        {
+          name: '简单用例',
+          route: 'simple'
+        },
+        {
+          name: '带切换动画',
+          route: 'animated'
+        },
+        {
+          name: '带手势操作',
+          route: 'swipe'
+        },
+        {
+          name: '自动轮播',
+          route: 'carousel'
+        },
+        {
+          name: '生产实例',
+          route: 'usage'
         }
-        setTimeout(() => {
-          this.list = this.list.concat(ItemFactory.get(10))
-          resolve()
-        }, 500)
-      })
+      ]
     }
-  },
-  mounted() {
-    this.getData()
   }
 }
 </script>

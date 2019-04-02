@@ -316,6 +316,7 @@ export default {
   watch: {
     $route(newVal) {
       this.focusIndex = this.headers.map(_ => _.route).indexOf(newVal.name)
+      this.computeHeaderStyle(0)
     },
     headers(newVal) {
       this.focusIndex = newVal.map(_ => _.route).indexOf(this.$route.name)
@@ -373,7 +374,7 @@ export default {
       this.windowHeight = window.innerHeight
     },
     computeHeaderStyle(lastFocusIndex) {
-      if (this.align !== 'start') {
+      if (this.align !== 'start' || this.focusIndex <= 0) {
         return
       }
       const index = this.focusIndex
@@ -423,6 +424,10 @@ export default {
     },
     computeAnchorStyle() {
       const tab = this.$refs.tab[this.focusIndex]
+      if (!tab) {
+        setTimeout(this.computeAnchorStyle, 200)
+        return
+      }
       this.anchorStyle = {
         width: `${tab.offsetWidth}px`,
         transform: `translateX(${tab.offsetLeft}px)`,
