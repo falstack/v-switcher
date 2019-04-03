@@ -1,5 +1,9 @@
 <style lang="scss">
 #usage {
+  .v-switcher-header-item {
+    cursor: pointer;
+  }
+
   .carousel {
     width: 440px;
     height: 220px;
@@ -102,6 +106,130 @@
       }
     }
   }
+
+  .bangumi {
+    .b-item {
+      margin: 26px 20px 40px 0;
+      height: 398px;
+      background-color: #f6f9fa;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .v-switcher {
+      overflow: visible;
+    }
+
+    .v-switcher-header {
+      &-wrap {
+        overflow: visible;
+      }
+
+      &-item {
+        &-cell {
+          width: 100%;
+          font-size: 18px;
+          line-height: 39px;
+          height: 39px;
+          color: #000;
+          transition: 0.2s;
+          border-bottom-width: 1px;
+          border-bottom-color: #e5e9ef;
+
+          &:hover {
+            color: #00a1d6;
+          }
+        }
+
+        &.is-active .v-switcher-header-item-cell {
+          color: #00a1d6;
+          border-bottom-color: #00a1d6;
+          position: relative;
+
+          &:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            margin-left: -3px;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-bottom: 3px solid #00a1d6;
+            border-top: 0;
+            border-left: 3px dashed transparent;
+            border-right: 3px dashed transparent;
+          }
+        }
+      }
+    }
+
+    .header-before {
+      margin-top: 8px;
+
+      i {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+        vertical-align: middle;
+        float: left;
+        margin-top: -10px;
+        background-image: url("../icons.png");
+        background-position: -141px -140px;
+      }
+
+      a {
+        font-size: 24px;
+        line-height: 24px;
+        font-weight: 400;
+        margin-right: 20px;
+        float: left;
+        color: #222;
+        transition: color 0.2s;
+        text-decoration: none;
+
+        &:hover {
+          color: #00a1d6;
+        }
+      }
+    }
+
+    .header-after {
+      display: block;
+      border: 1px solid #f25d8e;
+      width: 104px;
+      height: 34px;
+      line-height: 34px;
+      text-align: center;
+      color: #f25d8e;
+      font-size: 14px;
+      border-radius: 4px;
+      transition: 0.1s;
+      text-decoration: none;
+      margin-left: 30px;
+
+      &:hover {
+        color: #fff;
+        background-color: #f25d8e;
+
+        i {
+          background-position: -541px -218px;
+        }
+      }
+
+      i {
+        display: inline-block;
+        vertical-align: middle;
+        background-position: -478px -281px;
+        width: 6px;
+        height: 12px;
+        margin: -2px 0 0 5px;
+        background-image: url("../icons.png");
+      }
+    }
+  }
 }
 </style>
 
@@ -110,9 +238,9 @@
     <h3>轮播</h3>
     <section>
       <div class="carousel">
-        <VueLayoutTab :headers="headers" :swipe="true" :autoplay="2000" align="end">
+        <VueLayoutTab :headers="headers1" :swipe="true" :autoplay="2000" align="end">
           <a
-            v-for="(item, index) in headers"
+            v-for="(item, index) in headers1"
             :key="index"
             :slot="`${index}`"
             :style="{ backgroundImage: `url(${item.image})` }"
@@ -125,6 +253,34 @@
         </VueLayoutTab>
       </div>
     </section>
+    <h3>面板</h3>
+    <section>
+      <main class="bangumi">
+        <VueLayoutTab :headers="headers2">
+          <div
+            slot="header-before"
+            class="header-before"
+          >
+            <i></i>
+            <a href="javascript:;">番剧</a>
+          </div>
+          <a
+            slot="header-after"
+            class="header-after"
+            href="javascript:;"
+          >
+            <span>新番时间表</span>
+            <i></i>
+          </a>
+          <div
+            v-for="(item, index) in headers2"
+            :key="index"
+            :slot="`${index}`"
+            class="b-item"
+          >{{ index }}</div>
+        </VueLayoutTab>
+      </main>
+    </section>
   </div>
 </template>
 
@@ -135,7 +291,7 @@ export default {
   props: {},
   data() {
     return {
-      headers: [
+      headers1: [
         {
           text: '',
           image: 'https://i0.hdslb.com/bfs/archive/3f0cb192c49270ec5f98b93c4b460e0ed39a017f.jpg@880w_440h.jpg',
@@ -160,6 +316,37 @@ export default {
           text: '',
           image: 'https://i0.hdslb.com/bfs/archive/e515bcc182bcba0e079d01a10bd40c75d3f707f1.jpg@880w_440h.webp',
           title: '欢迎来到天生制造狂的世界'
+        }
+      ],
+      headers2: [
+        '最新',
+        {
+          text: '一',
+          'text-active': '周一'
+        },
+        {
+          text: '二',
+          'text-active': '周二'
+        },
+        {
+          text: '三',
+          'text-active': '周三'
+        },
+        {
+          text: '四',
+          'text-active': '周四'
+        },
+        {
+          text: '五',
+          'text-active': '周五'
+        },
+        {
+          text: '六',
+          'text-active': '周六'
+        },
+        {
+          text: '日',
+          'text-active': '周日'
         }
       ]
     }

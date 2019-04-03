@@ -5,7 +5,7 @@
 }
 
 $default-header-height: 40px;
-$default-border-height: 1px;
+$default-border-height: 0;
 $active-item-border-height: 2px;
 $active-item-color: #ff6881;
 
@@ -21,7 +21,6 @@ $active-item-color: #ff6881;
 
     &-wrap {
       height: $default-header-height;
-      border-bottom: $default-border-height solid #e5e5e5;
       box-sizing: border-box;
       display: flex;
       flex-direction: row;
@@ -77,11 +76,14 @@ $active-item-color: #ff6881;
           $active-item-border-height;
         height: $default-header-height - $default-border-height -
           $active-item-border-height;
+        border-bottom-color: transparent;
+        border-bottom-style: solid;
+        border-bottom-width: $active-item-border-height;
       }
 
       &.is-active &-cell {
         color: $active-item-color;
-        border-bottom: $active-item-border-height solid $active-item-color;
+        border-bottom-color: $active-item-color;
       }
     }
   }
