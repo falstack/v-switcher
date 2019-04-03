@@ -69,6 +69,7 @@ $active-item-color: #ff6881;
       font-size: 15px;
       color: #657786;
       user-select: none;
+      vertical-align: middle;
 
       &-cell {
         display: inline-block;
@@ -144,7 +145,6 @@ $active-item-color: #ff6881;
 <template>
   <div
     class="v-switcher"
-    :class="{ 'v-switcher-focus': cursorInner }"
     @mouseenter="cursorInner = true"
     @mouseleave="cursorInner = false"
   >
