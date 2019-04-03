@@ -140,6 +140,11 @@ $active-item-color: #ff6881;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    pointer-events: none;
+
+    button {
+      pointer-events: auto;
+    }
   }
 }
 </style>
@@ -202,10 +207,10 @@ $active-item-color: #ff6881;
         </div>
       </div>
       <div v-if="indicator" class="v-switcher-indicator">
-        <button @click="switchTrigger(false)">
+        <button class="btn-prev" @click="switchTrigger(false)">
           <slot name="btn-prev">prev</slot>
         </button>
-        <button @click="switchTrigger(true)">
+        <button class="btn-next" @click="switchTrigger(true)">
           <slot name="btn-next">next</slot>
         </button>
       </div>

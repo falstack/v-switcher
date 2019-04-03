@@ -230,6 +230,73 @@
       }
     }
   }
+
+  .recommended {
+    width: 700px;
+    height: 220px;
+    margin-left: 20px;
+
+    .v-switcher {
+      height: 100%;
+
+      &-header-wrap {
+        display: none;
+      }
+
+      &-content {
+        height: 220px;
+
+        .r-item {
+          height: 220px;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+
+      &-indicator {
+        opacity: 0;
+        transition: all 0.3s;
+
+        button {
+          width: 20px;
+          cursor: pointer;
+          font-size: 12px;
+          color: #fff;
+          text-align: center;
+          background-color: rgba(0, 0, 0, 0.6);
+          background-image: url("../icons2.png");
+          box-sizing: content-box;
+          border-width: 0;
+
+          &:hover,
+          &:focus {
+            outline-width: 0;
+            border-width: 0;
+          }
+        }
+
+        .btn-prev {
+          border-radius: 0 4px 4px 0;
+          padding: 13px 5px 13px 10px;
+          background-position: 6px -1211px;
+        }
+
+        .btn-next {
+          border-radius: 4px 0 0 4px;
+          padding: 13px 10px 13px 5px;
+          background-position: 25px -1262px;
+        }
+      }
+
+      &:hover {
+        .v-switcher-indicator {
+          opacity: 1;
+        }
+      }
+    }
+  }
 }
 </style>
 
@@ -250,6 +317,15 @@
             <a class="title" href="javascript:;">{{ item.title }}</a>
             <a class="more" href="javascript:;">更多</a>
           </a>
+        </VueLayoutTab>
+      </div>
+      <div class="recommended">
+        <VueLayoutTab :headers="headers3" :indicator="true" @change="handleChangeRecommended">
+          <div slot="0" class="r-item" style="background-color: rgba(21,174,103,.5)">三日</div>
+          <div slot="1" class="r-item" style="background-color: rgba(195,123,177,.5)">一周</div>
+          <div slot="2" class="r-item" style="background-color: rgba(125,205,244,.5)">昨日</div>
+          <template slot="btn-prev">{{ tab3LeftText }}</template>
+          <template slot="btn-next">{{ tab3RightText }}</template>
         </VueLayoutTab>
       </div>
     </section>
@@ -348,13 +424,38 @@ export default {
           text: '日',
           'text-active': '周日'
         }
-      ]
+      ],
+      headers3: ['', '', ''],
+      tab3Index: 0
     }
   },
-  computed: {},
+  computed: {
+    tab3LeftText() {
+      const index = this.tab3Index
+      if (index === 0) {
+        return '昨日'
+      } else if (index === 1) {
+        return '三日'
+      }
+      return '一周'
+    },
+    tab3RightText() {
+      const index = this.tab3Index
+      if (index === 0) {
+        return '一周'
+      } else if (index === 1) {
+        return '昨日'
+      }
+      return '三日'
+    }
+  },
   watch: {},
   created() {},
   mounted() {},
-  methods: {}
+  methods: {
+    handleChangeRecommended(index) {
+      this.tab3Index = index
+    }
+  }
 }
 </script>
