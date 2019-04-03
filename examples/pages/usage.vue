@@ -297,6 +297,64 @@
       }
     }
   }
+
+  .ranking {
+    .header-before {
+      font-size: 18px;
+      font-weight: 400;
+      color: #000;
+      margin-right: 8px;
+      margin-top: 4px;
+    }
+
+    .k-item {
+      height: 340px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .v-switcher {
+      &-header {
+        &-item {
+          margin-left: 12px;
+          padding: 0;
+
+          &-cell {
+            width: 100%;
+            font-size: 12px;
+            line-height: 24px;
+            height: 24px;
+            color: #000;
+            transition: 0.2s;
+            border-bottom-width: 1px;
+            border-bottom-color: transparent;
+          }
+
+          &.is-active .v-switcher-header-item-cell {
+            color: #00a1d6;
+            border-bottom-color: #00a1d6;
+            position: relative;
+
+            &:after {
+              content: '';
+              position: absolute;
+              left: 50%;
+              margin-left: -3px;
+              bottom: 0;
+              width: 0;
+              height: 0;
+              border-bottom: 3px solid #00a1d6;
+              border-top: 0;
+              border-left: 3px dashed transparent;
+              border-right: 3px dashed transparent;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 </style>
 
@@ -356,6 +414,18 @@
           >{{ index }}</div>
         </VueLayoutTab>
       </main>
+      <aside class="ranking">
+        <VueLayoutTab :headers="headers4" align="start" :animated="true" trigger="hover">
+          <div class="header-before" slot="header-before">排行</div>
+          <div class="header-after" slot="header-after">三日</div>
+          <div class="k-item" slot="0" style="background-color: rgba(21,174,103,.5)">
+            0
+          </div>
+          <div class="k-item" slot="1" style="background-color: rgba(125,205,244,.5)">
+            1
+          </div>
+        </VueLayoutTab>
+      </aside>
     </section>
   </div>
 </template>
@@ -426,7 +496,8 @@ export default {
         }
       ],
       headers3: ['', '', ''],
-      tab3Index: 0
+      tab3Index: 0,
+      headers4: ['全部', '原创']
     }
   },
   computed: {

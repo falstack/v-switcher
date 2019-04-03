@@ -16,7 +16,7 @@ body {
   }
 
   .banner {
-    height: 200px;
+    height: 150px;
     background-color: #4fc08d;
     color: #fff;
   }
@@ -45,7 +45,7 @@ body {
   */
 
   .container {
-    width: 1280px;
+    width: 1160px;
     max-width: 100%;
     margin: 0 auto;
 
@@ -53,12 +53,13 @@ body {
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
-      align-items: center;
+      align-items: flex-start;
       margin-bottom: 50px;
 
       main {
         width: 900px;
         max-width: 100%;
+        padding-right: 20px;
       }
 
       aside {
