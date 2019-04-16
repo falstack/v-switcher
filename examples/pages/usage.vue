@@ -88,19 +88,23 @@
         }
 
         &-item {
-          width: 18px;
-          height: 18px;
           margin-left: 8px;
-          background-position: -855px -790px;
-          background-image: url("../icons.png");
-          cursor: pointer;
 
-          &:hover {
-            background-position: -919px -790px;
-          }
+          &-cell {
+            width: 18px;
+            height: 18px;
+            background-position: -855px -790px;
+            background-image: url("../icons.png");
+            border-bottom-width: 0;
+            cursor: pointer;
 
-          &.is-active {
-            background-position: -855px -727px;
+            &:hover {
+              background-position: -919px -790px;
+            }
+
+            &.is-active {
+              background-position: -855px -727px;
+            }
           }
         }
       }
@@ -141,25 +145,25 @@
           &:hover {
             color: #00a1d6;
           }
-        }
 
-        &.is-active .v-switcher-header-item-cell {
-          color: #00a1d6;
-          border-bottom-color: #00a1d6;
-          position: relative;
+          &.is-active {
+            color: #00a1d6;
+            border-bottom-color: #00a1d6;
+            position: relative;
 
-          &:after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            margin-left: -3px;
-            bottom: 0;
-            width: 0;
-            height: 0;
-            border-bottom: 3px solid #00a1d6;
-            border-top: 0;
-            border-left: 3px dashed transparent;
-            border-right: 3px dashed transparent;
+            &:after {
+              content: '';
+              position: absolute;
+              left: 50%;
+              margin-left: -3px;
+              bottom: 0;
+              width: 0;
+              height: 0;
+              border-bottom: 3px solid #00a1d6;
+              border-top: 0;
+              border-left: 3px dashed transparent;
+              border-right: 3px dashed transparent;
+            }
           }
         }
       }
@@ -330,25 +334,25 @@
             transition: 0.2s;
             border-bottom-width: 1px;
             border-bottom-color: transparent;
-          }
 
-          &.is-active .v-switcher-header-item-cell {
-            color: #00a1d6;
-            border-bottom-color: #00a1d6;
-            position: relative;
+            &.is-active {
+              color: #00a1d6;
+              border-bottom-color: #00a1d6;
+              position: relative;
 
-            &:after {
-              content: '';
-              position: absolute;
-              left: 50%;
-              margin-left: -3px;
-              bottom: 0;
-              width: 0;
-              height: 0;
-              border-bottom: 3px solid #00a1d6;
-              border-top: 0;
-              border-left: 3px dashed transparent;
-              border-right: 3px dashed transparent;
+              &:after {
+                content: '';
+                position: absolute;
+                left: 50%;
+                margin-left: -3px;
+                bottom: 0;
+                width: 0;
+                height: 0;
+                border-bottom: 3px solid #00a1d6;
+                border-top: 0;
+                border-left: 3px dashed transparent;
+                border-right: 3px dashed transparent;
+              }
             }
           }
         }

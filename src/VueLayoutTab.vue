@@ -18,6 +18,8 @@ $active-item-color: #ff6881;
     font-size: 0;
     z-index: 1;
     flex-grow: 1;
+    padding: 0;
+    margin: 0;
 
     &-wrap {
       height: $default-header-height;
@@ -55,6 +57,7 @@ $active-item-color: #ff6881;
     }
 
     &-anchor {
+      display: block;
       position: absolute;
       left: 0;
       @include transition();
@@ -79,11 +82,11 @@ $active-item-color: #ff6881;
         border-bottom-color: transparent;
         border-bottom-style: solid;
         border-bottom-width: $active-item-border-height;
-      }
 
-      &.is-active &-cell {
-        color: $active-item-color;
-        border-bottom-color: $active-item-color;
+        &.is-active {
+          color: $active-item-color;
+          border-bottom-color: $active-item-color;
+        }
       }
     }
   }
@@ -157,30 +160,43 @@ $active-item-color: #ff6881;
   >
     <div class="v-switcher-header-wrap">
       <div ref="headerBefore"><slot name="header-before"></slot></div>
-      <div
+      <ul
         class="v-switcher-header"
         :class="`v-switcher-header-${align}`"
         :style="headerStyle"
       >
-        <div class="v-switcher-header-anchor" :style="anchorStyle">
+        <li class="v-switcher-header-anchor" :style="anchorStyle">
           <slot name="anchor"></slot>
-        </div>
-        <div
+        </li>
+        <li
           v-for="(item, index) in formatHeaders"
           :key="index"
-          :class="{ 'is-active': index === focusIndex }"
           :style="headerItemStyle"
           ref="tab"
           class="v-switcher-header-item"
-          @click="handleTabSwitch(index)"
-          @mouseenter="handleMouseEvent(index)"
         >
-          <div class="v-switcher-header-item-cell">
+          <router-link
+            v-if="routable"
+            :class="{ 'is-active': index === focusIndex }"
+            :to="{ name: headers[index].route, params: $route.params }"
+            class="v-switcher-header-item-cell"
+            @click.native="handleTabSwitch(index)"
+          >
+            <i v-if="item.icon" :class="item.icon"></i>
+            <span v-text="item.text"></span>
+          </router-link>
+          <div
+            v-else
+            :class="{ 'is-active': index === focusIndex }"
+            class="v-switcher-header-item-cell"
+            @click="handleTabSwitch(index)"
+            @mouseenter="handleMouseEvent(index)"
+          >
             <i v-if="item.icon" :class="item.icon"></i>
             <span v-text="item.text"></span>
           </div>
-        </div>
-      </div>
+        </li>
+      </ul>
       <div ref="headerAfter"><slot name="header-after"></slot></div>
     </div>
     <div
@@ -481,18 +497,11 @@ export default {
       return result
     },
     handleTabSwitch(index) {
-      if (this.focusIndex === index) {
-        return
-      }
-      if (this.routable) {
-        this.$router.push({
-          name: this.headers[index].route,
-          params: this.$route.params
-        })
-      }
       const lastIndex = this.focusIndex
-      this.focusIndex = index
-      this.$emit('change', index)
+      if (this.focusIndex !== index) {
+        this.focusIndex = index
+        this.$emit('change', index)
+      }
       this.computeAnchorStyle()
       this.computeHeaderStyle(lastIndex)
       this.triggerSwiper()
