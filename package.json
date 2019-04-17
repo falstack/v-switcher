@@ -1,7 +1,7 @@
 {
-  "name": "vue-layout-tab",
+  "name": "v-switcher",
   "version": "0.1.3",
-  "main": "dist/vue-layout-tab.umd.min.js",
+  "main": "dist/v-switcher.umd.min.js",
   "files": [
     "dist"
   ],
@@ -13,17 +13,16 @@
   "author": "falstack <icesilt@outlook.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/falstack/vue-layout-tab/issues"
+    "url": "https://github.com/falstack/v-switcher/issues"
   },
-  "homepage": "https://github.com/falstack/vue-layout-tab",
+  "homepage": "https://github.com/falstack/v-switcher",
   "scripts": {
     "dev": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib --name vue-layout-tab src/VueLayoutTab.vue",
+    "build": "vue-cli-service build --target lib --name v-switcher src/v-switcher.vue",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "better-scroll": "^1.15.1",
     "vue": "^2.6.6"
   },
   "devDependencies": {
@@ -32,6 +31,7 @@
     "@vue/cli-service": "^3.5.0",
     "@vue/eslint-config-prettier": "^4.0.1",
     "babel-eslint": "^10.0.1",
+    "better-scroll": "^1.15.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.11.0",

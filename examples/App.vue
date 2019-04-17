@@ -82,7 +82,11 @@ body {
 <template>
   <div id="app">
     <div class="container header">
-      <VueLayoutTab :headers="headers" :routable="true" align="start"></VueLayoutTab>
+      <v-switcher :headers="headers" :routable="true" align="start">
+        <template slot="tab-0">
+          2333 - 首页
+        </template>
+      </v-switcher>
     </div>
     <div class="banner">vue layout tab</div>
     <div class="container">

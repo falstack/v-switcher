@@ -182,8 +182,10 @@ $active-item-color: #ff6881;
             class="v-switcher-header-item-cell"
             @click.native="handleTabSwitch(index)"
           >
-            <i v-if="item.icon" :class="item.icon"></i>
-            <span v-text="item.text"></span>
+            <slot :name="`tab-${index}`">
+              <i v-if="item.icon" :class="item.icon"></i>
+              <span v-text="item.text"></span>
+            </slot>
           </router-link>
           <div
             v-else
@@ -192,8 +194,10 @@ $active-item-color: #ff6881;
             @click="handleTabSwitch(index)"
             @mouseenter="handleMouseEvent(index)"
           >
-            <i v-if="item.icon" :class="item.icon"></i>
-            <span v-text="item.text"></span>
+            <slot :name="`tab-${index}`">
+              <i v-if="item.icon" :class="item.icon"></i>
+              <span v-text="item.text"></span>
+            </slot>
           </div>
         </li>
       </ul>
@@ -238,7 +242,7 @@ $active-item-color: #ff6881;
 import Swipe from './swipe'
 
 export default {
-  name: 'VueLayoutTab',
+  name: 'v-switcher',
   props: {
     headers: {
       type: Array,

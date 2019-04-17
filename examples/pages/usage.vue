@@ -367,34 +367,34 @@
     <h3>轮播</h3>
     <section>
       <div class="carousel">
-        <VueLayoutTab :headers="headers1" :swipe="true" :autoplay="2000" align="end">
+        <v-switcher :headers="headers1" :swipe="true" :autoplay="2000" align="end">
           <a
             v-for="(item, index) in headers1"
             :key="index"
             :slot="`${index}`"
-            :style="{ backgroundImage: `url(${item.image})` }"
+            :style="{ backgroundColor: getRandomColor() }"
             class="c-item"
             href="javascript:;"
           >
             <a class="title" href="javascript:;">{{ item.title }}</a>
             <a class="more" href="javascript:;">更多</a>
           </a>
-        </VueLayoutTab>
+        </v-switcher>
       </div>
       <div class="recommended">
-        <VueLayoutTab :headers="headers3" :indicator="true" @change="handleChangeRecommended">
+        <v-switcher :headers="headers3" :indicator="true" @change="handleChangeRecommended">
           <div slot="0" class="r-item" style="background-color: rgba(21,174,103,.5)">三日</div>
           <div slot="1" class="r-item" style="background-color: rgba(195,123,177,.5)">一周</div>
           <div slot="2" class="r-item" style="background-color: rgba(125,205,244,.5)">昨日</div>
           <template slot="btn-prev">{{ tab3LeftText }}</template>
           <template slot="btn-next">{{ tab3RightText }}</template>
-        </VueLayoutTab>
+        </v-switcher>
       </div>
     </section>
     <h3>面板</h3>
     <section>
       <main class="bangumi">
-        <VueLayoutTab :headers="headers2">
+        <v-switcher :headers="headers2">
           <div
             slot="header-before"
             class="header-before"
@@ -416,10 +416,10 @@
             :slot="`${index}`"
             class="b-item"
           >{{ index }}</div>
-        </VueLayoutTab>
+        </v-switcher>
       </main>
       <aside class="ranking">
-        <VueLayoutTab :headers="headers4" align="start" :animated="true" trigger="hover">
+        <v-switcher :headers="headers4" align="start" :animated="true" trigger="hover">
           <div class="header-before" slot="header-before">排行</div>
           <div class="header-after" slot="header-after">三日</div>
           <div class="k-item" slot="0" style="background-color: rgba(21,174,103,.5)">
@@ -428,7 +428,7 @@
           <div class="k-item" slot="1" style="background-color: rgba(125,205,244,.5)">
             1
           </div>
-        </VueLayoutTab>
+        </v-switcher>
       </aside>
     </section>
   </div>
@@ -444,27 +444,22 @@ export default {
       headers1: [
         {
           text: '',
-          image: 'https://i0.hdslb.com/bfs/archive/3f0cb192c49270ec5f98b93c4b460e0ed39a017f.jpg@880w_440h.jpg',
           title: '成名必备！'
         },
         {
           text: '',
-          image: 'https://i0.hdslb.com/bfs/archive/d09b993b03402f232aa5ff0b0387dc13e75d43da.jpg@880w_440h.webp',
           title: '花泽香菜，甜美来袭！'
         },
         {
           text: '',
-          image: 'https://i0.hdslb.com/bfs/archive/e419eafc45212e661721a753c0fc9d67b0efded3.jpg@880w_440h.webp',
           title: '鸡鸣紫陌曙光寒，水转皇州春色阑'
         },
         {
           text: '',
-          image: 'https://i0.hdslb.com/bfs/archive/752a4ad671ae49650cfadd64a1c9e3ef75e3a769.jpg@880w_440h.webp',
           title: '请查收您的追番清单!'
         },
         {
           text: '',
-          image: 'https://i0.hdslb.com/bfs/archive/e515bcc182bcba0e079d01a10bd40c75d3f707f1.jpg@880w_440h.webp',
           title: '欢迎来到天生制造狂的世界'
         }
       ],
@@ -530,6 +525,17 @@ export default {
   methods: {
     handleChangeRecommended(index) {
       this.tab3Index = index
+    },
+    getRandomColor() {
+      var colors = [
+        'rgba(21,174,103,.5)',
+        'rgba(245,163,59,.5)',
+        'rgba(255,230,135,.5)',
+        'rgba(194,217,78,.5)',
+        'rgba(195,123,177,.5)',
+        'rgba(125,205,244,.5)'
+      ]
+      return colors[~~(Math.random() * colors.length)]
     }
   }
 }

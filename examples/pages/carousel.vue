@@ -7,7 +7,7 @@
     <h3>最简单的模式</h3>
     <section>
       <main>
-        <VueLayoutTab :headers="headers" :autoplay="2000">
+        <v-switcher :headers="headers" :autoplay="2000">
           <div class="demo-item" slot="0">
             第一个tab
           </div>
@@ -23,13 +23,13 @@
           <div class="demo-item" slot="4">
             第五个tab
           </div>
-        </VueLayoutTab>
+        </v-switcher>
       </main>
     </section>
     <h3>带切换动画和指示器</h3>
     <section>
       <main>
-        <VueLayoutTab :headers="headers" :swipe="true" :autoplay="2000" :indicator="true">
+        <v-switcher :headers="headers" :swipe="true" :autoplay="2000" :indicator="true">
           <div class="demo-item" slot="0">
             第一个tab
           </div>
@@ -45,7 +45,7 @@
           <div class="demo-item" slot="4">
             第五个tab
           </div>
-        </VueLayoutTab>
+        </v-switcher>
       </main>
     </section>
   </div>

@@ -7,7 +7,7 @@
     <h3>header 展开</h3>
     <section>
       <main>
-        <VueLayoutTab :headers="headers">
+        <v-switcher :headers="headers">
           <div class="demo-item" slot="0">
             第一个tab
           </div>
@@ -35,14 +35,14 @@
           <div class="demo-item" slot="8">
             第九个tab
           </div>
-        </VueLayoutTab>
+        </v-switcher>
       </main>
     </section>
     <h3>header 居左</h3>
     <h5>这个模式下，屏幕外的 header 会页面切换时自动滚动到视口内</h5>
     <section>
       <main>
-        <VueLayoutTab :headers="headers" align="start">
+        <v-switcher :headers="headers" align="start">
           <div class="demo-item" slot="0">
             第一个tab
           </div>
@@ -70,13 +70,13 @@
           <div class="demo-item" slot="8">
             第九个tab
           </div>
-        </VueLayoutTab>
+        </v-switcher>
       </main>
     </section>
     <h3>header 居中</h3>
     <section>
       <main>
-        <VueLayoutTab :headers="headerCenter" align="center">
+        <v-switcher :headers="headerCenter" align="center">
           <div class="demo-item" slot="0">
             第一个tab
           </div>
@@ -104,13 +104,13 @@
           <div class="demo-item" slot="8">
             第九个tab
           </div>
-        </VueLayoutTab>
+        </v-switcher>
       </main>
     </section>
     <h3>header 居右</h3>
     <section>
       <main>
-        <VueLayoutTab :headers="headerRight" align="end">
+        <v-switcher :headers="headerRight" align="end">
           <div class="demo-item" slot="0">
             第一个tab
           </div>
@@ -138,7 +138,7 @@
           <div class="demo-item" slot="8">
             第九个tab
           </div>
-        </VueLayoutTab>
+        </v-switcher>
       </main>
     </section>
   </div>

@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import VueLayoutTab from '../src/VueLayoutTab'
+import Switcher from '../src/v-switcher'
 import './iconfont.css'
 
 Vue.config.productionTip = false
-Vue.component(VueLayoutTab.name, VueLayoutTab)
+Vue.component(Switcher.name, Switcher)
 
 new Vue({
   el: '#app',

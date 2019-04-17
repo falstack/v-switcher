@@ -7,7 +7,7 @@
     <h3>普通使用</h3>
     <section>
       <main>
-        <VueLayoutTab :headers="headers" :swipe="true">
+        <v-switcher :headers="headers" :swipe="true">
           <div class="demo-item" slot="0">
             第一个tab
           </div>
@@ -23,13 +23,13 @@
           <div class="demo-item" slot="4">
             第五个tab
           </div>
-        </VueLayoutTab>
+        </v-switcher>
       </main>
     </section>
     <h3>header 吸顶（建议搭配 better-scroll 使用）</h3>
     <section>
       <main>
-        <VueLayoutTab :headers="headers" :swipe="true" :sticky="true">
+        <v-switcher :headers="headers" :swipe="true" :sticky="true">
           <div class="demo-item" slot="0">
             第一个tab
           </div>
@@ -45,7 +45,7 @@
           <div class="demo-item" slot="4">
             第五个tab
           </div>
-        </VueLayoutTab>
+        </v-switcher>
       </main>
     </section>
   </div>

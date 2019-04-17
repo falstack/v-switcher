@@ -7,7 +7,7 @@
     <h3>header click 切换</h3>
     <section>
       <main>
-        <VueLayoutTab :headers="headers" :animated="true" align="start">
+        <v-switcher :headers="headers" :animated="true" align="start">
           <div class="demo-item" slot="0">
             第一个tab
           </div>
@@ -23,13 +23,13 @@
           <div class="demo-item" slot="4">
             第五个tab
           </div>
-        </VueLayoutTab>
+        </v-switcher>
       </main>
     </section>
     <h3>header hover 切换</h3>
     <section>
       <main>
-        <VueLayoutTab :headers="headers" :animated="true" trigger="hover" align="start">
+        <v-switcher :headers="headers" :animated="true" trigger="hover" align="start">
           <div class="demo-item" slot="0">
             第一个tab
           </div>
@@ -45,7 +45,7 @@
           <div class="demo-item" slot="4">
             第五个tab
           </div>
-        </VueLayoutTab>
+        </v-switcher>
       </main>
     </section>
   </div>

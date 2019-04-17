@@ -4,7 +4,6 @@
 <template>
   <div id="index">
     index page
-
   </div>
 </template>
 
