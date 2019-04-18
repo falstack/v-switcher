@@ -1,4 +1,16 @@
 <style lang="scss">
+#simple {
+  .vertical {
+    .v-switcher-header-item-cell.is-active {
+      border-bottom-color: transparent;
+    }
+
+    .v-switcher-header-anchor {
+      background-color: #ff6881;
+      opacity: 0.1;
+    }
+  }
+}
 </style>
 
 <template>
@@ -111,6 +123,40 @@
     <section>
       <main>
         <v-switcher :headers="headerRight" align="end">
+          <div class="demo-item" slot="0">
+            第一个tab
+          </div>
+          <div class="demo-item" slot="1">
+            第二个tab
+          </div>
+          <div class="demo-item" slot="2">
+            第三个tab
+          </div>
+          <div class="demo-item" slot="3">
+            第四个tab
+          </div>
+          <div class="demo-item" slot="4">
+            第五个tab
+          </div>
+          <div class="demo-item" slot="5">
+            第六个tab
+          </div>
+          <div class="demo-item" slot="6">
+            第七个tab
+          </div>
+          <div class="demo-item" slot="7">
+            第八个tab
+          </div>
+          <div class="demo-item" slot="8">
+            第九个tab
+          </div>
+        </v-switcher>
+      </main>
+    </section>
+    <h3>header 垂直</h3>
+    <section>
+      <main class="vertical">
+        <v-switcher :headers="headers" align="vertical">
           <div class="demo-item" slot="0">
             第一个tab
           </div>

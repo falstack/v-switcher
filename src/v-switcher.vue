@@ -13,6 +13,23 @@ $active-item-color: #ff6881;
   overflow: hidden;
   position: relative;
 
+  &.v-switcher-vertical {
+    .v-switcher-header {
+      &-wrap {
+        float: left;
+        height: 100%;
+      }
+
+      &-item {
+        display: block;
+      }
+    }
+
+    .v-switcher-content {
+      overflow: hidden;
+    }
+  }
+
   &-header {
     position: relative;
     font-size: 0;
@@ -155,6 +172,7 @@ $active-item-color: #ff6881;
 <template>
   <div
     class="v-switcher"
+    :class="{ 'v-switcher-vertical': align === 'vertical' }"
     @mouseenter="cursorInner = true"
     @mouseleave="cursorInner = false"
   >
@@ -164,6 +182,7 @@ $active-item-color: #ff6881;
         class="v-switcher-header"
         :class="`v-switcher-header-${align}`"
         :style="headerStyle"
+        ref="header"
       >
         <li class="v-switcher-header-anchor" :style="anchorStyle">
           <slot name="anchor"></slot>
@@ -172,6 +191,7 @@ $active-item-color: #ff6881;
           v-for="(item, index) in formatHeaders"
           :key="index"
           :style="headerItemStyle"
+          :class="{ 'is-active': index === focusIndex }"
           ref="tab"
           class="v-switcher-header-item"
         >
@@ -267,7 +287,8 @@ export default {
     align: {
       type: String,
       default: 'around',
-      validate: val => ~['around', 'start', 'center', 'end'].indexOf(val)
+      validate: val =>
+        ~['around', 'start', 'center', 'end', 'vertical'].indexOf(val)
     },
     trigger: {
       type: String,
@@ -466,10 +487,21 @@ export default {
         setTimeout(this.computeAnchorStyle, 200)
         return
       }
-      this.anchorStyle = {
-        width: `${tab.offsetWidth}px`,
-        transform: `translateX(${tab.offsetLeft}px)`,
-        transitionDuration: `${this.duration}ms`
+      if (this.align === 'vertical') {
+        const header = this.$refs.header
+        this.anchorStyle = {
+          width: `${header.offsetWidth}px`,
+          height: `${tab.offsetHeight}px`,
+          transform: `translateY(${tab.getBoundingClientRect().top -
+            header.getBoundingClientRect().top}px)`,
+          transitionDuration: `${this.duration}ms`
+        }
+      } else {
+        this.anchorStyle = {
+          width: `${tab.offsetWidth}px`,
+          transform: `translateX(${tab.offsetLeft}px)`,
+          transitionDuration: `${this.duration}ms`
+        }
       }
     },
     computeItemText(item, curIndex) {
