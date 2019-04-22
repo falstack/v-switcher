@@ -109,6 +109,8 @@ $active-item-color: #ff6881;
   }
 
   &-content {
+    z-index: 0;
+
     &-animated {
       display: flex;
       flex-direction: row;

@@ -72,6 +72,7 @@ export default function Swipe(container, options) {
 
       if (browser.transitions) {
         slide.style.left = (pos * -width) + 'px';
+        slide.style.zIndex = slides.length - pos;
         move(pos, index > pos ? -width : (index < pos ? width : 0), 0);
       }
 
