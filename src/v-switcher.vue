@@ -139,8 +139,8 @@ $active-item-color: #ff6881;
 
         &-panel {
           float: left;
-          width: 100%;
           position: relative;
+          background-color: #fff;
         }
       }
     }
@@ -310,6 +310,10 @@ export default {
     indicator: {
       type: Boolean,
       default: false
+    },
+    itemWidth: {
+      type: String,
+      default: '100%'
     }
   },
   data() {
@@ -469,7 +473,9 @@ export default {
     },
     computePanelStyle(index) {
       if (this.swipe) {
-        return {}
+        return {
+          width: this.itemWidth
+        }
       }
       if (this.animated) {
         return this.aroundHeaderWidth
