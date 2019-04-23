@@ -77,6 +77,7 @@ $active-item-color: #ff6881;
       display: block;
       position: absolute;
       left: 0;
+      z-index: -1;
       @include transition();
     }
 
