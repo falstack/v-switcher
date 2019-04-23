@@ -452,6 +452,9 @@ export default {
       } else {
         checkTab = index ? tabs[index - 1] : tabs[0]
       }
+      if (!checkTab) {
+        return
+      }
       let { offsetLeft, offsetWidth } = checkTab
       const { innerWidth } = window
       const rect = checkTab.getBoundingClientRect()
