@@ -334,7 +334,8 @@ export default {
       timer: 0,
       headerLeft: 0,
       swiper: null,
-      windowHeight: this.$isServer ? 0 : window.innerHeight
+      windowHeight: this.$isServer ? 0 : window.innerHeight,
+      watcher: null
     }
   },
   computed: {
@@ -398,6 +399,12 @@ export default {
     if (this.sticky) {
       window.addEventListener('resize', this.computeContentHeight)
     }
+    if (this.routable) {
+      this.watcher = this.$watch('$route', () => {
+        this.computeAnchorStyle()
+        this.computeHeaderStyle(this.focusIndex)
+      })
+    }
   },
   beforeDestroy() {
     if (this.sticky) {
@@ -405,6 +412,9 @@ export default {
     }
     if (this.timer) {
       window.clearInterval(this.timer)
+    }
+    if (this.watcher) {
+      this.watcher()
     }
   },
   methods: {
