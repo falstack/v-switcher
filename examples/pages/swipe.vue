@@ -26,28 +26,6 @@
         </v-switcher>
       </main>
     </section>
-    <h3>header 吸顶（建议搭配 better-scroll 使用）</h3>
-    <section>
-      <main>
-        <v-switcher :headers="headers" :swipe="true" :sticky="true">
-          <div class="demo-item" slot="0">
-            第一个tab
-          </div>
-          <div class="demo-item" slot="1">
-            第二个tab
-          </div>
-          <div class="demo-item" slot="2">
-            第三个tab
-          </div>
-          <div class="demo-item" slot="3">
-            第四个tab
-          </div>
-          <div class="demo-item" slot="4">
-            第五个tab
-          </div>
-        </v-switcher>
-      </main>
-    </section>
   </div>
 </template>
 

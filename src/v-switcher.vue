@@ -118,18 +118,6 @@ $active-item-color: #ff6881;
       @include transition();
     }
 
-    &-sticky {
-      box-sizing: border-box;
-      padding-top: $default-header-height;
-      margin-top: -$default-header-height;
-
-      .v-switcher-content-panel {
-        height: 100%;
-        overflow: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-    }
-
     &-swipe {
       overflow: hidden;
       visibility: hidden;
@@ -179,7 +167,7 @@ $active-item-color: #ff6881;
     @mouseenter="cursorInner = true"
     @mouseleave="cursorInner = false"
   >
-    <div class="v-switcher-header-wrap">
+    <div class="v-switcher-header-wrap" ref="headerWrap">
       <div ref="headerBefore"><slot name="header-before"></slot></div>
       <ul
         class="v-switcher-header"
@@ -235,8 +223,7 @@ $active-item-color: #ff6881;
       <div
         class="v-switcher-content"
         :class="[
-          { 'v-switcher-content-animated': animated && !swipe },
-          { 'v-switcher-content-sticky': sticky }
+          { 'v-switcher-content-animated': animated && !swipe }
         ]"
         :style="contentStyle"
       >
@@ -302,10 +289,6 @@ export default {
       type: Boolean,
       default: false
     },
-    sticky: {
-      type: Boolean,
-      default: false
-    },
     autoplay: {
       type: Number,
       default: 0
@@ -365,9 +348,6 @@ export default {
     },
     contentStyle() {
       const style = {}
-      if (this.sticky) {
-        style.height = `${this.windowHeight}px`
-      }
       if (this.swipe) {
         return style
       }
@@ -396,9 +376,6 @@ export default {
       this.initSwiper()
       this.initCarousel()
     })
-    if (this.sticky) {
-      window.addEventListener('resize', this.computeContentHeight)
-    }
     if (this.routable) {
       this.watcher = this.$watch('$route', () => {
         this.computeAnchorStyle()
@@ -407,9 +384,6 @@ export default {
     }
   },
   beforeDestroy() {
-    if (this.sticky) {
-      window.removeEventListener('resize', this.computeContentHeight)
-    }
     if (this.timer) {
       window.clearInterval(this.timer)
     }
@@ -450,7 +424,7 @@ export default {
       this.windowHeight = window.innerHeight
     },
     computeHeaderStyle(lastFocusIndex) {
-      if (this.align !== 'start' || this.focusIndex <= 0) {
+      if (this.align !== 'start') {
         return
       }
       const index = this.focusIndex
@@ -466,19 +440,26 @@ export default {
       if (!checkTab) {
         return
       }
+      const headerWrap = this.$refs.headerWrap
+      if (!headerWrap) {
+        return
+      }
       let { offsetLeft, offsetWidth } = checkTab
-      const { innerWidth } = window
       const rect = checkTab.getBoundingClientRect()
+      const headerWrapRect = headerWrap.getBoundingClientRect()
       const beforeWidth = this.$refs.headerBefore.offsetWidth
+      const rectLeft = rect.left - headerWrapRect.left
+      const rectRight = rect.right - headerWrapRect.left
+      const innerWidth = headerWrap.offsetWidth
       let left = this.headerLeft
       if (
         isToRight &&
-        !(rect.left < innerWidth && rect.right < innerWidth) &&
+        !(rectLeft < innerWidth && rectRight < innerWidth) &&
         beforeWidth + offsetWidth + offsetLeft > innerWidth
       ) {
         left = innerWidth - offsetWidth - offsetLeft - beforeWidth
       }
-      if (!isToRight && (rect.left < beforeWidth || rect.right < 0)) {
+      if (!isToRight && (rectLeft < beforeWidth || rect.right < 0)) {
         left = -offsetLeft
       }
       this.headerLeft = left

@@ -7,21 +7,14 @@
     <h3>最简单的模式</h3>
     <section>
       <main>
-        <v-switcher :headers="headers" :autoplay="2000">
-          <div class="demo-item" slot="0">
-            第一个tab
-          </div>
-          <div class="demo-item" slot="1">
-            第二个tab
-          </div>
-          <div class="demo-item" slot="2">
-            第三个tab
-          </div>
-          <div class="demo-item" slot="3">
-            第四个tab
-          </div>
-          <div class="demo-item" slot="4">
-            第五个tab
+        <v-switcher :headers="headers" :autoplay="2000" align="start">
+          <div
+            v-for="(item, index) in headers"
+            :slot="`${index}`"
+            :key="index"
+            class="demo-item"
+          >
+            第{{ item }}个tab
           </div>
         </v-switcher>
       </main>
@@ -29,7 +22,7 @@
     <h3>带切换动画和指示器</h3>
     <section>
       <main>
-        <v-switcher :headers="headers" :swipe="true" :autoplay="2000" :indicator="true" item-width="600px">
+        <v-switcher :headers="headers.slice(0, 5)" :swipe="true" :autoplay="2000" :indicator="true" item-width="600px">
           <div :style="{ height: '400px', backgroundColor: 'rgba(21,174,103,.5)' }" slot="0">
             第一个tab
           </div>
@@ -63,7 +56,22 @@ export default {
         'tab-2',
         'tab-3',
         'tab-4',
-        'tab-5'
+        'tab-5',
+        'tab-6',
+        'tab-7',
+        'tab-8',
+        'tab-9',
+        'tab-10',
+        'tab-11',
+        'tab-12',
+        'tab-13',
+        'tab-14',
+        'tab-15',
+        'tab-16',
+        'tab-17',
+        'tab-18',
+        'tab-19',
+        'tab-20'
       ]
     }
   },
