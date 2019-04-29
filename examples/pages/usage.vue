@@ -419,7 +419,7 @@
         </v-switcher>
       </main>
       <aside class="ranking">
-        <v-switcher :headers="headers4" align="start" :animated="true" trigger="hover">
+        <v-switcher :headers="headers4" align="start" :animated="true" header-trigger="hover">
           <div class="header-before" slot="header-before">排行</div>
           <div class="header-after" slot="header-after">三日</div>
           <div class="k-item" slot="0" style="background-color: rgba(21,174,103,.5)">

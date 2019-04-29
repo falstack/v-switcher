@@ -1,6 +1,6 @@
 {
   "name": "v-switcher",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "main": "dist/v-switcher.umd.min.js",
   "files": [
     "dist"
@@ -20,7 +20,7 @@
   "scripts": {
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build --target lib --name v-switcher src/v-switcher.vue",
-    "lint": "vue-cli-service lint",
+    "lint": "vue-cli-service lint --fix",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {

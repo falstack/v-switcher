@@ -29,7 +29,7 @@
     <h3>header hover 切换</h3>
     <section>
       <main>
-        <v-switcher :headers="headers" :animated="true" trigger="hover" align="start">
+        <v-switcher :headers="headers" :animated="true" header-trigger="hover" align="start">
           <div class="demo-item" slot="0">
             第一个tab
           </div>

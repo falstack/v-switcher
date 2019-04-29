@@ -79,6 +79,7 @@ $active-item-color: #ff6881;
       left: 0;
       z-index: -1;
       @include transition();
+      transition-property: width, height, transform;
     }
 
     &-item {
@@ -167,13 +168,13 @@ $active-item-color: #ff6881;
     @mouseenter="cursorInner = true"
     @mouseleave="cursorInner = false"
   >
-    <div class="v-switcher-header-wrap" ref="headerWrap">
+    <div ref="headerWrap" class="v-switcher-header-wrap">
       <div ref="headerBefore"><slot name="header-before"></slot></div>
       <ul
+        ref="header"
         class="v-switcher-header"
         :class="`v-switcher-header-${align}`"
         :style="headerStyle"
-        ref="header"
       >
         <li class="v-switcher-header-anchor" :style="anchorStyle">
           <slot name="anchor"></slot>
@@ -181,10 +182,12 @@ $active-item-color: #ff6881;
         <li
           v-for="(item, index) in formatHeaders"
           :key="index"
+          ref="tab"
           :style="headerItemStyle"
           :class="{ 'is-active': index === focusIndex }"
-          ref="tab"
           class="v-switcher-header-item"
+          @mouseenter="handleAnchorTrigger(index)"
+          @mouseleave="handleAnchorTrigger(focusIndex)"
         >
           <router-link
             v-if="routable"
@@ -216,21 +219,19 @@ $active-item-color: #ff6881;
     </div>
     <div
       v-if="!routable"
+      ref="content"
       class="v-switcher-content-wrap"
       :class="{ 'v-switcher-content-swipe': swipe }"
-      ref="content"
     >
       <div
         class="v-switcher-content"
-        :class="[
-          { 'v-switcher-content-animated': animated && !swipe }
-        ]"
+        :class="[{ 'v-switcher-content-animated': animated && !swipe }]"
         :style="contentStyle"
       >
         <div
           v-for="(item, index) in headers"
-          :style="computePanelStyle(index)"
           :key="index"
+          :style="computePanelStyle(index)"
           class="v-switcher-content-panel"
         >
           <slot :name="index" />
@@ -252,7 +253,7 @@ $active-item-color: #ff6881;
 import Swipe from './swipe'
 
 export default {
-  name: 'v-switcher',
+  name: 'VSwitcher',
   props: {
     headers: {
       type: Array,
@@ -280,10 +281,20 @@ export default {
       validate: val =>
         ~['around', 'start', 'center', 'end', 'vertical'].indexOf(val)
     },
-    trigger: {
+    headerTrigger: {
       type: String,
       default: 'click',
       validate: val => ~['click', 'hover'].indexOf(val)
+    },
+    anchorTrigger: {
+      type: String,
+      default: 'click',
+      validate: val => ~['click', 'hover'].indexOf(val)
+    },
+    anchorPadding: {
+      type: Number,
+      default: 0,
+      validate: val => val >= 0
     },
     swipe: {
       type: Boolean,
@@ -371,14 +382,14 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.computeAnchorStyle()
+      this.computeAnchorStyle(this.focusIndex)
       this.computeHeaderStyle(0)
       this.initSwiper()
       this.initCarousel()
     })
     if (this.routable) {
       this.watcher = this.$watch('$route', () => {
-        this.computeAnchorStyle()
+        this.computeAnchorStyle(this.focusIndex)
         this.computeHeaderStyle(this.focusIndex)
       })
     }
@@ -484,25 +495,28 @@ export default {
       }
       return {}
     },
-    computeAnchorStyle() {
-      const tab = this.$refs.tab[this.focusIndex]
+    computeAnchorStyle(index) {
+      const tab = this.$refs.tab[index]
       if (!tab) {
-        setTimeout(this.computeAnchorStyle, 200)
+        setTimeout(() => {
+          this.computeAnchorStyle(index)
+        }, 200)
         return
       }
       if (this.align === 'vertical') {
         const header = this.$refs.header
         this.anchorStyle = {
           width: `${header.offsetWidth}px`,
-          height: `${tab.offsetHeight}px`,
+          height: `${tab.offsetHeight - this.anchorPadding * 2}px`,
           transform: `translateY(${tab.getBoundingClientRect().top -
-            header.getBoundingClientRect().top}px)`,
+            header.getBoundingClientRect().top +
+            this.anchorPadding}px)`,
           transitionDuration: `${this.duration}ms`
         }
       } else {
         this.anchorStyle = {
-          width: `${tab.offsetWidth}px`,
-          transform: `translateX(${tab.offsetLeft}px)`,
+          width: `${tab.offsetWidth - this.anchorPadding * 2}px`,
+          transform: `translateX(${tab.offsetLeft + this.anchorPadding}px)`,
           transitionDuration: `${this.duration}ms`
         }
       }
@@ -541,12 +555,12 @@ export default {
         this.focusIndex = index
         this.$emit('change', index)
       }
-      this.computeAnchorStyle()
+      this.computeAnchorStyle(index)
       this.computeHeaderStyle(lastIndex)
       this.triggerSwiper()
     },
     handleMouseEvent(index) {
-      if (this.trigger !== 'hover') {
+      if (this.headerTrigger !== 'hover') {
         return
       }
       this.handleTabSwitch(index)
@@ -567,6 +581,12 @@ export default {
         }
       }
       this.handleTabSwitch(result)
+    },
+    handleAnchorTrigger(index) {
+      if (this.anchorTrigger !== 'hover') {
+        return
+      }
+      this.computeAnchorStyle(index)
     }
   }
 }

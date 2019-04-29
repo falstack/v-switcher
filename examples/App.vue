@@ -82,7 +82,7 @@ body {
 <template>
   <div id="app">
     <div class="container header">
-      <v-switcher :headers="headers" :routable="true" align="start">
+      <v-switcher :headers="headers" :routable="true" align="start" anchor-trigger="hover">
         <template slot="tab-0">
           2333 - 首页
         </template>
