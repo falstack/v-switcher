@@ -156,7 +156,7 @@
     <h3>header 垂直</h3>
     <section>
       <main class="vertical">
-        <v-switcher :headers="headers" align="vertical" anchor-trigger="hover">
+        <v-switcher :headers="headers" align="vertical">
           <div class="demo-item" slot="0">
             第一个tab
           </div>

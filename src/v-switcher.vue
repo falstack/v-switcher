@@ -59,13 +59,6 @@ $default-header-height: 40px;
       }
     }
 
-    &-center,
-    &-start {
-      .v-switcher-header-item {
-        padding: 0 25px;
-      }
-    }
-
     &-end {
       text-align: right;
     }
@@ -499,19 +492,18 @@ export default {
       this._handleTabSwitch(result)
     },
     _handleAnchorTrigger(index) {
-      if (this.anchorTrigger !== 'hover') {
-        return
+      if (this.anchorTrigger === 'hover') {
+        this._computeAnchorStyle(index)
       }
-      this._computeAnchorStyle(index)
+      if (this.headerTrigger === 'hover') {
+        this._handleTabSwitch(index)
+      }
     },
     next() {
       this._switchTrigger(true)
     },
     prev() {
       this._switchTrigger(false)
-    },
-    jump(index) {
-      this._handleTabSwitch(index)
     }
   }
 }

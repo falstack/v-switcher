@@ -22,7 +22,7 @@
     <h3>带切换动画和指示器</h3>
     <section>
       <main>
-        <v-switcher :headers="headers.slice(0, 5)" :swipe="true" :autoplay="2000" :indicator="true" item-width="600px">
+        <v-switcher :headers="headers.slice(0, 5)" :swipe="true" :autoplay="2000" item-width="600px">
           <div :style="{ height: '400px', backgroundColor: 'rgba(21,174,103,.5)' }" slot="0">
             第一个tab
           </div>

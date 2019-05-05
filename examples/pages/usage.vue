@@ -89,22 +89,19 @@
 
         &-item {
           margin-left: 8px;
+          width: 18px;
+          height: 18px;
+          background-position: -855px -790px;
+          background-image: url("../icons.png");
+          border-bottom-width: 0;
+          cursor: pointer;
 
-          &-cell {
-            width: 18px;
-            height: 18px;
-            background-position: -855px -790px;
-            background-image: url("../icons.png");
-            border-bottom-width: 0;
-            cursor: pointer;
+          &:hover {
+            background-position: -919px -790px;
+          }
 
-            &:hover {
-              background-position: -919px -790px;
-            }
-
-            &.is-active {
-              background-position: -855px -727px;
-            }
+          &.is-active {
+            background-position: -855px -727px;
           }
         }
       }
@@ -132,38 +129,35 @@
       }
 
       &-item {
-        &-cell {
-          width: 100%;
-          font-size: 18px;
-          line-height: 39px;
-          height: 39px;
-          color: #000;
-          transition: 0.2s;
-          border-bottom-width: 1px;
-          border-bottom-color: #e5e9ef;
+        width: 100%;
+        font-size: 18px;
+        line-height: 39px;
+        height: 39px;
+        color: #000;
+        transition: 0.2s;
+        border-bottom: 1px solid #e5e9ef;
 
-          &:hover {
-            color: #00a1d6;
-          }
+        &:hover {
+          color: #00a1d6;
+        }
 
-          &.is-active {
-            color: #00a1d6;
-            border-bottom-color: #00a1d6;
-            position: relative;
+        &.is-active {
+          color: #00a1d6;
+          border-bottom-color: #00a1d6;
+          position: relative;
 
-            &:after {
-              content: '';
-              position: absolute;
-              left: 50%;
-              margin-left: -3px;
-              bottom: 0;
-              width: 0;
-              height: 0;
-              border-bottom: 3px solid #00a1d6;
-              border-top: 0;
-              border-left: 3px dashed transparent;
-              border-right: 3px dashed transparent;
-            }
+          &:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            margin-left: -3px;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-bottom: 3px solid #00a1d6;
+            border-top: 0;
+            border-left: 3px dashed transparent;
+            border-right: 3px dashed transparent;
           }
         }
       }
@@ -239,6 +233,61 @@
     width: 700px;
     height: 220px;
     margin-left: 20px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+
+    &:hover {
+      .indicator {
+        opacity: 1;
+      }
+    }
+
+    .indicator {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+
+      button {
+        width: 20px;
+        cursor: pointer;
+        font-size: 12px;
+        color: #fff;
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.6);
+        background-image: url("../icons2.png");
+        box-sizing: content-box;
+        border-width: 0;
+        pointer-events: auto;
+
+        &:hover,
+        &:focus {
+          outline-width: 0;
+          border-width: 0;
+        }
+      }
+
+      .btn-prev {
+        border-radius: 0 4px 4px 0;
+        padding: 13px 5px 13px 10px;
+        background-position: 6px -1211px;
+      }
+
+      .btn-next {
+        border-radius: 4px 0 0 4px;
+        padding: 13px 10px 13px 5px;
+        background-position: 25px -1262px;
+      }
+    }
 
     .v-switcher {
       height: 100%;
@@ -256,47 +305,6 @@
           flex-direction: row;
           justify-content: center;
           align-items: center;
-        }
-      }
-
-      &-indicator {
-        opacity: 0;
-        transition: all 0.3s;
-
-        button {
-          width: 20px;
-          cursor: pointer;
-          font-size: 12px;
-          color: #fff;
-          text-align: center;
-          background-color: rgba(0, 0, 0, 0.6);
-          background-image: url("../icons2.png");
-          box-sizing: content-box;
-          border-width: 0;
-
-          &:hover,
-          &:focus {
-            outline-width: 0;
-            border-width: 0;
-          }
-        }
-
-        .btn-prev {
-          border-radius: 0 4px 4px 0;
-          padding: 13px 5px 13px 10px;
-          background-position: 6px -1211px;
-        }
-
-        .btn-next {
-          border-radius: 4px 0 0 4px;
-          padding: 13px 10px 13px 5px;
-          background-position: 25px -1262px;
-        }
-      }
-
-      &:hover {
-        .v-switcher-indicator {
-          opacity: 1;
         }
       }
     }
@@ -324,35 +332,30 @@
         &-item {
           margin-left: 12px;
           padding: 0;
+          font-size: 12px;
+          line-height: 24px;
+          height: 24px;
+          color: #000;
+          transition: 0.2s;
+          border-bottom: 1px solid transparent;
 
-          &-cell {
-            width: 100%;
-            font-size: 12px;
-            line-height: 24px;
-            height: 24px;
-            color: #000;
-            transition: 0.2s;
-            border-bottom-width: 1px;
-            border-bottom-color: transparent;
+          &.is-active {
+            color: #00a1d6;
+            border-bottom-color: #00a1d6;
+            position: relative;
 
-            &.is-active {
-              color: #00a1d6;
-              border-bottom-color: #00a1d6;
-              position: relative;
-
-              &:after {
-                content: '';
-                position: absolute;
-                left: 50%;
-                margin-left: -3px;
-                bottom: 0;
-                width: 0;
-                height: 0;
-                border-bottom: 3px solid #00a1d6;
-                border-top: 0;
-                border-left: 3px dashed transparent;
-                border-right: 3px dashed transparent;
-              }
+            &:after {
+              content: '';
+              position: absolute;
+              left: 50%;
+              margin-left: -3px;
+              bottom: 0;
+              width: 0;
+              height: 0;
+              border-bottom: 3px solid #00a1d6;
+              border-top: 0;
+              border-left: 3px dashed transparent;
+              border-right: 3px dashed transparent;
             }
           }
         }
@@ -382,13 +385,15 @@
         </v-switcher>
       </div>
       <div class="recommended">
-        <v-switcher :headers="headers3" :indicator="true" @change="handleChangeRecommended">
+        <v-switcher :headers="headers3" @change="handleChangeRecommended" ref="recommended">
           <div slot="0" class="r-item" style="background-color: rgba(21,174,103,.5)">三日</div>
           <div slot="1" class="r-item" style="background-color: rgba(195,123,177,.5)">一周</div>
           <div slot="2" class="r-item" style="background-color: rgba(125,205,244,.5)">昨日</div>
-          <template slot="btn-prev">{{ tab3LeftText }}</template>
-          <template slot="btn-next">{{ tab3RightText }}</template>
         </v-switcher>
+        <div class="indicator">
+          <button class="btn-prev" @click="switchRecommended(false)">{{ tab3LeftText }}</button>
+          <button class="btn-next" @click="switchRecommended(true)">{{ tab3RightText }}</button>
+        </div>
       </div>
     </section>
     <h3>面板</h3>
@@ -536,6 +541,9 @@ export default {
         'rgba(125,205,244,.5)'
       ]
       return colors[~~(Math.random() * colors.length)]
+    },
+    switchRecommended(isNext) {
+      isNext ? this.$refs.recommended.next() : this.$refs.recommended.prev()
     }
   }
 }
