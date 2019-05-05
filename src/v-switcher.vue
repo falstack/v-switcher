@@ -5,9 +5,6 @@
 }
 
 $default-header-height: 40px;
-$default-border-height: 0;
-$active-item-border-height: 2px;
-$active-item-color: #ff6881;
 
 .v-switcher {
   overflow: hidden;
@@ -85,28 +82,12 @@ $active-item-color: #ff6881;
     &-item {
       height: 100%;
       display: inline-block;
-      line-height: $default-header-height - $default-border-height;
+      line-height: $default-header-height;
       text-align: center;
       font-size: 15px;
       color: #657786;
       user-select: none;
       vertical-align: middle;
-
-      &-cell {
-        display: inline-block;
-        line-height: $default-header-height - $default-border-height -
-          $active-item-border-height;
-        height: $default-header-height - $default-border-height -
-          $active-item-border-height;
-        border-bottom-color: transparent;
-        border-bottom-style: solid;
-        border-bottom-width: $active-item-border-height;
-
-        &.is-active {
-          color: $active-item-color;
-          border-bottom-color: $active-item-color;
-        }
-      }
     }
   }
 
@@ -141,23 +122,6 @@ $active-item-color: #ff6881;
       position: relative;
     }
   }
-
-  &-indicator {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    top: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    pointer-events: none;
-
-    button {
-      pointer-events: auto;
-    }
-  }
 }
 </style>
 
@@ -186,33 +150,14 @@ $active-item-color: #ff6881;
           :style="headerItemStyle"
           :class="{ 'is-active': index === focusIndex }"
           class="v-switcher-header-item"
-          @mouseenter="handleAnchorTrigger(index)"
-          @mouseleave="handleAnchorTrigger(focusIndex)"
+          @mouseenter="_handleAnchorTrigger(index)"
+          @mouseleave="_handleAnchorTrigger(focusIndex)"
+          @click="_handleTabSwitch(index)"
         >
-          <router-link
-            v-if="routable"
-            :class="{ 'is-active': index === focusIndex }"
-            :to="{ name: headers[index].route, params: $route.params }"
-            class="v-switcher-header-item-cell"
-            @click.native="handleTabSwitch(index)"
-          >
-            <slot :name="`tab-${index}`">
-              <i v-if="item.icon" :class="item.icon"></i>
-              <span v-text="item.text"></span>
-            </slot>
-          </router-link>
-          <div
-            v-else
-            :class="{ 'is-active': index === focusIndex }"
-            class="v-switcher-header-item-cell"
-            @click="handleTabSwitch(index)"
-            @mouseenter="handleMouseEvent(index)"
-          >
-            <slot :name="`tab-${index}`">
-              <i v-if="item.icon" :class="item.icon"></i>
-              <span v-text="item.text"></span>
-            </slot>
-          </div>
+          <slot :name="`tab-${index}`">
+            <i v-if="item.icon" :class="item.icon"></i>
+            <span v-text="item.text"></span>
+          </slot>
         </li>
       </ul>
       <div ref="headerAfter"><slot name="header-after"></slot></div>
@@ -231,19 +176,11 @@ $active-item-color: #ff6881;
         <div
           v-for="(item, index) in headers"
           :key="index"
-          :style="computePanelStyle(index)"
+          :style="_computePanelStyle(index)"
           class="v-switcher-content-panel"
         >
           <slot :name="index" />
         </div>
-      </div>
-      <div v-if="indicator" class="v-switcher-indicator">
-        <button class="btn-prev" @click="switchTrigger(false)">
-          <slot name="btn-prev">prev</slot>
-        </button>
-        <button class="btn-next" @click="switchTrigger(true)">
-          <slot name="btn-next">next</slot>
-        </button>
       </div>
     </div>
   </div>
@@ -304,10 +241,6 @@ export default {
       type: Number,
       default: 0
     },
-    indicator: {
-      type: Boolean,
-      default: false
-    },
     itemWidth: {
       type: String,
       default: '100%'
@@ -327,9 +260,7 @@ export default {
       headerStyle: {},
       timer: 0,
       headerLeft: 0,
-      swiper: null,
-      windowHeight: this.$isServer ? 0 : window.innerHeight,
-      watcher: null
+      swiper: null
     }
   },
   computed: {
@@ -337,8 +268,8 @@ export default {
       const result = []
       this.headers.forEach((item, index) => {
         result.push({
-          text: this.computeItemText(item, index),
-          icon: this.computeItemIcon(item, index)
+          text: this._computeItemText(item, index),
+          icon: this._computeItemIcon(item, index)
         })
       })
       return result
@@ -373,8 +304,8 @@ export default {
   },
   watch: {
     $route(newVal) {
-      this.focusIndex = this.headers.map(_ => _.route).indexOf(newVal.name)
-      this.computeHeaderStyle(0)
+      const currentIndex = this.headers.map(_ => _.route).indexOf(newVal.name)
+      this._handleTabSwitch(currentIndex, true)
     },
     headers(newVal) {
       this.focusIndex = newVal.map(_ => _.route).indexOf(this.$route.name)
@@ -382,28 +313,19 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.computeAnchorStyle(this.focusIndex)
-      this.computeHeaderStyle(0)
-      this.initSwiper()
-      this.initCarousel()
+      this._computeAnchorStyle(this.focusIndex)
+      this._computeHeaderStyle(0)
+      this._initSwiper()
+      this._initCarousel()
     })
-    if (this.routable) {
-      this.watcher = this.$watch('$route', () => {
-        this.computeAnchorStyle(this.focusIndex)
-        this.computeHeaderStyle(this.focusIndex)
-      })
-    }
   },
   beforeDestroy() {
     if (this.timer) {
       window.clearInterval(this.timer)
     }
-    if (this.watcher) {
-      this.watcher()
-    }
   },
   methods: {
-    initCarousel() {
+    _initCarousel() {
       if (!this.autoplay) {
         return
       }
@@ -411,30 +333,27 @@ export default {
         if (this.cursorInner) {
           return
         }
-        this.switchTrigger(true)
+        this._switchTrigger(true)
       }, this.autoplay)
     },
-    initSwiper() {
+    _initSwiper() {
       if (!this.swipe) {
         return
       }
       this.swiper = Swipe(this.$refs.content, {
         startSlide: this.focusIndex,
         speed: this.duration,
-        continuous: !!this.autoplay || this.indicator,
-        callback: this.handleTabSwitch
+        continuous: !!this.autoplay,
+        callback: this._handleTabSwitch
       })
     },
-    triggerSwiper() {
+    _triggerSwiper() {
       if (!this.swipe) {
         return
       }
       this.swiper.slide(this.focusIndex, this.duration)
     },
-    computeContentHeight() {
-      this.windowHeight = window.innerHeight
-    },
-    computeHeaderStyle(lastFocusIndex) {
+    _computeHeaderStyle(lastFocusIndex) {
       if (this.align !== 'start') {
         return
       }
@@ -479,7 +398,7 @@ export default {
         transitionDuration: `${this.duration}ms`
       }
     },
-    computePanelStyle(index) {
+    _computePanelStyle(index) {
       if (this.swipe) {
         return {
           width: this.itemWidth
@@ -495,11 +414,11 @@ export default {
       }
       return {}
     },
-    computeAnchorStyle(index) {
+    _computeAnchorStyle(index) {
       const tab = this.$refs.tab[index]
       if (!tab) {
         setTimeout(() => {
-          this.computeAnchorStyle(index)
+          this._computeAnchorStyle(index)
         }, 200)
         return
       }
@@ -521,7 +440,7 @@ export default {
         }
       }
     },
-    computeItemText(item, curIndex) {
+    _computeItemText(item, curIndex) {
       let result
       if (typeof item === 'string') {
         result = item
@@ -537,7 +456,7 @@ export default {
       }
       return result
     },
-    computeItemIcon(item, curIndex) {
+    _computeItemIcon(item, curIndex) {
       let result
       if (typeof item === 'string' || !item.icon) {
         result = ''
@@ -549,23 +468,20 @@ export default {
       }
       return result
     },
-    handleTabSwitch(index) {
+    _handleTabSwitch(index, force = false) {
+      if (this.routable && !force) {
+        return
+      }
       const lastIndex = this.focusIndex
       if (this.focusIndex !== index) {
         this.focusIndex = index
         this.$emit('change', index)
       }
-      this.computeAnchorStyle(index)
-      this.computeHeaderStyle(lastIndex)
-      this.triggerSwiper()
+      this._computeAnchorStyle(index)
+      this._computeHeaderStyle(lastIndex)
+      this._triggerSwiper()
     },
-    handleMouseEvent(index) {
-      if (this.headerTrigger !== 'hover') {
-        return
-      }
-      this.handleTabSwitch(index)
-    },
-    switchTrigger(isNext) {
+    _switchTrigger(isNext) {
       let result
       if (isNext) {
         if (this.focusIndex === this.headerCount - 1) {
@@ -580,13 +496,22 @@ export default {
           result = this.focusIndex - 1
         }
       }
-      this.handleTabSwitch(result)
+      this._handleTabSwitch(result)
     },
-    handleAnchorTrigger(index) {
+    _handleAnchorTrigger(index) {
       if (this.anchorTrigger !== 'hover') {
         return
       }
-      this.computeAnchorStyle(index)
+      this._computeAnchorStyle(index)
+    },
+    next() {
+      this._switchTrigger(true)
+    },
+    prev() {
+      this._switchTrigger(false)
+    },
+    jump(index) {
+      this._handleTabSwitch(index)
     }
   }
 }

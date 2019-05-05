@@ -83,9 +83,13 @@ body {
   <div id="app">
     <div class="container header">
       <v-switcher :headers="headers" :routable="true" align="start" anchor-trigger="hover">
-        <template slot="tab-0">
-          2333 - 首页
-        </template>
+        <router-link
+          v-for="(item, index) in headers"
+          :key="index"
+          :slot="`tab-${index}`"
+          :to="item.route"
+          v-text="item.name"
+        ></router-link>
       </v-switcher>
     </div>
     <div class="banner">vue layout tab</div>
