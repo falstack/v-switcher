@@ -15,6 +15,17 @@ body {
     }
   }
 
+  .v-switcher {
+    &-header-item {
+      padding: 0 20px;
+      box-sizing: border-box;
+
+      &.is-active {
+        color: palevioletred;
+      }
+    }
+  }
+
   .banner {
     height: 150px;
     background-color: #4fc08d;

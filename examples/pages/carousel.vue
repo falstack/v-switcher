@@ -1,13 +1,19 @@
 <style lang="scss">
+#carousel {
+
+}
 </style>
 
 <template>
   <div id="carousel">
     <h1>自动轮播</h1>
     <h3>最简单的模式</h3>
-    <section>
+    <section class="many">
       <main>
-        <v-switcher :headers="headers" :autoplay="2000" align="start">
+        <v-switcher :headers="headers" align="start">
+          <template slot="header-after">
+            2333
+          </template>
           <div
             v-for="(item, index) in headers"
             :slot="`${index}`"

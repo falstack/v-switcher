@@ -35,6 +35,11 @@ $default-header-height: 40px;
     padding: 0;
     margin: 0;
 
+    &-before,
+    &-after {
+      flex-shrink: 0;
+    }
+
     &-wrap {
       height: $default-header-height;
       box-sizing: border-box;
@@ -81,6 +86,7 @@ $default-header-height: 40px;
       color: #657786;
       user-select: none;
       vertical-align: middle;
+      white-space: nowrap;
     }
   }
 
@@ -115,6 +121,11 @@ $default-header-height: 40px;
       position: relative;
     }
   }
+
+  &-tab-wrap {
+    flex-grow: 1;
+    overflow: hidden;
+  }
 }
 </style>
 
@@ -126,34 +137,40 @@ $default-header-height: 40px;
     @mouseleave="cursorInner = false"
   >
     <div ref="headerWrap" class="v-switcher-header-wrap">
-      <div ref="headerBefore"><slot name="header-before"></slot></div>
-      <ul
-        ref="header"
-        class="v-switcher-header"
-        :class="`v-switcher-header-${align}`"
-        :style="headerStyle"
-      >
-        <li class="v-switcher-header-anchor" :style="anchorStyle">
-          <slot name="anchor"></slot>
-        </li>
-        <li
-          v-for="(item, index) in formatHeaders"
-          :key="index"
-          ref="tab"
-          :style="headerItemStyle"
-          :class="{ 'is-active': index === focusIndex }"
-          class="v-switcher-header-item"
-          @mouseenter="_handleAnchorTrigger(index)"
-          @mouseleave="_handleAnchorTrigger(focusIndex)"
-          @click="_handleTabSwitch(index)"
+      <div ref="headerBefore" class="v-switcher-header-before">
+        <slot name="header-before"></slot>
+      </div>
+      <div class="v-switcher-tab-wrap" ref="tabWrap">
+        <ul
+          ref="header"
+          class="v-switcher-header"
+          :class="`v-switcher-header-${align}`"
+          :style="headerStyle"
         >
-          <slot :name="`tab-${index}`">
-            <i v-if="item.icon" :class="item.icon"></i>
-            <span v-text="item.text"></span>
-          </slot>
-        </li>
-      </ul>
-      <div ref="headerAfter"><slot name="header-after"></slot></div>
+          <li class="v-switcher-header-anchor" :style="anchorStyle">
+            <slot name="anchor"></slot>
+          </li>
+          <li
+            v-for="(item, index) in formatHeaders"
+            :key="index"
+            ref="tab"
+            :style="headerItemStyle"
+            :class="{ 'is-active': index === focusIndex }"
+            class="v-switcher-header-item"
+            @mouseenter="_handleAnchorTrigger(index)"
+            @mouseleave="_handleAnchorTrigger(focusIndex)"
+            @click="_handleTabSwitch(index)"
+          >
+            <slot :name="`tab-${index}`">
+              <i v-if="item.icon" :class="item.icon"></i>
+              <span v-text="item.text"></span>
+            </slot>
+          </li>
+        </ul>
+      </div>
+      <div ref="headerAfter" class="v-switcher-header-after">
+        <slot name="header-after"></slot>
+      </div>
     </div>
     <div
       v-if="!routable"
@@ -253,7 +270,8 @@ export default {
       headerStyle: {},
       timer: 0,
       headerLeft: 0,
-      swiper: null
+      swiper: null,
+      screenCount: 0
     }
   },
   computed: {
@@ -371,6 +389,7 @@ export default {
       const rect = checkTab.getBoundingClientRect()
       const headerWrapRect = headerWrap.getBoundingClientRect()
       const beforeWidth = this.$refs.headerBefore.offsetWidth
+      const afterWidth = this.$refs.headerAfter.offsetWidth
       const rectLeft = rect.left - headerWrapRect.left
       const rectRight = rect.right - headerWrapRect.left
       const innerWidth = headerWrap.offsetWidth
@@ -380,7 +399,7 @@ export default {
         !(rectLeft < innerWidth && rectRight < innerWidth) &&
         beforeWidth + offsetWidth + offsetLeft > innerWidth
       ) {
-        left = innerWidth - offsetWidth - offsetLeft - beforeWidth
+        left = innerWidth - offsetWidth - offsetLeft - beforeWidth - afterWidth
       }
       if (!isToRight && (rectLeft < beforeWidth || rect.right < 0)) {
         left = -offsetLeft
@@ -474,6 +493,9 @@ export default {
       this._computeHeaderStyle(lastIndex)
       this._triggerSwiper()
     },
+    _computeScreenCount(index) {
+
+    },
     _switchTrigger(isNext) {
       let result
       if (isNext) {
@@ -504,6 +526,12 @@ export default {
     },
     prev() {
       this._switchTrigger(false)
+    },
+    forward() {
+
+    },
+    backward() {
+
     }
   }
 }

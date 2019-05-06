@@ -95,6 +95,7 @@
           background-image: url("../icons.png");
           border-bottom-width: 0;
           cursor: pointer;
+          padding: 0;
 
           &:hover {
             background-position: -919px -790px;
