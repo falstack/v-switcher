@@ -10,9 +10,10 @@
     <h3>最简单的模式</h3>
     <section class="many">
       <main>
-        <v-switcher :headers="headers" align="start">
+        <v-switcher ref="switch" :headers="headers" align="start">
           <template slot="header-after">
-            2333
+            <button @click="backward">向后</button>
+            <button @click="forward">向前</button>
           </template>
           <div
             v-for="(item, index) in headers"
@@ -77,7 +78,9 @@ export default {
         'tab-17',
         'tab-18',
         'tab-19',
-        'tab-20'
+        'tab-20',
+        'tab-21',
+        'tab-22'
       ]
     }
   },
@@ -96,6 +99,12 @@ export default {
         'rgba(125,205,244,.5)'
       ]
       return colors[~~(Math.random() * colors.length)]
+    },
+    backward() {
+      this.$refs.switch.backward()
+    },
+    forward() {
+      this.$refs.switch.forward()
     }
   }
 }

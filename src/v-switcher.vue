@@ -137,10 +137,10 @@ $default-header-height: 40px;
     @mouseleave="cursorInner = false"
   >
     <div ref="headerWrap" class="v-switcher-header-wrap">
-      <div ref="headerBefore" class="v-switcher-header-before">
+      <div class="v-switcher-header-before">
         <slot name="header-before"></slot>
       </div>
-      <div class="v-switcher-tab-wrap" ref="tabWrap">
+      <div ref="tabWrap" class="v-switcher-tab-wrap">
         <ul
           ref="header"
           class="v-switcher-header"
@@ -168,7 +168,7 @@ $default-header-height: 40px;
           </li>
         </ul>
       </div>
-      <div ref="headerAfter" class="v-switcher-header-after">
+      <div class="v-switcher-header-after">
         <slot name="header-after"></slot>
       </div>
     </div>
@@ -271,7 +271,8 @@ export default {
       timer: 0,
       headerLeft: 0,
       swiper: null,
-      screenCount: 0
+      curScreenIndex: 0,
+      maxScreenCount: 1
     }
   },
   computed: {
@@ -320,6 +321,7 @@ export default {
     },
     headers(newVal) {
       this.focusIndex = newVal.map(_ => _.route).indexOf(this.$route.name)
+      this._computeMaxScreenCount()
     }
   },
   mounted() {
@@ -328,6 +330,7 @@ export default {
       this._computeHeaderStyle(0)
       this._initSwiper()
       this._initCarousel()
+      this._computeMaxScreenCount()
     })
   },
   beforeDestroy() {
@@ -381,15 +384,13 @@ export default {
       if (!checkTab) {
         return
       }
-      const headerWrap = this.$refs.headerWrap
+      const headerWrap = this.$refs.tabWrap
       if (!headerWrap) {
         return
       }
       let { offsetLeft, offsetWidth } = checkTab
       const rect = checkTab.getBoundingClientRect()
       const headerWrapRect = headerWrap.getBoundingClientRect()
-      const beforeWidth = this.$refs.headerBefore.offsetWidth
-      const afterWidth = this.$refs.headerAfter.offsetWidth
       const rectLeft = rect.left - headerWrapRect.left
       const rectRight = rect.right - headerWrapRect.left
       const innerWidth = headerWrap.offsetWidth
@@ -397,13 +398,14 @@ export default {
       if (
         isToRight &&
         !(rectLeft < innerWidth && rectRight < innerWidth) &&
-        beforeWidth + offsetWidth + offsetLeft > innerWidth
+        offsetWidth + offsetLeft > innerWidth
       ) {
-        left = innerWidth - offsetWidth - offsetLeft - beforeWidth - afterWidth
+        left = innerWidth - offsetWidth - offsetLeft
       }
-      if (!isToRight && (rectLeft < beforeWidth || rect.right < 0)) {
+      if (!isToRight && (rectLeft < 0 || rect.right < 0)) {
         left = -offsetLeft
       }
+      this.curScreenIndex = Math.round(Math.abs(left / innerWidth))
       this.headerLeft = left
       this.headerStyle = {
         transform: `translateX(${left}px)`,
@@ -425,6 +427,15 @@ export default {
         }
       }
       return {}
+    },
+    _computeMaxScreenCount() {
+      const tab = this.$refs.tab[this.headerCount - 1]
+      const header = this.$refs.header
+      const tabRect = tab.getBoundingClientRect()
+      const fullWidth =
+        tabRect.left + tabRect.width - header.getBoundingClientRect().left
+      const { offsetWidth } = header
+      this.maxScreenCount = Math.ceil(fullWidth / offsetWidth)
     },
     _computeAnchorStyle(index) {
       const tab = this.$refs.tab[index]
@@ -493,9 +504,6 @@ export default {
       this._computeHeaderStyle(lastIndex)
       this._triggerSwiper()
     },
-    _computeScreenCount(index) {
-
-    },
     _switchTrigger(isNext) {
       let result
       if (isNext) {
@@ -521,6 +529,15 @@ export default {
         this._handleTabSwitch(index)
       }
     },
+    _moveHeader(targetScreenCount) {
+      const left = -targetScreenCount * this.$refs.header.offsetWidth
+      this.headerStyle = {
+        transform: `translateX(${left}px)`,
+        transitionDuration: `${this.duration}ms`
+      }
+      this.headerLeft = left
+      this.curScreenIndex = targetScreenCount
+    },
     next() {
       this._switchTrigger(true)
     },
@@ -528,10 +545,22 @@ export default {
       this._switchTrigger(false)
     },
     forward() {
-
+      if (this.align !== 'start') {
+        return
+      }
+      if (this.curScreenIndex + 1 >= this.maxScreenCount) {
+        return
+      }
+      this._moveHeader(this.curScreenIndex + 1)
     },
     backward() {
-
+      if (this.align !== 'start') {
+        return
+      }
+      if (this.curScreenIndex === 0) {
+        return
+      }
+      this._moveHeader(this.curScreenIndex - 1)
     }
   }
 }
