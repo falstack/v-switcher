@@ -259,7 +259,7 @@ export default {
   data() {
     let focusIndex
     if (this.routable) {
-      focusIndex = this.headers.map(_ => _.route).indexOf(this.$route.name)
+      focusIndex = this.headers.map(_ => _.route).indexOf(this.$route.path)
     } else {
       focusIndex = this.defaultIndex
     }
@@ -316,11 +316,11 @@ export default {
   },
   watch: {
     $route(newVal) {
-      const currentIndex = this.headers.map(_ => _.route).indexOf(newVal.name)
+      const currentIndex = this.headers.map(_ => _.route).indexOf(newVal.path)
       this._handleTabSwitch(currentIndex, true)
     },
     headers(newVal) {
-      this.focusIndex = newVal.map(_ => _.route).indexOf(this.$route.name)
+      this.focusIndex = newVal.map(_ => _.route).indexOf(this.$route.path)
       this._computeMaxScreenCount()
     }
   },

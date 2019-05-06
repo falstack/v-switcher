@@ -2,13 +2,18 @@
 body {
   margin: 0;
 
+  a {
+    text-decoration: none;
+    color: #222;
+  }
+
   .header {
     .v-switcher {
       &-header {
         &-anchor {
           bottom: 0;
           height: 100%;
-          background-color: #ff6881;
+          background-color: #00a1d6;
           opacity: 0.1;
         }
       }
@@ -118,27 +123,27 @@ export default {
       headers: [
         {
           name: '首页',
-          route: 'index'
+          route: '/'
         },
         {
           name: '简单用例',
-          route: 'simple'
+          route: '/simple'
         },
         {
           name: '带切换动画',
-          route: 'animated'
+          route: '/animated'
         },
         {
           name: '带手势操作',
-          route: 'swipe'
+          route: '/swipe'
         },
         {
           name: '自动轮播',
-          route: 'carousel'
+          route: '/carousel'
         },
         {
           name: '生产实例',
-          route: 'usage'
+          route: '/usage'
         }
       ]
     }
