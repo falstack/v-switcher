@@ -101,10 +101,12 @@ export default {
       return colors[~~(Math.random() * colors.length)]
     },
     backward() {
-      this.$refs.switch.backward()
+      const result = this.$refs.switch.backward()
+      console.log(result)
     },
     forward() {
-      this.$refs.switch.forward()
+      const result = this.$refs.switch.forward()
+      console.log(result)
     }
   }
 }

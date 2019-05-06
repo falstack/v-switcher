@@ -537,6 +537,10 @@ export default {
       }
       this.headerLeft = left
       this.curScreenIndex = targetScreenCount
+      return {
+        is_begin: targetScreenCount === 0,
+        is_end: targetScreenCount + 1 === this.maxScreenCount
+      }
     },
     next() {
       this._switchTrigger(true)
@@ -545,22 +549,25 @@ export default {
       this._switchTrigger(false)
     },
     forward() {
-      if (this.align !== 'start') {
-        return
+      if (
+        this.align !== 'start' ||
+        this.curScreenIndex + 1 >= this.maxScreenCount
+      ) {
+        return {
+          is_begin: false,
+          is_end: true
+        }
       }
-      if (this.curScreenIndex + 1 >= this.maxScreenCount) {
-        return
-      }
-      this._moveHeader(this.curScreenIndex + 1)
+      return this._moveHeader(this.curScreenIndex + 1)
     },
     backward() {
-      if (this.align !== 'start') {
-        return
+      if (this.align !== 'start' || this.curScreenIndex === 0) {
+        return {
+          is_begin: true,
+          is_end: false
+        }
       }
-      if (this.curScreenIndex === 0) {
-        return
-      }
-      this._moveHeader(this.curScreenIndex - 1)
+      return this._moveHeader(this.curScreenIndex - 1)
     }
   }
 }
