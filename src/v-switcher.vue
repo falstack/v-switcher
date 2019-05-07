@@ -72,9 +72,9 @@ $default-header-height: 40px;
       display: block;
       position: absolute;
       left: 0;
-      z-index: -1;
       @include transition();
       transition-property: width, height, transform;
+      pointer-events: none;
     }
 
     &-item {
@@ -147,9 +147,6 @@ $default-header-height: 40px;
           :class="`v-switcher-header-${align}`"
           :style="headerStyle"
         >
-          <li class="v-switcher-header-anchor" :style="anchorStyle">
-            <slot name="anchor"></slot>
-          </li>
           <li
             v-for="(item, index) in formatHeaders"
             :key="index"
@@ -165,6 +162,9 @@ $default-header-height: 40px;
               <i v-if="item.icon" :class="item.icon"></i>
               <span v-text="item.text"></span>
             </slot>
+          </li>
+          <li class="v-switcher-header-anchor" :style="anchorStyle">
+            <slot name="anchor"></slot>
           </li>
         </ul>
       </div>
