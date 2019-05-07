@@ -441,6 +441,7 @@ export default {
         tabRect.left + tabRect.width - header.getBoundingClientRect().left
       const { offsetWidth } = header
       this.maxScreenCount = Math.ceil(fullWidth / offsetWidth)
+      this.$emit('calc-screen-count', this.maxScreenCount)
     },
     _computeAnchorStyle(index) {
       const tab = this.$refs.tab[index]
