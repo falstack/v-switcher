@@ -436,6 +436,9 @@ export default {
     _computeMaxScreenCount() {
       const tab = this.$refs.tab[this.headerCount - 1]
       const header = this.$refs.header
+      if (!tab || !header) {
+        return
+      }
       const tabRect = tab.getBoundingClientRect()
       const fullWidth =
         tabRect.left + tabRect.width - header.getBoundingClientRect().left
