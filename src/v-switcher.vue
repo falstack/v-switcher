@@ -330,8 +330,8 @@ export default {
       this._computeHeaderStyle(0)
       this._initSwiper()
       this._initCarousel()
+      this._computeMaxScreenCount()
       if (this.align === 'start') {
-        this._computeMaxScreenCount()
         window.addEventListener('resize', () => {
           this._computeMaxScreenCount()
         })
@@ -434,6 +434,9 @@ export default {
       return {}
     },
     _computeMaxScreenCount() {
+      if (this.align !== 'start') {
+        return
+      }
       const tab = this.$refs.tab[this.headerCount - 1]
       const header = this.$refs.header
       if (!tab || !header) {
