@@ -84,7 +84,6 @@ $default-header-height: 40px;
       text-align: center;
       font-size: 15px;
       color: #657786;
-      user-select: none;
       vertical-align: middle;
       white-space: nowrap;
     }
