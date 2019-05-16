@@ -172,7 +172,7 @@ $default-header-height: 40px;
       </div>
     </div>
     <div
-      v-if="!routable && canRender"
+      v-if="!routable"
       ref="content"
       class="v-switcher-content-wrap"
       :class="{ 'v-switcher-content-swipe': swipe }"
@@ -271,8 +271,7 @@ export default {
       headerLeft: 0,
       swiper: null,
       curScreenIndex: 0,
-      maxScreenCount: 1,
-      canRender: false
+      maxScreenCount: 1
     }
   },
   computed: {
@@ -325,7 +324,6 @@ export default {
     }
   },
   mounted() {
-    this.canRender = true
     this.$nextTick(() => {
       this._computeAnchorStyle(this.focusIndex)
       this._computeHeaderStyle(0)
