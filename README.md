@@ -1,25 +1,14 @@
-# vue-layout-tab
+# v-switcher
 
 ## usage
 
 ### install
-```shell
-yarn add vue-layout-tab
+```sh
+yarn add v-switcher
+or
+npm i v-switcher
 ```
 
-### example
-```vue
-<v-tab :headers="headers">
-  <template slot="0">
-    <VueScroll>
-      建议使用 better-scroll
-    </VueScroll>
-  </template>
-  <template slot="1">
-    <p>非 routable 模式下，template 个数与 headers 的长度相同</p>
-  </template>
-</v-tab>
-```
 ### args
 | name | type | default  | required | meaning |
 | --- | --- | --- | --- | --- |
@@ -28,17 +17,14 @@ yarn add vue-layout-tab
 | routable | <Boolean> | false | N | 设为 true 则为路由模式 |
 | animated | <Boolean> | false | N | 是否支持切换动画 | 
 | duration | <Number> | 300 | N | 切换动画的时长，ms |
-| align | <String> | around | N | tab 的展示模式 ['around', 'start', 'center', 'end'] |
+| align | <String> | around | N | tab 的展示模式 ['around', 'start', 'center', 'end', 'vertical'] |
 | swipe | <Boolean> | false | N | 是否支持左右手势滑动 | 
-| sticky | <Boolean> | false | N | 是否让 tab-header 吸附在页面顶部 |
+| headerTrigger | <String> | click | false | 头部动画触发的方式 ['click', 'hover'] |
+| anchorTrigger | <String> | click | false | 锚点动画触发的方式 ['click', 'hover'] |
+| anchorPadding | <Number> | 0 | false | 锚点元素的 padding 值 |
+| autoplay | <Number> | 0 | false | 自动切换的时长（ms）默认不自动切换 |
+| itemWidth | <String> | 100% | false | 每个 content 的宽度，默认 100% |
 
-
-### tips
-1. tab 较多时建议`align：start`
-2. `swipe: true`的时候建议使用`better-scroll`
-3. 使用`better-scroll`的使用，建议`sticky: true`
-4. `headers`可以是字符串数组，也可以是对象数组，`routable: true`时，使用对象数组，每个tab有`route`属性，为指向页面的`name`
-5. `routable：true`的时候，不需要`<template slot>`
 
 ## Project setup
 ```
