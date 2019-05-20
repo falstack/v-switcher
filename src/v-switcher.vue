@@ -224,23 +224,23 @@ export default {
     align: {
       type: String,
       default: 'around',
-      validate: val =>
+      validator: val =>
         ~['around', 'start', 'center', 'end', 'vertical'].indexOf(val)
     },
     headerTrigger: {
       type: String,
       default: 'click',
-      validate: val => ~['click', 'hover'].indexOf(val)
+      validator: val => ~['click', 'hover'].indexOf(val)
     },
     anchorTrigger: {
       type: String,
       default: 'click',
-      validate: val => ~['click', 'hover'].indexOf(val)
+      validator: val => ~['click', 'hover'].indexOf(val)
     },
     anchorPadding: {
       type: Number,
       default: 0,
-      validate: val => val >= 0
+      validator: val => val >= 0
     },
     swipe: {
       type: Boolean,
