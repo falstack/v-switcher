@@ -1,5 +1,6 @@
 const webpack = require('webpack')
 const npmCfg = require('./package.json')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const banner = [
   npmCfg.name + ' v' + npmCfg.version,
@@ -17,9 +18,15 @@ module.exports = {
     }
   },
   configureWebpack: {
-    plugins: [new webpack.BannerPlugin(banner)]
+    plugins: [
+      new webpack.BannerPlugin(banner),
+      new CopyWebpackPlugin([
+        { from: './src/v-switcher.vue' },
+        { from: './src/swipe.js' }
+      ])
+    ]
   },
   css: {
-    extract: true
+    extract: false
   }
 }
