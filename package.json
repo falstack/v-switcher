@@ -1,7 +1,7 @@
 {
   "name": "v-switcher",
-  "version": "1.0.2",
-  "main": "dist/v-switcher.umd.min.js",
+  "version": "1.0.3",
+  "main": "dist/v-switcher.vue",
   "files": [
     "dist"
   ],

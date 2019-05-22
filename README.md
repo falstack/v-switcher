@@ -1,14 +1,5 @@
 # v-switcher
 
-## usage
-
-### install
-```sh
-yarn add v-switcher
-or
-npm i v-switcher
-```
-
 ### args
 | name | type | default  | required | meaning |
 | --- | --- | --- | --- | --- |
@@ -25,6 +16,8 @@ npm i v-switcher
 | autoplay | <Number> | 0 | false | 自动切换的时长（ms）默认不自动切换 |
 | itemWidth | <String> | 100% | false | 每个 content 的宽度，默认 100% |
 
+### usage
+> 用例比较多，比较复杂，就不写了，把项目 clone 到本地，然后执行以下脚本来看 demo 吧
 
 ## Project setup
 ```
@@ -34,14 +27,4 @@ yarn install
 ### Compiles and hot-reloads for development
 ```
 yarn run serve
-```
-
-### Compiles and minifies for production
-```
-yarn run build
-```
-
-### Lints and fixes files
-```
-yarn run lint
 ```

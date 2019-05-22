@@ -1,3 +1,4 @@
+<!--
 <style lang="scss">
 @mixin transition {
   transition-property: transform;
@@ -127,7 +128,7 @@ $default-header-height: 40px;
   }
 }
 </style>
-
+-->
 <template>
   <div
     class="v-switcher"
@@ -197,6 +198,7 @@ $default-header-height: 40px;
 
 <script>
 import Swipe from './swipe'
+import './v-switcher.css'
 
 export default {
   name: 'VSwitcher',
