@@ -315,15 +315,15 @@ export default {
       return style
     }
   },
-  watch: {
-    $route(newVal) {
+  beforeMount() {
+    this.$watch('$route', newVal => {
       const currentIndex = this.headers.map(_ => _.route).indexOf(newVal.path)
       this._handleTabSwitch(currentIndex, true)
-    },
-    headers(newVal) {
+    })
+    this.$watch('headers', newVal => {
       this.focusIndex = newVal.map(_ => _.route).indexOf(this.$route.path)
       this._computeMaxScreenCount()
-    }
+    })
   },
   mounted() {
     this.$nextTick(() => {
