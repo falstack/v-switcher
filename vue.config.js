@@ -22,12 +22,11 @@ module.exports = {
       new webpack.BannerPlugin(banner),
       new CopyWebpackPlugin([
         { from: './src/v-switcher.vue' },
-        { from: './src/v-switcher.css' },
         { from: './src/swipe.js' }
       ])
     ]
   },
   css: {
-    extract: true
+    extract: false
   }
 }
