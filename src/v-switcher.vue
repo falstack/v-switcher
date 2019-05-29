@@ -4,8 +4,6 @@
   transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-$default-header-height: 40px;
-
 .v-switcher {
   overflow: hidden;
   position: relative;
@@ -14,7 +12,7 @@ $default-header-height: 40px;
     .v-switcher-header {
       &-wrap {
         float: left;
-        height: 100%;
+        height: 100% !important;
       }
 
       &-item {
@@ -41,7 +39,6 @@ $default-header-height: 40px;
     }
 
     &-wrap {
-      height: $default-header-height;
       box-sizing: border-box;
       display: flex;
       flex-direction: row;
@@ -78,9 +75,7 @@ $default-header-height: 40px;
     }
 
     &-item {
-      height: 100%;
       display: inline-block;
-      line-height: $default-header-height;
       text-align: center;
       font-size: 15px;
       color: #657786;
@@ -135,7 +130,11 @@ $default-header-height: 40px;
     @mouseenter="cursorInner = true"
     @mouseleave="cursorInner = false"
   >
-    <div ref="headerWrap" class="v-switcher-header-wrap">
+    <div
+      ref="headerWrap"
+      class="v-switcher-header-wrap"
+      :style="{ height: `${itemHeight}px` }"
+    >
       <div class="v-switcher-header-before">
         <slot name="header-before"></slot>
       </div>
@@ -253,6 +252,11 @@ export default {
     itemWidth: {
       type: String,
       default: '100%'
+    },
+    itemHeight: {
+      type: Number,
+      default: 40,
+      validator: val => val >= 0
     }
   },
   data() {
@@ -289,10 +293,14 @@ export default {
       return this.headers.length
     },
     headerItemStyle() {
-      if (this.align !== 'around') {
-        return {}
+      const result = {
+        height: `${this.itemHeight}px`,
+        lineHeight: `${this.itemHeight}px`
       }
-      return this.aroundHeaderWidth
+      if (this.align !== 'around') {
+        return result
+      }
+      return Object.assign(result, this.aroundHeaderWidth)
     },
     aroundHeaderWidth() {
       return {
