@@ -1,6 +1,6 @@
 # v-switcher
 
-### args
+### props
 | name | type | default  | required | meaning |
 | --- | --- | --- | --- | --- |
 | headers | <Array> | [] | Y | tab-header 的数组，支持 icon |
