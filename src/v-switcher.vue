@@ -456,12 +456,15 @@ export default {
       this.maxScreenCount = Math.ceil(fullWidth / offsetWidth)
       this.$emit('calc-screen-count', this.maxScreenCount)
     },
-    _computeAnchorStyle(index) {
+    _computeAnchorStyle(index, loop = 0) {
       const tab = this.$refs.tab[index]
       if (!tab) {
-        setTimeout(() => {
-          this._computeAnchorStyle(index)
-        }, 200)
+        // 这个地方 DOM 可能还没渲染好，refs 不存在，循环 5 次来取值
+        if (loop < 5) {
+          setTimeout(() => {
+            this._computeAnchorStyle(this.focusIndex, loop + 1)
+          }, 200)
+        }
         return
       }
       if (this.align === 'vertical') {
