@@ -197,6 +197,27 @@
 <script>
 import Swipe from './swipe.js'
 
+if (!String.prototype.startsWith) {
+  Object.defineProperty(String.prototype, 'startsWith', {
+    value: function(search, pos) {
+      pos = !pos || pos < 0 ? 0 : +pos
+      return this.substring(pos, pos + search.length) === search
+    }
+  })
+}
+
+const getMatchedRouteIndex = (headers, path) => {
+  let result = -1
+  headers
+    .map(_ => _.route)
+    .forEach((route, index) => {
+      if (path.startsWith(route)) {
+        result = index
+      }
+    })
+  return result
+}
+
 export default {
   name: 'VSwitcher',
   props: {
@@ -262,7 +283,7 @@ export default {
   data() {
     let focusIndex
     if (this.routable) {
-      focusIndex = this.headers.map(_ => _.route).indexOf(this.$route.path)
+      focusIndex = getMatchedRouteIndex(this.headers, this.$route.path)
     } else {
       focusIndex = this.defaultIndex
     }
@@ -323,11 +344,13 @@ export default {
   },
   beforeMount() {
     this.$watch('$route', newVal => {
-      const currentIndex = this.headers.map(_ => _.route).indexOf(newVal.path)
+      const currentIndex = getMatchedRouteIndex(this.headers, newVal.path)
       this._handleTabSwitch(currentIndex, true)
     })
     this.$watch('headers', newVal => {
-      this.focusIndex = newVal.map(_ => _.route).indexOf(this.$route.path)
+      if (this.routable) {
+        this.focusIndex = getMatchedRouteIndex(newVal, this.$route.path)
+      }
       this._computeMaxScreenCount()
     })
   },
