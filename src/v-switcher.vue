@@ -44,6 +44,11 @@
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
+
+      &-fixed {
+        position: fixed;
+        z-index: 10;
+      }
     }
 
     &-center {
@@ -133,7 +138,8 @@
     <div
       ref="headerWrap"
       class="v-switcher-header-wrap"
-      :style="{ height: `${itemHeight}px` }"
+      :class="{ 'v-switcher-header-wrap-fixed': isFixed }"
+      :style="[{ height: `${headerHeight}px` }, fixedHeaderStyle]"
     >
       <div class="v-switcher-header-before">
         <slot name="header-before"></slot>
@@ -170,6 +176,7 @@
         <slot name="header-after"></slot>
       </div>
     </div>
+    <div v-show="showFixedShim" ref="fixed" :style="fixedShimStyle" />
     <div
       v-if="!routable"
       ref="content"
@@ -196,6 +203,7 @@
 
 <script>
 import Swipe from './swipe.js'
+import affix from './affix.js'
 
 if (!String.prototype.startsWith) {
   Object.defineProperty(String.prototype, 'startsWith', {
@@ -220,6 +228,7 @@ const getMatchedRouteIndex = (headers, path) => {
 
 export default {
   name: 'VSwitcher',
+  mixins: [affix],
   props: {
     headers: {
       type: Array,
@@ -270,11 +279,11 @@ export default {
       type: Number,
       default: 0
     },
-    itemWidth: {
+    contentWidth: {
       type: String,
       default: '100%'
     },
-    itemHeight: {
+    headerHeight: {
       type: Number,
       default: 40,
       validator: val => val >= 0
@@ -292,6 +301,10 @@ export default {
       focusIndex,
       anchorStyle: {},
       headerStyle: {},
+      isFixed: false,
+      showFixedShim: false,
+      fixedShimStyle: {},
+      fixedHeaderStyle: {},
       timer: 0,
       headerLeft: 0,
       swiper: null,
@@ -315,8 +328,8 @@ export default {
     },
     headerItemStyle() {
       const result = {
-        height: `${this.itemHeight}px`,
-        lineHeight: `${this.itemHeight}px`
+        height: `${this.headerHeight}px`,
+        lineHeight: `${this.headerHeight}px`
       }
       if (this.align !== 'around') {
         return result
@@ -450,7 +463,7 @@ export default {
     _computePanelStyle(index) {
       if (this.swipe) {
         return {
-          width: this.itemWidth
+          width: this.contentWidth
         }
       }
       if (this.animated) {

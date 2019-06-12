@@ -98,7 +98,7 @@ body {
 <template>
   <div id="app">
     <div class="container header">
-      <v-switcher :headers="headers" :routable="true" align="start" anchor-trigger="hover">
+      <v-switcher :headers="headers" :routable="true" align="start" anchor-trigger="hover" :fixed-top="0">
         <router-link
           v-for="(item, index) in headers"
           :key="index"
