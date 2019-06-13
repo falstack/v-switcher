@@ -75,7 +75,9 @@ body {
       main {
         width: 900px;
         max-width: 100%;
-        padding-right: 20px;
+        @media (min-width: 768px) {
+          padding-right: 20px;
+        }
       }
 
       aside {

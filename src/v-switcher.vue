@@ -150,6 +150,8 @@
           class="v-switcher-header"
           :class="`v-switcher-header-${align}`"
           :style="headerStyle"
+          @touchstart="_handleHeaderTouchStart"
+          @touchmove="_handleHeaderTouchMove"
         >
           <li
             v-for="(item, index) in formatHeaders"
@@ -307,6 +309,8 @@ export default {
       fixedHeaderStyle: {},
       timer: 0,
       headerLeft: 0,
+      headerSize: 0,
+      lastPoint: 0,
       swiper: null,
       curScreenIndex: 0,
       maxScreenCount: 1
@@ -365,6 +369,7 @@ export default {
         this.focusIndex = getMatchedRouteIndex(newVal, this.$route.path)
       }
       this._computeMaxScreenCount()
+      this._computeHeaderSize()
     })
   },
   mounted() {
@@ -374,6 +379,7 @@ export default {
       this._initSwiper()
       this._initCarousel()
       this._computeMaxScreenCount()
+      this._computeHeaderSize()
       if (this.align === 'start') {
         window.addEventListener('resize', () => {
           this._computeMaxScreenCount()
@@ -599,6 +605,58 @@ export default {
         is_begin: targetScreenCount === 0,
         is_end: targetScreenCount + 1 === this.maxScreenCount
       }
+    },
+    _handleHeaderTouchStart(e) {
+      const point = e.touches ? e.touches[0] : e
+      this.lastPoint = this.align === 'vertical' ? point.pageY : point.pageX
+    },
+    _handleHeaderTouchMove(e) {
+      const point = e.touches ? e.touches[0] : e
+      const isVertical = this.align === 'vertical'
+      const curPoint = isVertical ? point.pageY : point.pageX
+      const delta = curPoint - this.lastPoint
+      this.lastPoint = curPoint
+      const left = this.headerLeft + delta
+      if (isVertical) {
+        // 到顶了
+        if (delta < 0 && left < 0) {
+          return
+        }
+        // TODO：暂不支持垂直滚动吧~~~
+        return
+      } else {
+        // 到开头了
+        if (left > 0 && delta > 0) {
+          return
+        }
+        // 到结尾了
+        if (
+          delta < 0 &&
+          left + this.headerSize < this.$refs.tabWrap.offsetWidth
+        ) {
+          return
+        }
+      }
+      this.headerLeft = left
+      this.headerStyle = {
+        transform: `translateX(${left}px)`,
+        transitionDuration: `${this.duration}ms`
+      }
+    },
+    _computeHeaderSize() {
+      this.$nextTick(() => {
+        if (!this.$refs.tab) {
+          return
+        }
+        const tabs = this.$refs.tab
+        const lastIndex = tabs.length - 1
+        this.headerSize =
+          this.align === 'vertical'
+            ? tabs[0].getBoundingClientRect().top -
+              tabs[lastIndex].getBoundingClientRect().bottom
+            : tabs[lastIndex].getBoundingClientRect().right -
+              tabs[0].getBoundingClientRect().left
+      })
     },
     next() {
       this._switchTrigger(true)
