@@ -25,6 +25,22 @@
     }
   }
 
+  &.v-switcher-sticky {
+    .v-switcher-content-wrap,
+    .v-switcher-content,
+    .v-switcher-content-panel {
+      height: 100%;
+    }
+
+    .v-switcher-content-wrap {
+      box-sizing: border-box;
+    }
+
+    .v-switcher-content-panel {
+      overflow-y: auto;
+    }
+  }
+
   &-header {
     position: relative;
     font-size: 0;
@@ -46,6 +62,7 @@
       align-items: center;
 
       &-fixed {
+        background-color: #fff;
         position: fixed;
         z-index: 10;
       }
@@ -131,7 +148,10 @@
 <template>
   <div
     class="v-switcher"
-    :class="{ 'v-switcher-vertical': align === 'vertical' }"
+    :class="[
+      { 'v-switcher-vertical': align === 'vertical' },
+      { 'v-switcher-sticky': sticky }
+    ]"
     @mouseenter="cursorInner = true"
     @mouseleave="cursorInner = false"
   >
@@ -184,6 +204,7 @@
       ref="content"
       class="v-switcher-content-wrap"
       :class="{ 'v-switcher-content-swipe': swipe }"
+      :style="contentWrapStyle"
     >
       <div
         class="v-switcher-content"
@@ -289,6 +310,10 @@ export default {
       type: Number,
       default: 40,
       validator: val => val >= 0
+    },
+    sticky: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -345,6 +370,14 @@ export default {
         width: `${100 / this.headerCount}%`
       }
     },
+    contentWrapStyle() {
+      const style = {}
+      if (this.sticky) {
+        style.paddingTop = `${this.headerHeight}px`
+        style.marginTop = `-${this.headerHeight}px`
+      }
+      return style
+    },
     contentStyle() {
       const style = {}
       if (this.swipe) {
@@ -385,6 +418,7 @@ export default {
           this._computeMaxScreenCount()
         })
       }
+      this.$emit('change', this.focusIndex)
     })
   },
   beforeDestroy() {
@@ -408,10 +442,11 @@ export default {
       if (!this.swipe) {
         return
       }
+      const auto = !!this.autoplay
       this.swiper = Swipe(this.$refs.content, {
         startSlide: this.focusIndex,
         speed: this.duration,
-        continuous: !!this.autoplay,
+        continuous: auto,
         callback: this._handleTabSwitch
       })
     },

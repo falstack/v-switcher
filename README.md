@@ -32,6 +32,7 @@ Vue.component(VSwitcher.name, VSwitcher)
 | contentWidth | <String> | 100% | N | 每个 content 的宽度，默认 100% |
 | headerHeight | <Number> | 40 | N | 每个 item 的高度(px)，默认 40 |
 | fixedTop | <Number> | undefined | N | 如果设值，就为 headers fixed 时距离顶部的高度 |
+| sticky | <Boolean> | false | N | 是否使用 100% 高度布局 |
 
 ### example
 > 用例比较多，比较复杂，就不写了，把项目 clone 到本地，然后执行以下脚本来看 demo 吧

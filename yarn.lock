@@ -752,6 +752,25 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
+"@better-scroll/core@^2.0.0-alpha.14":
+  version "2.0.0-alpha.14"
+  resolved "https://registry.npm.taobao.org/@better-scroll/core/download/@better-scroll/core-2.0.0-alpha.14.tgz#8728377afbb4ef7a2b03a01fe6263ec3dcbff0ab"
+  integrity sha1-hyg3evu073orA6Af5iY+w9y/8Ks=
+  dependencies:
+    "@better-scroll/shared-utils" "^2.0.0-alpha.14"
+
+"@better-scroll/observe-dom@^2.0.0-alpha.14":
+  version "2.0.0-alpha.14"
+  resolved "https://registry.npm.taobao.org/@better-scroll/observe-dom/download/@better-scroll/observe-dom-2.0.0-alpha.14.tgz#a7e6afd9e1760b61a7f58df5ecb2014154914bdb"
+  integrity sha1-p+av2eF2C2Gn9Y317LIBQVSRS9s=
+  dependencies:
+    "@better-scroll/core" "^2.0.0-alpha.14"
+
+"@better-scroll/shared-utils@^2.0.0-alpha.14":
+  version "2.0.0-alpha.14"
+  resolved "https://registry.npm.taobao.org/@better-scroll/shared-utils/download/@better-scroll/shared-utils-2.0.0-alpha.14.tgz#d0343463c65219de022cf4f378205f97974b7544"
+  integrity sha1-0DQ0Y8ZSGd4CLPTzeCBfl5dLdUQ=
+
 "@hapi/address@2.x.x":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.0.0.tgz#9f05469c88cb2fd3dcd624776b54ee95c312126a"
@@ -8232,6 +8251,11 @@ thread-loader@^2.1.2:
     loader-runner "^2.3.1"
     loader-utils "^1.1.0"
     neo-async "^2.6.0"
+
+throttle-debounce@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.npm.taobao.org/throttle-debounce/download/throttle-debounce-2.1.0.tgz#257e648f0a56bd9e54fe0f132c4ab8611df4e1d5"
+  integrity sha1-JX5kjwpWvZ5U/g8TLEq4YR304dU=
 
 through2@^2.0.0:
   version "2.0.5"

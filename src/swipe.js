@@ -343,6 +343,12 @@ export default function Swipe(container, options) {
               (Math.abs(delta.x) / width + 1)      // determine resistance level
               : 1);                                 // no resistance if false
 
+          if (index === 0 && delta.x > 0) {
+            return
+          }
+          if (index === element.children.length - 1 && delta.x < 0) {
+            return
+          }
           // translate 1:1
           translate(index - 1, delta.x + slidePos[index - 1], 0);
           translate(index, delta.x + slidePos[index], 0);

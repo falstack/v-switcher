@@ -100,7 +100,7 @@ body {
 <template>
   <div id="app">
     <div class="container header">
-      <v-switcher :headers="headers" :routable="true" align="start" anchor-trigger="hover" :fixed-top="0">
+      <v-switcher :headers="headers" :routable="true" align="start" anchor-trigger="hover">
         <router-link
           v-for="(item, index) in headers"
           :key="index"
@@ -146,6 +146,10 @@ export default {
         {
           name: '生产实例',
           route: '/usage'
+        },
+        {
+          name: 'H5实例',
+          route: '/mobile'
         }
       ]
     }

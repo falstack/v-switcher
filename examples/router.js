@@ -35,6 +35,11 @@ export default new VueRouter({
       path: '/usage',
       name: 'usage',
       component: () => import('./pages/usage')
+    },
+    {
+      path: '/mobile',
+      name: 'mobile',
+      component: () => import('./pages/mobile')
     }
   ]
 })

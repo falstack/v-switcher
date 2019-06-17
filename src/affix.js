@@ -67,8 +67,9 @@ export default {
   },
   mounted() {
     if (this.fixedTop !== undefined) {
-      on(window, 'scroll', this.handleScroll)
-      on(window, 'resize', this.handleScroll)
+      const target = this._getScrollTarget()
+      on(target, 'scroll', this.handleScroll)
+      on(target, 'resize', this.handleScroll)
       this.$nextTick(() => {
         this.handleScroll()
       })
@@ -76,11 +77,31 @@ export default {
   },
   beforeDestroy() {
     if (this.fixedTop !== undefined) {
-      off(window, 'scroll', this.handleScroll)
-      off(window, 'resize', this.handleScroll)
+      const target = this._getScrollTarget()
+      off(target, 'scroll', this.handleScroll)
+      off(target, 'resize', this.handleScroll)
     }
   },
   methods: {
+    _getScrollTarget() {
+      let el = this.$el
+      if (!el) {
+        return null
+      }
+      while (
+        el &&
+        el.tagName !== 'HTML' &&
+        el.tagName !== 'BOYD' &&
+        el.nodeType === 1
+      ) {
+        const overflowY = window.getComputedStyle(el).overflowY
+        if (overflowY === 'scroll' || overflowY === 'auto') {
+          return el
+        }
+        el = el.parentNode
+      }
+      return document
+    },
     handleScroll() {
       const isFixed = this.isFixed
       const scrollTop = getScroll(window, true)

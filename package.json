@@ -1,6 +1,6 @@
 {
   "name": "v-switcher",
-  "version": "1.0.15",
+  "version": "1.0.18",
   "main": "dist/v-switcher.umd.min.js",
   "files": [
     "dist"
@@ -27,6 +27,8 @@
     "vue": "^2.6.6"
   },
   "devDependencies": {
+    "@better-scroll/core": "^2.0.0-alpha.14",
+    "@better-scroll/observe-dom": "^2.0.0-alpha.14",
     "@vue/cli-plugin-babel": "^3.8.0",
     "@vue/cli-plugin-eslint": "^3.8.0",
     "@vue/cli-service": "^3.8.0",
@@ -38,6 +40,7 @@
     "less-loader": "^5.0.0",
     "node-sass": "^4.12.0",
     "sass-loader": "^7.1.0",
+    "throttle-debounce": "^2.1.0",
     "vue-router": "^3.0.6",
     "vue-template-compiler": "^2.5.21"
   }
