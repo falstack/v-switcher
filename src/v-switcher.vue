@@ -157,6 +157,8 @@
     ]"
     @mouseenter="cursorInner = true"
     @mouseleave="cursorInner = false"
+    @touchstart="touchInner = true"
+    @touchend="touchInner = false"
   >
     <div
       ref="headerWrap"
@@ -328,6 +330,7 @@ export default {
     }
     return {
       cursorInner: false,
+      touchInner: false,
       focusIndex,
       anchorStyle: {},
       headerStyle: {},
@@ -438,8 +441,14 @@ export default {
         return
       }
       this.timer = window.setInterval(() => {
-        if (this.cursorInner && this.notTouchDevice) {
-          return
+        if (this.notTouchDevice) {
+          if (this.cursorInner) {
+            return
+          }
+        } else {
+          if (this.touchInner) {
+            return
+          }
         }
         this._switchTrigger(true)
       }, this.autoplay)

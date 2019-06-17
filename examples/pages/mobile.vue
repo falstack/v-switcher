@@ -88,7 +88,9 @@
           :style="{ backgroundColor: getRandomColor() }"
           class="c-item"
           href="javascript:;"
-        />
+        >
+          {{ item.title }}
+        </a>
       </v-switcher>
     </div>
     <div class="content">
