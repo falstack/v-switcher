@@ -54,6 +54,7 @@
     &-before,
     &-after {
       flex-shrink: 0;
+      z-index: 1;
     }
 
     &-wrap {
@@ -546,20 +547,21 @@ export default {
         }
         return
       }
+      const anchorPadding = +this.anchorPadding
       if (this.align === 'vertical') {
         const header = this.$refs.header
         this.anchorStyle = {
           width: `${header.offsetWidth}px`,
-          height: `${tab.offsetHeight - this.anchorPadding * 2}px`,
+          height: `${tab.offsetHeight - anchorPadding * 2}px`,
           transform: `translateY(${tab.getBoundingClientRect().top -
             header.getBoundingClientRect().top +
-            this.anchorPadding}px)`,
+            anchorPadding}px)`,
           transitionDuration: `${this.duration}ms`
         }
       } else {
         this.anchorStyle = {
-          width: `${tab.offsetWidth - this.anchorPadding * 2}px`,
-          transform: `translateX(${tab.offsetLeft + this.anchorPadding}px)`,
+          width: `${tab.offsetWidth - anchorPadding * 2}px`,
+          transform: `translateX(${tab.offsetLeft + anchorPadding}px)`,
           transitionDuration: `${this.duration}ms`
         }
       }

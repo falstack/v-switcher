@@ -96,7 +96,7 @@
       </v-switcher>
     </div>
     <div class="content">
-      <v-switcher :headers="headers2" align="start" :swipe="true" :sticky="true" @change="handleSwitchTab">
+      <v-switcher :headers="headers2" align="start" :swipe="true" :sticky="true">
         <scroll
           v-for="(item, index) in headers2"
           :key="index"
@@ -106,6 +106,26 @@
         >
           <ul class="ul-wrap">
             <li>123 - start - {{ item }}</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
             <li>123</li>
             <li>123</li>
             <li>123</li>
@@ -189,9 +209,7 @@ export default {
           title: '欢迎来到天生制造狂的世界'
         }
       ],
-      headers2: headers2,
-      lastTop: new Array(headers2.length).fill(0),
-      activeIndex: 0
+      headers2
     }
   },
   computed: {},
@@ -209,9 +227,6 @@ export default {
         'rgba(125,205,244,.5)'
       ]
       return colors[~~(Math.random() * colors.length)]
-    },
-    handleSwitchTab(index) {
-      this.activeIndex = index
     },
     handlePullDown() {
       this.isActive = false
