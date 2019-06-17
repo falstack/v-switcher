@@ -393,6 +393,9 @@ export default {
         style.transitionDuration = `${this.duration}ms`
       }
       return style
+    },
+    notTouchDevice() {
+      return !('ontouchstart' in document.documentElement)
     }
   },
   beforeMount() {
@@ -435,7 +438,7 @@ export default {
         return
       }
       this.timer = window.setInterval(() => {
-        if (this.cursorInner) {
+        if (this.cursorInner && this.notTouchDevice) {
           return
         }
         this._switchTrigger(true)

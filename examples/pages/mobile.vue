@@ -49,10 +49,6 @@
           cursor: default;
           padding: 0;
 
-          &:hover {
-            background-position: -919px -790px;
-          }
-
           &.is-active {
             background-position: -855px -727px;
           }
