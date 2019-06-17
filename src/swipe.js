@@ -321,6 +321,7 @@ export default function Swipe(container, options) {
 
         // prevent native scrolling
         event.preventDefault();
+        event.stopPropagation();
 
         // stop slideshow
         stop();

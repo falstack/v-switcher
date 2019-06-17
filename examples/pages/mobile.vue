@@ -133,7 +133,6 @@
 </template>
 
 <script>
-import { throttle } from 'throttle-debounce'
 import Scroll from '../VueScroll'
 
 export default {
@@ -219,20 +218,7 @@ export default {
     },
     handlePullUp() {
       this.isActive = true
-    },
-    handleScroll: throttle(250, function(evt) {
-      const scrollTop = evt.target.scrollTop
-      const lastScrollTop = this.lastTop[this.activeIndex]
-      const change = Math.abs(scrollTop - lastScrollTop)
-      if (change > 120) {
-        if (lastScrollTop > scrollTop) {
-          this.handlePullDown()
-        } else if (lastScrollTop < scrollTop) {
-          this.handlePullUp()
-        }
-      }
-      this.lastTop[this.activeIndex] = scrollTop
-    })
+    }
   }
 }
 </script>
