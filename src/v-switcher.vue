@@ -26,6 +26,8 @@
   }
 
   &.v-switcher-sticky {
+    height: 100%;
+
     .v-switcher-content-wrap,
     .v-switcher-content,
     .v-switcher-content-panel {
