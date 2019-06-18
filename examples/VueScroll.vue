@@ -30,6 +30,10 @@ export default {
     scrollX: {
       type: Boolean,
       default: false
+    },
+    stop: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -63,7 +67,8 @@ export default {
         fade: true,
         scrollX: this.scrollX,
         scrollY: !this.scrollX,
-        observeDom: true
+        observeDom: true,
+        stopPropagation: this.stop
       })
       this.scroll.on('scrollStart', () => {
         if (this.scroll.movingDirectionY === -1) {

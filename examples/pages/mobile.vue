@@ -67,10 +67,27 @@
 
     .ul-wrap {
       margin: 0;
+      padding: 0;
 
       li {
         height: 40px;
         line-height: 40px;
+      }
+
+      .item-wrap {
+        display: inline-block;
+        white-space: nowrap;
+
+        .item {
+          height: 50px;
+          line-height: 50px;
+          font-size: 24px;
+          display: inline-block;
+          text-align: center;
+          padding: 0 10px;
+          width: 120px;
+          white-space: nowrap;
+        }
       }
     }
   }
@@ -103,6 +120,11 @@
           @pull-up="handlePullUp"
         >
           <ul class="ul-wrap">
+            <scroll :scroll-x="true" :stop="true">
+              <div class="item-wrap">
+                <div v-for="item in 10" :key="item" class="item" :style="{ backgroundColor: getRandomColor() }">{{ item }}</div>
+              </div>
+            </scroll>
             <li>123 - start - {{ item }}</li>
             <li>123</li>
             <li>123</li>
