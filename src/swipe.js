@@ -321,7 +321,9 @@ export default function Swipe(container, options) {
 
         // prevent native scrolling
         event.preventDefault();
-        event.stopPropagation();
+        if (!/android/.test(window.navigator.userAgent.toLocaleLowerCase())) {
+          event.stopPropagation();
+        }
 
         // stop slideshow
         stop();
