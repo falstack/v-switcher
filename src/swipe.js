@@ -312,8 +312,9 @@ export default function Swipe(container, options) {
       }
 
       // determine if scrolling test has run - one time test
+      const isVertical = Math.abs(delta.x) < Math.abs(delta.y)
       if (typeof isScrolling == 'undefined') {
-        isScrolling = !!(isScrolling || Math.abs(delta.x) < Math.abs(delta.y));
+        isScrolling = !!(isScrolling || isVertical);
       }
 
       // if user is not trying to scroll vertically
@@ -321,7 +322,7 @@ export default function Swipe(container, options) {
 
         // prevent native scrolling
         event.preventDefault();
-        if (!/android/.test(window.navigator.userAgent.toLocaleLowerCase())) {
+        if (isVertical) {
           event.stopPropagation();
         }
 
