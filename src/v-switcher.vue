@@ -665,9 +665,9 @@ export default {
       const point = e.touches ? e.touches[0] : e
       const isVertical = this.align === 'vertical'
       const curPoint = isVertical ? point.pageY : point.pageX
-      const delta = curPoint - this.lastPoint
+      const delta = (curPoint - this.lastPoint) * 3
       this.lastPoint = curPoint
-      const left = this.headerLeft + delta
+      let left = this.headerLeft + delta
       if (isVertical) {
         // 到顶了
         if (delta < 0 && left < 0) {
@@ -678,14 +678,12 @@ export default {
       } else {
         // 到开头了
         if (left > 0 && delta > 0) {
-          return
-        }
-        // 到结尾了
-        if (
+          left = 0
+        } else if (
           delta < 0 &&
           left + this.headerSize < this.$refs.tabWrap.offsetWidth
         ) {
-          return
+          left = this.$refs.tabWrap.offsetWidth - this.headerSize
         }
       }
       this.headerLeft = left
