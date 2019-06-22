@@ -1,25 +1,30 @@
-export default new class {
-  constructor() {
-    this.lastIndex = 0
-  }
+const faker = require('faker')
+faker.locale = 'zh_CN'
 
+let GLOBAL_ID = 0
+
+export default new class {
   get(count) {
-    var items = [],
-      i
+    let items = [], i
     for (i = 0; i < count; i++) {
       const width = 100 + ~~(Math.random() * 50)
       const height = 100
       items[i] = {
-        index: this.lastIndex++,
-        id: Math.random().toString(36),
+        id: ++GLOBAL_ID,
         style: {
           color: this.getRandomColor()
         },
         width,
-        height
+        height,
+        data: Object.assign(faker.helpers.createCard(), {
+          number_id: faker.random.number(),
+          uuid: faker.random.uuid(),
+          follow: false
+        }),
+        like: false
       }
     }
-    return items
+    return count === 1 ? items[0] : items
   }
 
   getRandomColor() {

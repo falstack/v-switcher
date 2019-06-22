@@ -91,6 +91,12 @@
       }
     }
   }
+
+  .flow-loader-state {
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+  }
 }
 </style>
 
@@ -111,13 +117,21 @@
       </v-switcher>
     </div>
     <div class="content">
-      <v-switcher :headers="headers2" align="start" :swipe="true" :sticky="true">
+      <v-switcher
+        :headers="headers2"
+        :swipe="true"
+        :sticky="true"
+        align="start"
+        @change="handleTabSwitch"
+      >
         <scroll
           v-for="(item, index) in headers2"
+          ref="scroll"
           :key="index"
           :slot="`${index}`"
           @pull-down="handlePullDown"
           @pull-up="handlePullUp"
+          @bottom="handleLoadMore"
         >
           <ul class="ul-wrap">
             <scroll :scroll-x="true" :stop="true">
@@ -125,46 +139,29 @@
                 <div v-for="item in 10" :key="item" class="item" :style="{ backgroundColor: getRandomColor() }">{{ item }}</div>
               </div>
             </scroll>
-            <li>123 - start - {{ item }}</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-            <li>123 - end - {{ item }}</li>
+            <flow-loader
+              ref="loader"
+              func="getListByPage"
+              type="page"
+              :auto="0"
+              :query="{
+                id: item,
+                count: 10
+              }"
+              :callback="flowCallback"
+            >
+              <template #default="{ flow, count }">
+                <virtual-list
+                  v-if="count"
+                  :size="110"
+                  :remain="10"
+                  :item="ItemComponent"
+                  :itemcount="count"
+                  :pagemode="true"
+                  :itemprops="getItemProps"
+                />
+              </template>
+            </flow-loader>
           </ul>
         </scroll>
       </v-switcher>
@@ -174,14 +171,18 @@
 
 <script>
 import Scroll from '../VueScroll'
+import ItemComponent from '../Item'
+import virtualList from 'vue-virtual-scroll-list'
 
 export default {
   name: 'Mobile',
   components: {
+    virtualList,
     Scroll
   },
   data() {
     const headers2 = [
+      'tab-0',
       'tab-1',
       'tab-2',
       'tab-3',
@@ -190,22 +191,10 @@ export default {
       'tab-6',
       'tab-7',
       'tab-8',
-      'tab-9',
-      'tab-10',
-      'tab-11',
-      'tab-12',
-      'tab-13',
-      'tab-14',
-      'tab-15',
-      'tab-16',
-      'tab-17',
-      'tab-18',
-      'tab-19',
-      'tab-20',
-      'tab-21',
-      'tab-22'
+      'tab-9'
     ]
     return {
+      ItemComponent,
       isActive: false,
       headers1: [
         {
@@ -229,7 +218,8 @@ export default {
           title: '欢迎来到天生制造狂的世界'
         }
       ],
-      headers2
+      headers2,
+      activeIndex: 0
     }
   },
   computed: {},
@@ -253,6 +243,24 @@ export default {
     },
     handlePullUp() {
       this.isActive = true
+    },
+    handleTabSwitch(index) {
+      this.activeIndex = index
+      this.$refs.loader[index].initData()
+    },
+    flowCallback() {
+      this.$refs.scroll[this.activeIndex].refresh()
+    },
+    handleLoadMore() {
+      this.$refs.loader[this.activeIndex].loadMore()
+    },
+    getItemProps(index) {
+      return {
+        props: {
+          item: this.$refs.loader[this.activeIndex].source.result[index],
+          index
+        }
+      }
     }
   }
 }

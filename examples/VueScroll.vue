@@ -80,6 +80,11 @@ export default {
           this.$emit('pull-up')
         }
       })
+      this.scroll.on('scrollEnd', () => {
+        if (this.scroll.y <= this.scroll.maxScrollY + 50) {
+          this.$emit('bottom')
+        }
+      })
     },
     enable() {
       this.scroll && this.scroll.enable()
@@ -88,7 +93,6 @@ export default {
       this.scroll && this.scroll.disable()
     },
     refresh() {
-      console.log('refresh')
       return new Promise(resolve => {
         this.$nextTick(() => {
           setTimeout(() => {

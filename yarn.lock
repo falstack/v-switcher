@@ -752,24 +752,24 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@better-scroll/core@^2.0.0-alpha.14":
-  version "2.0.0-alpha.14"
-  resolved "https://registry.npm.taobao.org/@better-scroll/core/download/@better-scroll/core-2.0.0-alpha.14.tgz#8728377afbb4ef7a2b03a01fe6263ec3dcbff0ab"
-  integrity sha1-hyg3evu073orA6Af5iY+w9y/8Ks=
+"@better-scroll/core@^2.0.0-alpha.15":
+  version "2.0.0-alpha.15"
+  resolved "https://registry.yarnpkg.com/@better-scroll/core/-/core-2.0.0-alpha.15.tgz#a6e04f8e4529b747844cf6b9ea2257f7552debc1"
+  integrity sha512-CpYJLxw1GWMOlzRCWKXDlcNkpB04FSyMNkryrKVdrdSlaa+hkTkjUxK/hFsVZyzKorgnGfCB9gj8WeDNlSk2Ug==
   dependencies:
-    "@better-scroll/shared-utils" "^2.0.0-alpha.14"
+    "@better-scroll/shared-utils" "^2.0.0-alpha.15"
 
-"@better-scroll/observe-dom@^2.0.0-alpha.14":
-  version "2.0.0-alpha.14"
-  resolved "https://registry.npm.taobao.org/@better-scroll/observe-dom/download/@better-scroll/observe-dom-2.0.0-alpha.14.tgz#a7e6afd9e1760b61a7f58df5ecb2014154914bdb"
-  integrity sha1-p+av2eF2C2Gn9Y317LIBQVSRS9s=
+"@better-scroll/observe-dom@^2.0.0-alpha.15":
+  version "2.0.0-alpha.15"
+  resolved "https://registry.yarnpkg.com/@better-scroll/observe-dom/-/observe-dom-2.0.0-alpha.15.tgz#729f04814b68baa2ee5bb38e197ed78f51b7d501"
+  integrity sha512-jGnayq6L2dsG2I7Ej5ShpqgpehhUC2F/EFOpGuaDh1/BL5apL4kZrV4Ldkr4dZsjAiDonmlhRpR1XpQLIWBxmA==
   dependencies:
-    "@better-scroll/core" "^2.0.0-alpha.14"
+    "@better-scroll/core" "^2.0.0-alpha.15"
 
-"@better-scroll/shared-utils@^2.0.0-alpha.14":
-  version "2.0.0-alpha.14"
-  resolved "https://registry.npm.taobao.org/@better-scroll/shared-utils/download/@better-scroll/shared-utils-2.0.0-alpha.14.tgz#d0343463c65219de022cf4f378205f97974b7544"
-  integrity sha1-0DQ0Y8ZSGd4CLPTzeCBfl5dLdUQ=
+"@better-scroll/shared-utils@^2.0.0-alpha.15":
+  version "2.0.0-alpha.15"
+  resolved "https://registry.yarnpkg.com/@better-scroll/shared-utils/-/shared-utils-2.0.0-alpha.15.tgz#687c65762d789245124718be2cdf28c5b9bbda5d"
+  integrity sha512-NAsPb+2VgsuWOLTb+EeUxys/gCkTA4sOxbi57WDo8XzB7jTjfW3f04cfOKZ0K4pXB+FHdpislUF0ntwm7FGXhg==
 
 "@hapi/address@2.x.x":
   version "2.0.0"
@@ -975,10 +975,10 @@
     eslint "^4.19.1"
     eslint-plugin-vue "^4.7.1"
 
-"@vue/cli-service@^3.8.0":
-  version "3.8.0"
-  resolved "https://registry.yarnpkg.com/@vue/cli-service/-/cli-service-3.8.0.tgz#47eaa169a7bd96522c1a0df89214f1afee843cd6"
-  integrity sha512-ipJF4RHjyLyLC4oLx+JM1Jk6tiIG0KjCFAqfOscQ44K4CdyS03oFMAUR+SZYy/UXKccMnoeY6Ld4YrGXSytQsg==
+"@vue/cli-service@^3.8.4":
+  version "3.8.4"
+  resolved "https://registry.yarnpkg.com/@vue/cli-service/-/cli-service-3.8.4.tgz#fecf63c8e0a838e2468d2a79059e39f2cbb1fdc5"
+  integrity sha512-OWKTPZN+Wk3gpd8ar6DsQWlpIFPCIULZuVsHarJXjlXpIx3FOleXzaT2QiDB+tprbTRZMfsMMZMt5b0nvacY9Q==
   dependencies:
     "@intervolga/optimize-cssnano-plugin" "^1.0.5"
     "@soda/friendly-errors-webpack-plugin" "^1.7.1"
@@ -1003,6 +1003,7 @@
     cssnano "^4.1.10"
     current-script-polyfill "^1.0.0"
     debug "^4.1.1"
+    default-gateway "^5.0.2"
     dotenv "^7.0.0"
     dotenv-expand "^5.1.0"
     escape-string-regexp "^1.0.5"
@@ -1598,6 +1599,18 @@ babel-eslint@^10.0.1:
   version "10.0.1"
   resolved "http://registry.npm.taobao.org/babel-eslint/download/babel-eslint-10.0.1.tgz#919681dc099614cd7d31d45c8908695092a1faed"
   integrity sha1-kZaB3AmWFM19MdRciQhpUJKh+u0=
+  dependencies:
+    "@babel/code-frame" "^7.0.0"
+    "@babel/parser" "^7.0.0"
+    "@babel/traverse" "^7.0.0"
+    "@babel/types" "^7.0.0"
+    eslint-scope "3.7.1"
+    eslint-visitor-keys "^1.0.0"
+
+babel-eslint@^10.0.2:
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/babel-eslint/-/babel-eslint-10.0.2.tgz#182d5ac204579ff0881684b040560fdcc1558456"
+  integrity sha512-UdsurWPtgiPgpJ06ryUnuaSXC2s0WoSZnQmEpbAH65XZSdwowgN5MvyP7e88nW07FYXv72erVtpBkxyDVKhH1Q==
   dependencies:
     "@babel/code-frame" "^7.0.0"
     "@babel/parser" "^7.0.0"
@@ -2891,6 +2904,14 @@ default-gateway@^4.2.0:
     execa "^1.0.0"
     ip-regex "^2.1.0"
 
+default-gateway@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/default-gateway/-/default-gateway-5.0.2.tgz#d2d8a13d6fee406d9365d19ec9adccb8a60b82b3"
+  integrity sha512-wXuT0q8T5vxQNecrTgz/KbU2lPUMRc98I9Y5dnH3yhFB3BGYqtADK4lhivLlG0OfjhmfKx1PGILG2jR4zjI+WA==
+  dependencies:
+    execa "^1.0.0"
+    ip-regex "^2.1.0"
+
 defaults@^1.0.3:
   version "1.0.3"
   resolved "http://registry.npm.taobao.org/defaults/download/defaults-1.0.3.tgz#c656051e9817d9ff08ed881477f3fe4019f3ef7d"
@@ -3663,6 +3684,11 @@ extsprintf@^1.2.0:
   version "1.4.0"
   resolved "http://registry.npm.taobao.org/extsprintf/download/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
+
+faker@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/faker/-/faker-4.1.0.tgz#1e45bbbecc6774b3c195fad2835109c6d748cc3f"
+  integrity sha1-HkW7vsxndLPBlfrSg1EJxtdIzD8=
 
 fast-deep-equal@^1.0.0:
   version "1.1.0"
@@ -8688,6 +8714,13 @@ vue-loader@^15.7.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
+vue-mixin-store@^1.1.20:
+  version "1.1.20"
+  resolved "https://registry.yarnpkg.com/vue-mixin-store/-/vue-mixin-store-1.1.20.tgz#63f39379ef779049c93deac8861deafa773f032d"
+  integrity sha512-RaMMug7Ch/HxKSCAYMLz4VqI5ORwy4SAY3WU8A4J2/IbUehZLKvD+cKmnWl3l9JHp0hzE1XUE9D1BCVySFpVMw==
+  dependencies:
+    throttle-debounce "^2.1.0"
+
 vue-router@^3.0.6:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.6.tgz#2e4f0f9cbb0b96d0205ab2690cfe588935136ac3"
@@ -8714,10 +8747,20 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "http://registry.npm.taobao.org/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha1-HuO8mhbsv1EYvjNLsV+cRvgvWCU=
 
+vue-virtual-scroll-list@^1.3.9:
+  version "1.3.9"
+  resolved "https://registry.yarnpkg.com/vue-virtual-scroll-list/-/vue-virtual-scroll-list-1.3.9.tgz#ba3ce6425374fb323ea83ab33daa2727117808ed"
+  integrity sha512-K979Bk0Fmfxrjb9KIMhJmkIDrKLR/Y+N4B5ivJzzYoTRPGyz/JEe7jLn3vwzYt3YbU6a0KV7c0rf2DP7GGZh3g==
+
 vue@^2.6.6:
   version "2.6.10"
   resolved "http://registry.npm.taobao.org/vue/download/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
   integrity sha1-pysaQqTYKnIepDjRtr9V5mGVxjc=
+
+vuex@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.1.1.tgz#0c264bfe30cdbccf96ab9db3177d211828a5910e"
+  integrity sha512-ER5moSbLZuNSMBFnEBVGhQ1uCBNJslH9W/Dw2W7GZN23UQA69uapP5GTT9Vm8Trc0PzBSVt6LzF3hGjmv41xcg==
 
 watchpack@^1.5.0:
   version "1.6.0"
