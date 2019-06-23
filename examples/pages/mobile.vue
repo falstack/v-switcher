@@ -130,6 +130,7 @@
           :key="index"
           :slot="`${index}`"
           :event="true"
+          @scroll="handleScroll"
           @pull-down="handlePullDown"
           @pull-up="handlePullUp"
           @bottom="handleLoadMore"
@@ -154,8 +155,9 @@
               <template #default="{ flow, count }">
                 <virtual-list
                   v-if="count"
+                  ref="list"
                   :size="110"
-                  :remain="10"
+                  :remain="5"
                   :item="ItemComponent"
                   :itemcount="count"
                   :pagemode="true"
@@ -173,7 +175,7 @@
 <script>
 import Scroll from '../VueScroll'
 import ItemComponent from '../Item'
-import virtualList from 'vue-virtual-scroll-list'
+import virtualList from '../virtual-list'
 
 export default {
   name: 'Mobile',
@@ -254,6 +256,9 @@ export default {
     },
     handleLoadMore() {
       this.$refs.loader[this.activeIndex].loadMore()
+    },
+    handleScroll(data) {
+      this.$refs.list[this.activeIndex].onScroll(data)
     },
     getItemProps(index) {
       return {

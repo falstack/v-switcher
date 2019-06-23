@@ -9,8 +9,6 @@
 
 <script>
 import BScroll from '@better-scroll/core'
-import ObserveDom from '@better-scroll/observe-dom'
-BScroll.use(ObserveDom)
 
 export default {
   name: 'VScroll',
@@ -58,11 +56,12 @@ export default {
         click: true,
         scrollX: this.scrollX,
         scrollY: !this.scrollX,
-        observeDom: true,
         stopPropagation: this.stop
       })
       if (this.event) {
         this.scroll.on('scroll', ({ y }) => {
+          const direction = this.scroll.movingDirectionY
+          this.$emit('scroll', { offset: -y, direction })
           if (this.scroll.movingDirectionY === -1) {
             if (y > -50) {
               this.$emit('pull-down')
