@@ -129,6 +129,7 @@
           ref="scroll"
           :key="index"
           :slot="`${index}`"
+          :event="true"
           @pull-down="handlePullDown"
           @pull-up="handlePullUp"
           @bottom="handleLoadMore"

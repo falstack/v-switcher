@@ -15,23 +15,15 @@ BScroll.use(ObserveDom)
 export default {
   name: 'VScroll',
   props: {
-    probeType: {
-      type: Number,
-      default: 2
-    },
-    click: {
-      type: Boolean,
-      default: true
-    },
-    data: {
-      type: Array,
-      default: null
-    },
     scrollX: {
       type: Boolean,
       default: false
     },
     stop: {
+      type: Boolean,
+      default: false
+    },
+    event: {
       type: Boolean,
       default: false
     }
@@ -62,32 +54,28 @@ export default {
         return
       }
       this.scroll = new BScroll(this.$refs.wrapper, {
-        probeType: this.probeType,
-        click: this.click,
+        probeType: this.event ? 2 : 0,
+        click: true,
         scrollX: this.scrollX,
         scrollY: !this.scrollX,
         observeDom: true,
         stopPropagation: this.stop
       })
-      this.scroll.on('scroll', ({ y }) => {
-        if (this.scroll.movingDirectionY === -1) {
-          if (y > -50) {
-            this.$emit('pull-down')
+      if (this.event) {
+        this.scroll.on('scroll', ({ y }) => {
+          if (this.scroll.movingDirectionY === -1) {
+            if (y > -50) {
+              this.$emit('pull-down')
+            }
           }
-        }
-        if (this.scroll.movingDirectionY === 1) {
-          this.$emit('pull-up')
-        }
-        if (y <= this.scroll.maxScrollY + 50) {
-          this.$emit('bottom')
-        }
-      })
-    },
-    enable() {
-      this.scroll && this.scroll.enable()
-    },
-    disable() {
-      this.scroll && this.scroll.disable()
+          if (this.scroll.movingDirectionY === 1) {
+            this.$emit('pull-up')
+          }
+          if (y <= this.scroll.maxScrollY + 50) {
+            this.$emit('bottom')
+          }
+        })
+      }
     },
     refresh() {
       return new Promise(resolve => {
