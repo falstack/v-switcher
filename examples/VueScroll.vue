@@ -17,7 +17,7 @@ export default {
   props: {
     probeType: {
       type: Number,
-      default: 1
+      default: 2
     },
     click: {
       type: Boolean,
@@ -64,24 +64,21 @@ export default {
       this.scroll = new BScroll(this.$refs.wrapper, {
         probeType: this.probeType,
         click: this.click,
-        fade: true,
         scrollX: this.scrollX,
         scrollY: !this.scrollX,
         observeDom: true,
         stopPropagation: this.stop
       })
-      this.scroll.on('scrollStart', () => {
+      this.scroll.on('scroll', ({ y }) => {
         if (this.scroll.movingDirectionY === -1) {
-          if (this.scroll.y > -50) {
+          if (y > -50) {
             this.$emit('pull-down')
           }
         }
         if (this.scroll.movingDirectionY === 1) {
           this.$emit('pull-up')
         }
-      })
-      this.scroll.on('scrollEnd', () => {
-        if (this.scroll.y <= this.scroll.maxScrollY + 50) {
+        if (y <= this.scroll.maxScrollY + 50) {
           this.$emit('bottom')
         }
       })
