@@ -324,7 +324,7 @@ export default function Swipe(container, options) {
         // prevent native scrolling
         event.preventDefault();
         if (isAndroid) {
-          if (Math.abs(delta.x) < Math.abs(delta.y)) {
+          if (Math.abs(delta.x) < Math.abs(delta.y) * 3) {
             stop();
             return
           }
