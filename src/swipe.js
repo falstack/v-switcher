@@ -28,6 +28,8 @@ export default function Swipe(container, options) {
     })(document.createElement('swipe'))
   };
 
+  var isAndroid = /android/.test(window.navigator.userAgent.toLocaleLowerCase())
+
   // quit if no root element
   if (!container) return;
   var element = container.children[0];
@@ -321,9 +323,10 @@ export default function Swipe(container, options) {
 
         // prevent native scrolling
         event.preventDefault();
-        if (/android/.test(window.navigator.userAgent.toLocaleLowerCase())) {
-          if (Math.abs(delta.x) < Math.abs(delta.y) * 3) {
-            event.stopPropagation();
+        if (isAndroid) {
+          if (Math.abs(delta.x) < Math.abs(delta.y)) {
+            stop();
+            return
           }
         } else {
           event.stopPropagation();

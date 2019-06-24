@@ -8714,10 +8714,10 @@ vue-loader@^15.7.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-mixin-store@^1.1.20:
-  version "1.1.20"
-  resolved "https://registry.yarnpkg.com/vue-mixin-store/-/vue-mixin-store-1.1.20.tgz#63f39379ef779049c93deac8861deafa773f032d"
-  integrity sha512-RaMMug7Ch/HxKSCAYMLz4VqI5ORwy4SAY3WU8A4J2/IbUehZLKvD+cKmnWl3l9JHp0hzE1XUE9D1BCVySFpVMw==
+vue-mixin-store@^1.1.21:
+  version "1.1.21"
+  resolved "https://registry.yarnpkg.com/vue-mixin-store/-/vue-mixin-store-1.1.21.tgz#d940d1d027747b845aa4547ef3f79a4907b00e0e"
+  integrity sha512-9pGyiHkmj0qCcgwjxduneOQKTNxcNxaQPpwdIIUu3lLCJi8GPCqXVJazBTlvCNM/9cLpla7escKVD63LU94YHQ==
   dependencies:
     throttle-debounce "^2.1.0"
 
