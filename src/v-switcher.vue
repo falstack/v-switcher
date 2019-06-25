@@ -338,7 +338,6 @@ export default {
       focusIndex,
       anchorStyle: {},
       headerStyle: {
-        height: this.align === 'vertical' ? '' : `${this.headerHeight}px`,
         transform: '',
         transitionDuration: ''
       },
