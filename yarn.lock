@@ -8698,6 +8698,13 @@ vue-eslint-parser@^5.0.0:
     esquery "^1.0.1"
     lodash "^4.17.11"
 
+vue-flow-render@^0.1.24:
+  version "0.1.24"
+  resolved "https://registry.npm.taobao.org/vue-flow-render/download/vue-flow-render-0.1.24.tgz#7900de7c8f17f233683c1209cfc288fa9334e0d0"
+  integrity sha1-eQDefI8X8jNoPBIJz8KI+pM04NA=
+  dependencies:
+    vue "^2.6.10"
+
 vue-hot-reload-api@^2.3.0:
   version "2.3.3"
   resolved "http://registry.npm.taobao.org/vue-hot-reload-api/download/vue-hot-reload-api-2.3.3.tgz#2756f46cb3258054c5f4723de8ae7e87302a1ccf"
@@ -8752,7 +8759,7 @@ vue-virtual-scroll-list@^1.3.9:
   resolved "https://registry.yarnpkg.com/vue-virtual-scroll-list/-/vue-virtual-scroll-list-1.3.9.tgz#ba3ce6425374fb323ea83ab33daa2727117808ed"
   integrity sha512-K979Bk0Fmfxrjb9KIMhJmkIDrKLR/Y+N4B5ivJzzYoTRPGyz/JEe7jLn3vwzYt3YbU6a0KV7c0rf2DP7GGZh3g==
 
-vue@^2.6.6:
+vue@^2.6.10, vue@^2.6.6:
   version "2.6.10"
   resolved "http://registry.npm.taobao.org/vue/download/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
   integrity sha1-pysaQqTYKnIepDjRtr9V5mGVxjc=

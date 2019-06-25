@@ -156,15 +156,13 @@
               :callback="flowCallback"
             >
               <template #default="{ flow, count }">
-                <virtual-list
-                  v-if="count"
-                  ref="list"
-                  :size="110"
-                  :remain="5"
+                <vue-flow-render
+                  ref="render"
+                  :height="110"
+                  :remain="30"
+                  :total="count"
                   :item="ItemComponent"
-                  :itemcount="count"
-                  :pagemode="true"
-                  :itemprops="getItemProps"
+                  :getter="getItemProps"
                 />
               </template>
             </flow-loader>
@@ -178,13 +176,14 @@
 <script>
 import Scroll from '../VueScroll'
 import ItemComponent from '../Item'
-import virtualList from '../virtual-list'
+import VueFlowRender from 'vue-flow-render'
+// import VueFlowRender from '../render'
 
 export default {
   name: 'Mobile',
   components: {
-    virtualList,
-    Scroll
+    Scroll,
+    VueFlowRender
   },
   data() {
     const headers2 = [
@@ -252,7 +251,10 @@ export default {
     },
     handleTabSwitch(index) {
       this.activeIndex = index
-      this.$refs.loader[index].initData()
+      this.$nextTick(() => {
+        this.$refs.loader[index].initData()
+        this.$refs.render[index].setWrap(this.$refs.scroll[index].$el)
+      })
     },
     flowCallback() {
       this.$refs.scroll[this.activeIndex].refresh()
@@ -260,8 +262,8 @@ export default {
     handleLoadMore() {
       this.$refs.loader[this.activeIndex].loadMore()
     },
-    handleScroll(data) {
-      this.$refs.list[this.activeIndex].onScroll(data)
+    handleScroll({ offset, isUp }) {
+      this.$refs.render[this.activeIndex].scroll(offset, isUp)
     },
     getItemProps(index) {
       return {

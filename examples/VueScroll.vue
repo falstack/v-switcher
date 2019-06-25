@@ -61,15 +61,28 @@ export default {
       if (this.event) {
         this.scroll.on('scroll', ({ y }) => {
           const direction = this.scroll.movingDirectionY
-          this.$emit('scroll', { offset: -y, direction })
-          if (this.scroll.movingDirectionY === -1) {
+          this.$emit('scroll', {
+            offset: Math.max(-y, 0),
+            isUp: direction === -1
+          })
+          if (direction === -1) {
             if (y > -50) {
               this.$emit('pull-down')
             }
           }
-          if (this.scroll.movingDirectionY === 1) {
+          if (direction === 1) {
             this.$emit('pull-up')
           }
+          if (y <= this.scroll.maxScrollY + 50) {
+            this.$emit('bottom')
+          }
+        })
+        this.scroll.on('scrollEnd', ({ y }) => {
+          const direction = this.scroll.movingDirectionY
+          this.$emit('scroll', {
+            offset: Math.max(-y, 0),
+            isUp: direction === -1
+          })
           if (y <= this.scroll.maxScrollY + 50) {
             this.$emit('bottom')
           }

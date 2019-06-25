@@ -12,7 +12,7 @@
 </style>
 
 <template>
-  <div class="comp-item">
+  <div v-if="item" class="comp-item">
     <div :style="{ backgroundColor: item.style.color }">
       count：{{ index + 1 }}，id：{{ item.data.number_id }}
     </div>
@@ -25,7 +25,7 @@ export default {
   props: {
     item: {
       type: Object,
-      required: true
+      default: null
     },
     index: {
       type: Number,
