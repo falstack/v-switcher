@@ -1,6 +1,6 @@
 {
   "name": "v-switcher",
-  "version": "1.0.28",
+  "version": "1.0.29",
   "main": "dist/v-switcher.umd.min.js",
   "files": [
     "dist"
@@ -36,7 +36,7 @@
     "babel-eslint": "^10.0.2",
     "better-scroll": "^1.15.2",
     "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
+    "eslint-plugin-vue": "^5.2.3",
     "faker": "^4.1.0",
     "less-loader": "^5.0.0",
     "node-sass": "^4.12.0",
