@@ -124,6 +124,9 @@
         align="start"
         @change="handleTabSwitch"
       >
+        <template slot="header-after">
+          <button @click="handleBtnClick">筛选</button>
+        </template>
         <scroll
           v-for="(item, index) in headers2"
           ref="scroll"
@@ -267,6 +270,9 @@ export default {
           index
         }
       }
+    },
+    handleBtnClick() {
+      alert(1)
     }
   }
 }

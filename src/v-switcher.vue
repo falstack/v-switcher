@@ -54,8 +54,9 @@
 
     &-before,
     &-after {
+      position: relative;
       flex-shrink: 0;
-      z-index: 1;
+      z-index: 2;
     }
 
     &-wrap {
@@ -143,8 +144,10 @@
   }
 
   &-tab-wrap {
-    flex-grow: 1;
+    position: relative;
     overflow: hidden;
+    flex-grow: 1;
+    z-index: 1;
   }
 }
 </style>
