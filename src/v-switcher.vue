@@ -37,10 +37,6 @@
     .v-switcher-content-wrap {
       box-sizing: border-box;
     }
-
-    .v-switcher-content-panel {
-      overflow-y: auto;
-    }
   }
 
   &-header {
@@ -101,6 +97,13 @@
       pointer-events: none;
     }
 
+    &-tabs {
+      position: relative;
+      overflow: hidden;
+      flex-grow: 1;
+      z-index: 1;
+    }
+
     &-item {
       display: inline-block;
       text-align: center;
@@ -142,13 +145,6 @@
       position: relative;
     }
   }
-
-  &-tab-wrap {
-    position: relative;
-    overflow: hidden;
-    flex-grow: 1;
-    z-index: 1;
-  }
 }
 </style>
 
@@ -173,7 +169,7 @@
       <div class="v-switcher-header-before">
         <slot name="header-before"></slot>
       </div>
-      <div ref="tabWrap" class="v-switcher-tab-wrap">
+      <div ref="tabWrap" class="v-switcher-header-tabs">
         <ul
           ref="header"
           class="v-switcher-header"

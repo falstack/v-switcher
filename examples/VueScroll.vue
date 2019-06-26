@@ -73,7 +73,7 @@ export default {
           if (direction === 1) {
             this.$emit('pull-up')
           }
-          if (y <= this.scroll.maxScrollY + 50) {
+          if (y <= this.scroll.maxScrollY + 150) {
             this.$emit('bottom')
           }
         })
@@ -83,7 +83,7 @@ export default {
             offset: Math.max(-y, 0),
             isUp: direction === -1
           })
-          if (y <= this.scroll.maxScrollY + 50) {
+          if (y <= this.scroll.maxScrollY + 150) {
             this.$emit('bottom')
           }
         })

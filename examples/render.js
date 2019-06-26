@@ -74,7 +74,7 @@ export default {
       this.isUp = up === undefined ? offset < this.lastScrollTop : up
       this.lastScrollTop = offset
       const { start, remain, cache, offsetTop, isUp, total } = this
-      if (remain > total) {
+      if (remain >= total) {
         return
       }
       if (offset - offsetTop <= 0) {
@@ -117,7 +117,7 @@ export default {
     },
     _resetStart() {
       const { lastScrollTop, cache, start, isSameHeight, height, remain, column, offsetTop, total } = this
-      if (remain > total) {
+      if (remain >= total) {
         return
       }
       const resetUp = () => {

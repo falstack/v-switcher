@@ -123,12 +123,11 @@
         <template slot="header-after">
           <button @click="handleBtnClick">筛选</button>
         </template>
-        <scroll
+        <container
           v-for="(item, index) in headers2"
           ref="scroll"
           :key="index"
           :slot="`${index}`"
-          :event="true"
           @scroll="handleScroll"
           @pull-down="handlePullDown"
           @pull-up="handlePullUp"
@@ -163,7 +162,7 @@
               </template>
             </flow-loader>
           </ul>
-        </scroll>
+        </container>
       </v-switcher>
     </div>
   </div>
@@ -172,6 +171,7 @@
 <script>
 import Scroll from '../VueScroll'
 import ItemComponent from '../Item'
+import Container from '../Container'
 import VueFlowRender from 'vue-flow-render'
 // import VueFlowRender from '../render'
 
@@ -179,6 +179,7 @@ export default {
   name: 'Mobile',
   components: {
     Scroll,
+    Container,
     VueFlowRender
   },
   data() {
@@ -223,6 +224,10 @@ export default {
       activeIndex: 0
     }
   },
+  computed: {},
+  watch: {},
+  created() {},
+  mounted() {},
   methods: {
     getRandomColor() {
       var colors = [
@@ -249,7 +254,7 @@ export default {
       })
     },
     flowCallback() {
-      this.$refs.scroll[this.activeIndex].refresh()
+      // this.$refs.scroll[this.activeIndex].refresh()
     },
     handleLoadMore() {
       this.$refs.loader[this.activeIndex].loadMore()

@@ -40,6 +40,11 @@ export default new VueRouter({
       path: '/mobile',
       name: 'mobile',
       component: () => import('./pages/mobile')
+    },
+    {
+      path: '/mobile-noscroll',
+      name: 'mobile-noscroll',
+      component: () => import('./pages/mobile-noscroll')
     }
   ]
 })
