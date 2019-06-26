@@ -333,10 +333,7 @@ export default {
       touchInner: false,
       focusIndex,
       anchorStyle: {},
-      headerStyle: {
-        transform: '',
-        transitionDuration: ''
-      },
+      headerStyle: {},
       isFixed: false,
       showFixedShim: false,
       fixedShimStyle: {},
@@ -514,8 +511,10 @@ export default {
       }
       this.curScreenIndex = Math.round(Math.abs(left / innerWidth))
       this.headerLeft = left
-      this.headerStyle.transform = `translateX(${left}px)`
-      this.headerStyle.transitionDuration = `${this.duration}ms`
+      this.headerStyle = {
+        transform: `translateX(${left}px)`,
+        transitionDuration: `${this.duration}ms`
+      }
     },
     _computePanelStyle(index) {
       if (this.swipe) {
@@ -647,8 +646,10 @@ export default {
     },
     _moveHeader(targetScreenCount) {
       const left = -targetScreenCount * this.$refs.header.offsetWidth
-      this.headerStyle.transform = `translateX(${left}px)`
-      this.headerStyle.transitionDuration = `${this.duration}ms`
+      this.headerStyle = {
+        transform: `translateX(${left}px)`,
+        transitionDuration: `${this.duration}ms`
+      }
       this.headerLeft = left
       this.curScreenIndex = targetScreenCount
       return {
@@ -686,8 +687,10 @@ export default {
         }
       }
       this.headerLeft = left
-      this.headerStyle.transform = `translateX(${left}px)`
-      this.headerStyle.transitionDuration = `${this.duration}ms`
+      this.headerStyle = {
+        transform: `translateX(${left}px)`,
+        transitionDuration: `${this.duration}ms`
+      }
     },
     _computeHeaderSize() {
       this.$nextTick(() => {
