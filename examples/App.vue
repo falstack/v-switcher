@@ -148,12 +148,12 @@ export default {
           route: '/usage'
         },
         {
-          name: 'H5实例-BS',
+          name: 'H5实例',
           route: '/mobile'
         },
         {
-          name: 'H5实例',
-          route: '/mobile-noscroll'
+          name: 'PC实例',
+          route: '/pc'
         }
       ]
     }

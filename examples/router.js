@@ -42,9 +42,9 @@ export default new VueRouter({
       component: () => import('./pages/mobile')
     },
     {
-      path: '/mobile-noscroll',
-      name: 'mobile-noscroll',
-      component: () => import('./pages/mobile-noscroll')
+      path: '/pc',
+      name: 'pc',
+      component: () => import('./pages/pc')
     }
   ]
 })

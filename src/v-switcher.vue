@@ -52,7 +52,7 @@
     &-after {
       position: relative;
       flex-shrink: 0;
-      z-index: 2;
+      z-index: 1;
     }
 
     &-wrap {
@@ -98,10 +98,8 @@
     }
 
     &-tabs {
-      position: relative;
       overflow: hidden;
       flex-grow: 1;
-      z-index: 1;
     }
 
     &-item {
