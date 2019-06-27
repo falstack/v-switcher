@@ -1,6 +1,6 @@
 {
   "name": "v-switcher",
-  "version": "1.0.34",
+  "version": "1.0.35",
   "main": "dist/v-switcher.umd.min.js",
   "files": [
     "dist"
