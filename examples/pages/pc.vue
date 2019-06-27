@@ -123,14 +123,14 @@
         <template slot="header-after">
           <button @click="handleBtnClick">筛选</button>
         </template>
-        <container
+        <v-scroller
           v-for="(item, index) in headers2"
           ref="scroll"
           :key="index"
           :slot="`${index}`"
+          @top="handlePullDown"
           @scroll="handleScroll"
-          @pull-down="handlePullDown"
-          @pull-up="handlePullUp"
+          @scroll-down="handlePullUp"
           @bottom="handleLoadMore"
         >
           <ul class="ul-wrap">
@@ -148,7 +148,6 @@
                 id: item,
                 count: 10
               }"
-              :callback="flowCallback"
             >
               <template #default="{ flow, count }">
                 <vue-flow-render
@@ -162,7 +161,7 @@
               </template>
             </flow-loader>
           </ul>
-        </container>
+        </v-scroller>
       </v-switcher>
     </div>
   </div>
@@ -171,15 +170,14 @@
 <script>
 import Scroll from '../VueScroll'
 import ItemComponent from '../Item'
-import Container from '../Container'
+import VScroller from 'h5-vue-scroller'
 import VueFlowRender from 'vue-flow-render'
-// import VueFlowRender from '../render'
 
 export default {
   name: 'Mobile',
   components: {
     Scroll,
-    Container,
+    VScroller,
     VueFlowRender
   },
   data() {
@@ -253,14 +251,11 @@ export default {
         this.$refs.render[index].setWrap(this.$refs.scroll[index].$el)
       })
     },
-    flowCallback() {
-      // this.$refs.scroll[this.activeIndex].refresh()
-    },
     handleLoadMore() {
       this.$refs.loader[this.activeIndex].loadMore()
     },
-    handleScroll({ offset, isUp }) {
-      this.$refs.render[this.activeIndex].scroll(offset, isUp)
+    handleScroll({ offsetTop, isUp }) {
+      this.$refs.render[this.activeIndex].scroll(offsetTop, isUp)
     },
     getItemProps(index) {
       return {

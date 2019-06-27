@@ -4199,6 +4199,13 @@ gzip-size@^5.0.0:
     duplexer "^0.1.1"
     pify "^3.0.0"
 
+h5-vue-scroller@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/h5-vue-scroller/-/h5-vue-scroller-0.1.1.tgz#3b8bd7918c686d439876f78aabfdf2c0ed0b1828"
+  integrity sha512-hTwbXu4nJ6qY1w8KvIDgsT3jnE6ZZfGqP2OdJCVJRsMtK42xKbcbgkJGD5u1chO25NQ4O09+M73+hxjbW5v0cQ==
+  dependencies:
+    vue "^2.6.10"
+
 handle-thing@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/handle-thing/download/handle-thing-2.0.0.tgz#0e039695ff50c93fc288557d696f3c1dc6776754"
