@@ -342,7 +342,8 @@ export default {
       lastPoint: 0,
       swiper: null,
       curScreenIndex: 0,
-      maxScreenCount: 1
+      maxScreenCount: 1,
+      lastSlide: 0
     }
   },
   computed: {
@@ -416,7 +417,7 @@ export default {
     this.$nextTick(() => {
       this._computeAnchorStyle(this.focusIndex)
       this._computeHeaderStyle(0)
-      this._initSwiper()
+      this._initSwipe()
       this._initCarousel()
       this._computeMaxScreenCount()
       this._computeHeaderSize()
@@ -439,6 +440,9 @@ export default {
         return
       }
       this.timer = window.setInterval(() => {
+        if (Date.now() - this.lastSlide < this.duration) {
+          return
+        }
         if (this.notTouchDevice) {
           if (this.cursorInner) {
             return
@@ -451,7 +455,7 @@ export default {
         this._switchTrigger(true)
       }, this.autoplay)
     },
-    _initSwiper() {
+    _initSwipe() {
       if (!this.swipe) {
         return
       }
@@ -460,7 +464,7 @@ export default {
         startSlide: this.focusIndex,
         speed: this.duration,
         continuous: auto,
-        callback: this._handleTabSwitch
+        callback: this._swipeCallback
       })
     },
     _triggerSwiper() {
@@ -604,18 +608,26 @@ export default {
       }
       return result
     },
-    _handleTabSwitch(index, force = false) {
+    _swipeCallback(index) {
+      this.lastSlide = Date.now()
+      this._handleTabSwitch(index, false, false)
+    },
+    _handleTabSwitch(index, force = false, move = true) {
       if (this.routable && !force) {
         return
       }
-      const lastIndex = this.focusIndex
-      if (this.focusIndex !== index) {
-        this.focusIndex = index
-        this.$emit('change', index)
+      let newIndex = index
+      if (index >= this.headerCount) {
+        newIndex = (newIndex - this.headerCount) % 2 ? this.headerCount - 1 : 0
       }
-      this._computeAnchorStyle(index)
+      const lastIndex = this.focusIndex
+      if (this.focusIndex !== newIndex) {
+        this.focusIndex = newIndex
+        this.$emit('change', newIndex)
+      }
+      this._computeAnchorStyle(newIndex)
       this._computeHeaderStyle(lastIndex)
-      this._triggerSwiper()
+      move && this._triggerSwiper()
     },
     _switchTrigger(isNext) {
       let result

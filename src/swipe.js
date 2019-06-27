@@ -29,6 +29,7 @@ export default function Swipe(container, options) {
   };
 
   var isAndroid = /android/.test(window.navigator.userAgent.toLocaleLowerCase())
+  var lastMoveAt = 0
 
   // quit if no root element
   if (!container) return;
@@ -154,6 +155,7 @@ export default function Swipe(container, options) {
 
     index = to;
     offloadFn(options.callback && options.callback(index, slides[index]));
+    lastMoveAt = Date.now()
   }
 
   function move(index, dist, speed) {
@@ -424,7 +426,7 @@ export default function Swipe(container, options) {
             index = circle(index - 1);
 
           }
-
+          lastMoveAt = Date.now()
           options.callback && options.callback(index, slides[index]);
 
         } else {
@@ -505,7 +507,9 @@ export default function Swipe(container, options) {
 
     },
     slide: function (to, speed) {
-
+      if (speed && (Date.now() - lastMoveAt <= speed)) {
+        return;
+      }
       // cancel slideshow
       stop();
 
