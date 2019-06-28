@@ -276,7 +276,6 @@ export default function Swipe(container, options) {
     },
     start: function (event) {
       if (disabled) {
-        event.stopPropagation()
         event.preventDefault()
         return
       }

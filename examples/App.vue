@@ -150,10 +150,6 @@ export default {
         {
           name: 'H5实例',
           route: '/mobile'
-        },
-        {
-          name: 'PC实例',
-          route: '/pc'
         }
       ]
     }

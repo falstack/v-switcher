@@ -40,11 +40,6 @@ export default new VueRouter({
       path: '/mobile',
       name: 'mobile',
       component: () => import('./pages/mobile')
-    },
-    {
-      path: '/pc',
-      name: 'pc',
-      component: () => import('./pages/pc')
     }
   ]
 })
