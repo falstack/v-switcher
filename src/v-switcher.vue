@@ -317,6 +317,10 @@ export default {
     sticky: {
       type: Boolean,
       default: false
+    },
+    disabledSwipe: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -463,6 +467,7 @@ export default {
       this.swiper = Swipe(this.$refs.content, {
         startSlide: this.focusIndex,
         speed: this.duration,
+        disabled: this.disabledSwipe,
         continuous: auto,
         callback: this._swipeCallback
       })

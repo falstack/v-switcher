@@ -38,6 +38,7 @@ export default function Swipe(container, options) {
   options = options || {};
   var index = parseInt(options.startSlide, 10) || 0;
   var speed = options.speed || 300;
+  var disabled = options.disabled || false
   options.continuous = options.continuous !== undefined ? options.continuous : true;
 
   function setup() {
@@ -274,6 +275,11 @@ export default function Swipe(container, options) {
 
     },
     start: function (event) {
+      if (disabled) {
+        event.stopPropagation()
+        event.preventDefault()
+        return
+      }
 
       var touches = event.touches[0];
 
