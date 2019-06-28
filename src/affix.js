@@ -96,6 +96,9 @@ export default {
       ) {
         const overflowY = window.getComputedStyle(el).overflowY
         if (overflowY === 'scroll' || overflowY === 'auto') {
+          if (el.tagName === 'HTML' || el.tagName === 'BODY') {
+            return document
+          }
           return el
         }
         el = el.parentNode
