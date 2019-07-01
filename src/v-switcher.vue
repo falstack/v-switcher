@@ -43,10 +43,32 @@
     position: relative;
     font-size: 0;
     z-index: 1;
-    flex-grow: 1;
     padding: 0;
     margin: 0;
     white-space: nowrap;
+
+    &-translate {
+      flex-grow: 1;
+
+      .v-switcher-header-start {
+        text-align: left;
+        display: flex;
+        flex-direction: row;
+        @include transition();
+
+        .v-switcher-header-item {
+          flex-shrink: 0;
+        }
+      }
+    }
+
+    &-scroll {
+      overflow: auto;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
 
     &-before,
     &-after {
@@ -71,17 +93,6 @@
 
     &-center {
       text-align: center;
-    }
-
-    &-start {
-      text-align: left;
-      display: flex;
-      flex-direction: row;
-      @include transition();
-
-      .v-switcher-header-item {
-        flex-shrink: 0;
-      }
     }
 
     &-end {
@@ -171,7 +182,10 @@
         <ul
           ref="header"
           class="v-switcher-header"
-          :class="`v-switcher-header-${align}`"
+          :class="[
+            `v-switcher-header-${align}`,
+            `v-switcher-header-${headerAnimation}`
+          ]"
           :style="headerStyle"
           @touchstart="_handleHeaderTouchStart"
           @touchmove="_handleHeaderTouchMove"
@@ -327,6 +341,11 @@ export default {
     continuousSwipe: {
       type: Boolean,
       default: false
+    },
+    headerAnimation: {
+      type: String,
+      default: 'translate',
+      validator: val => ~['translate', 'scroll'].indexOf(val)
     }
   },
   data() {
@@ -729,11 +748,17 @@ export default {
       this.contentLastPoint = lastPoint
     },
     _handleHeaderTouchStart(e) {
+      if (this.headerAnimation !== 'translate') {
+        return
+      }
       const point = e.touches ? e.touches[0] : e
       this.headerLastPoint =
         this.align === 'vertical' ? point.pageY : point.pageX
     },
     _handleHeaderTouchMove(e) {
+      if (this.headerAnimation !== 'translate') {
+        return
+      }
       const point = e.touches ? e.touches[0] : e
       const isVertical = this.align === 'vertical'
       const curPoint = isVertical ? point.pageY : point.pageX
@@ -763,6 +788,9 @@ export default {
         transform: `translateX(${left}px)`,
         transitionDuration: `${this.duration}ms`
       }
+      this.curScreenIndex = Math.round(
+        Math.abs(left / this.$refs.headerWrap.offsetWidth)
+      )
     },
     _computeHeaderSize() {
       this.$nextTick(() => {
@@ -794,6 +822,9 @@ export default {
       }
     },
     forward() {
+      if (this.headerAnimation !== 'translate') {
+        return
+      }
       if (
         this.align !== 'start' ||
         this.curScreenIndex + 1 >= this.maxScreenCount
@@ -806,6 +837,9 @@ export default {
       return this._moveHeader(this.curScreenIndex + 1)
     },
     backward() {
+      if (this.headerAnimation !== 'translate') {
+        return
+      }
       if (this.align !== 'start' || this.curScreenIndex === 0) {
         return {
           is_begin: true,
