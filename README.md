@@ -34,6 +34,7 @@ Vue.component(VSwitcher.name, VSwitcher)
 | fixedTop | Number | undefined | N | 如果设值，就为 headers fixed 时距离顶部的高度 |
 | sticky | Boolean | false | N | 是否使用 100% 高度布局 |
 | disabledSwipe | Boolean | false | N | 是否禁止 swipe 的 touch 事件 |
+| continuousSwipe | Boolean | true | N | 当使用 swipe 的时候，是否是无限滚动模式 |
 
 ### example
 > 用例比较多，比较复杂，就不写了，把项目 clone 到本地，然后执行以下脚本来看 demo 吧

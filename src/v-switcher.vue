@@ -321,6 +321,10 @@ export default {
     disabledSwipe: {
       type: Boolean,
       default: false
+    },
+    continuousSwipe: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -463,12 +467,11 @@ export default {
       if (!this.swipe) {
         return
       }
-      const auto = !!this.autoplay
       this.swiper = Swipe(this.$refs.content, {
         startSlide: this.focusIndex,
         speed: this.duration,
         disabled: this.disabledSwipe,
-        continuous: auto,
+        continuous: this.continuousSwipe === false ? false : !!this.autoplay,
         callback: this._swipeCallback
       })
     },
