@@ -324,7 +324,7 @@ export default {
     },
     continuousSwipe: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data() {
@@ -471,7 +471,7 @@ export default {
         startSlide: this.focusIndex,
         speed: this.duration,
         disabled: this.disabledSwipe,
-        continuous: this.continuousSwipe === false ? false : !!this.autoplay,
+        continuous: this.continuousSwipe || !!this.autoplay,
         callback: this._swipeCallback
       })
     },
