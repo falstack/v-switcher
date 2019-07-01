@@ -726,10 +726,18 @@ export default {
       })
     },
     next() {
-      this._switchTrigger(true)
+      if (this.swiper) {
+        this.swiper.next()
+      } else {
+        this._switchTrigger(true)
+      }
     },
     prev() {
-      this._switchTrigger(false)
+      if (this.swiper) {
+        this.swiper.prev()
+      } else {
+        this._switchTrigger(false)
+      }
     },
     forward() {
       if (
