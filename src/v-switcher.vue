@@ -64,6 +64,7 @@
 
     &-scroll {
       overflow: auto;
+      -webkit-overflow-scrolling: touch;
 
       &::-webkit-scrollbar {
         display: none;
@@ -186,7 +187,7 @@
             `v-switcher-header-${align}`,
             `v-switcher-header-${headerAnimation}`
           ]"
-          :style="headerStyle"
+          :style="headerAnimation === 'translate' ? headerStyle : {}"
           @touchstart="_handleHeaderTouchStart"
           @touchmove="_handleHeaderTouchMove"
         >
