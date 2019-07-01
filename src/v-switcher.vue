@@ -213,6 +213,8 @@
         class="v-switcher-content"
         :class="[{ 'v-switcher-content-animated': animated && !swipe }]"
         :style="contentStyle"
+        @touchstart="_handleContentTouchStart"
+        @touchmove="_handleContentTouchMove"
       >
         <div
           v-for="(item, index) in headers"
@@ -347,7 +349,11 @@ export default {
       timer: 0,
       headerLeft: 0,
       headerSize: 0,
-      lastPoint: 0,
+      headerLastPoint: 0,
+      contentLastPoint: {
+        x: 0,
+        y: 0
+      },
       swiper: null,
       curScreenIndex: 0,
       maxScreenCount: 1,
@@ -638,6 +644,9 @@ export default {
       move && this._triggerSwiper()
     },
     _switchTrigger(isNext) {
+      if (Date.now() - this.lastSlide < this.duration) {
+        return
+      }
       let result
       if (isNext) {
         if (this.focusIndex === this.headerCount - 1) {
@@ -675,16 +684,61 @@ export default {
         is_end: targetScreenCount + 1 === this.maxScreenCount
       }
     },
+    _handleContentTouchStart(e) {
+      if (this.swipe || !this.animated) {
+        return
+      }
+      const point = e.touches ? e.touches[0] : e
+      this.contentLastPoint = {
+        x: point.pageX,
+        y: point.pageY
+      }
+    },
+    _handleContentTouchMove(e) {
+      if (this.swipe || !this.animated) {
+        return
+      }
+      const point = e.touches ? e.touches[0] : e
+      const lastPoint = this.contentLastPoint
+      const curPoint = {
+        x: point.pageX,
+        y: point.pageY
+      }
+      const delta = {
+        x: curPoint.x - lastPoint.x,
+        y: curPoint.y - lastPoint.y
+      }
+      if (Math.abs(delta.x) < Math.abs(delta.y)) {
+        return
+      }
+      if (Math.abs(delta.x) * 3 < this.$el.clientWidth) {
+        return
+      }
+      if (delta.x > 0) {
+        if (!this.focusIndex) {
+          return
+        }
+        this.prev()
+      } else {
+        if (this.focusIndex >= this.headerCount - 1) {
+          return
+        }
+        this.next()
+      }
+      this.lastSlide = Date.now()
+      this.contentLastPoint = lastPoint
+    },
     _handleHeaderTouchStart(e) {
       const point = e.touches ? e.touches[0] : e
-      this.lastPoint = this.align === 'vertical' ? point.pageY : point.pageX
+      this.headerLastPoint =
+        this.align === 'vertical' ? point.pageY : point.pageX
     },
     _handleHeaderTouchMove(e) {
       const point = e.touches ? e.touches[0] : e
       const isVertical = this.align === 'vertical'
       const curPoint = isVertical ? point.pageY : point.pageX
-      const delta = (curPoint - this.lastPoint) * 3
-      this.lastPoint = curPoint
+      const delta = (curPoint - this.headerLastPoint) * 3
+      this.headerLastPoint = curPoint
       let left = this.headerLeft + delta
       if (isVertical) {
         // 到顶了
@@ -759,6 +813,12 @@ export default {
         }
       }
       return this._moveHeader(this.curScreenIndex - 1)
+    },
+    refresh() {
+      if (!this.swipe) {
+        return
+      }
+      this.swiper.refreshShadowSlide()
     }
   }
 }
