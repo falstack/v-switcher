@@ -850,7 +850,7 @@ export default {
       if (!this.swipe) {
         return
       }
-      this.swiper.setup()
+      this.swiper.refreshShadowSlide()
     }
   }
 }
