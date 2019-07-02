@@ -65,10 +65,9 @@
     &-scroll {
       overflow: auto;
       -webkit-overflow-scrolling: touch;
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
+      height: 110%;
+      padding-bottom: 10%;
+      box-sizing: content-box;
     }
 
     &-before,
@@ -112,6 +111,7 @@
     &-tabs {
       overflow: hidden;
       flex-grow: 1;
+      height: 100%;
     }
 
     &-item {
@@ -185,11 +185,12 @@
           class="v-switcher-header"
           :class="[
             `v-switcher-header-${align}`,
-            `v-switcher-header-${headerAnimation}`
+            `v-switcher-header-${notTouchDevice ? 'translate' : 'scroll'}`
           ]"
-          :style="headerAnimation === 'translate' ? headerStyle : {}"
+          :style="headerStyle"
           @touchstart="_handleHeaderTouchStart"
           @touchmove="_handleHeaderTouchMove"
+          @scroll="_setHeaderLeft"
         >
           <li
             v-for="(item, index) in formatHeaders"
@@ -247,6 +248,7 @@
 <script>
 import Swipe from './swipe.js'
 import affix from './affix.js'
+import scroll from './scroll.js'
 
 if (!String.prototype.startsWith) {
   Object.defineProperty(String.prototype, 'startsWith', {
@@ -342,11 +344,6 @@ export default {
     continuousSwipe: {
       type: Boolean,
       default: false
-    },
-    headerAnimation: {
-      type: String,
-      default: 'translate',
-      validator: val => ~['translate', 'scroll'].indexOf(val)
     }
   },
   data() {
@@ -545,12 +542,21 @@ export default {
       if (!isToRight && (rectLeft < 0 || rect.right < 0)) {
         left = -offsetLeft
       }
-      this.curScreenIndex = Math.round(Math.abs(left / innerWidth))
-      this.headerLeft = left
-      this.headerStyle = {
-        transform: `translateX(${left}px)`,
-        transitionDuration: `${this.duration}ms`
+      this._setHeaderScroll(left)
+      this._computeCurrentScreenIndex(left)
+    },
+    _setHeaderScroll(left) {
+      if (this.notTouchDevice) {
+        this.headerStyle = {
+          transform: `translateX(${left}px)`,
+          transitionDuration: `${this.duration}ms`
+        }
+      } else {
+        scroll(this.$refs.header, -left, this.duration)
       }
+    },
+    _setHeaderLeft(evt) {
+      this.headerLeft = -evt.target.scrollLeft
     },
     _computePanelStyle(index) {
       if (this.swipe) {
@@ -693,10 +699,7 @@ export default {
     },
     _moveHeader(targetScreenCount) {
       const left = -targetScreenCount * this.$refs.header.offsetWidth
-      this.headerStyle = {
-        transform: `translateX(${left}px)`,
-        transitionDuration: `${this.duration}ms`
-      }
+      this._setHeaderScroll(left)
       this.headerLeft = left
       this.curScreenIndex = targetScreenCount
       return {
@@ -749,7 +752,7 @@ export default {
       this.contentLastPoint = lastPoint
     },
     _handleHeaderTouchStart(e) {
-      if (this.headerAnimation !== 'translate') {
+      if (!this.notTouchDevice) {
         return
       }
       const point = e.touches ? e.touches[0] : e
@@ -757,7 +760,7 @@ export default {
         this.align === 'vertical' ? point.pageY : point.pageX
     },
     _handleHeaderTouchMove(e) {
-      if (this.headerAnimation !== 'translate') {
+      if (!this.notTouchDevice) {
         return
       }
       const point = e.touches ? e.touches[0] : e
@@ -785,10 +788,10 @@ export default {
         }
       }
       this.headerLeft = left
-      this.headerStyle = {
-        transform: `translateX(${left}px)`,
-        transitionDuration: `${this.duration}ms`
-      }
+      this._setHeaderScroll(left)
+      this._computeCurrentScreenIndex(left)
+    },
+    _computeCurrentScreenIndex(left) {
       this.curScreenIndex = Math.round(
         Math.abs(left / this.$refs.headerWrap.offsetWidth)
       )
@@ -823,9 +826,6 @@ export default {
       }
     },
     forward() {
-      if (this.headerAnimation !== 'translate') {
-        return
-      }
       if (
         this.align !== 'start' ||
         this.curScreenIndex + 1 >= this.maxScreenCount
@@ -838,9 +838,6 @@ export default {
       return this._moveHeader(this.curScreenIndex + 1)
     },
     backward() {
-      if (this.headerAnimation !== 'translate') {
-        return
-      }
       if (this.align !== 'start' || this.curScreenIndex === 0) {
         return {
           is_begin: true,
