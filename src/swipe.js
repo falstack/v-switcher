@@ -512,18 +512,6 @@ export default function Swipe(container, options) {
 
     },
 
-    refreshShadowSlide: function () {
-      if (slides.length > 4) {
-        return
-      }
-      const lastIndex = slides.length - 1
-      slides[lastIndex].parentNode.removeChild(slides[lastIndex])
-      slides[lastIndex - 1].parentNode.removeChild(slides[lastIndex - 1])
-      element.appendChild(slides[0].cloneNode(true));
-      element.appendChild(element.children[1].cloneNode(true));
-      slides = element.children
-    },
-
     slide: function (to, speed) {
       if (speed && (Date.now() - lastMoveAt <= speed)) {
         return;

@@ -846,11 +846,11 @@ export default {
       }
       return this._moveHeader(this.curScreenIndex - 1)
     },
-    refresh() {
+    setupSwipe() {
       if (!this.swipe) {
         return
       }
-      this.swiper.refreshShadowSlide()
+      this.swiper.setup()
     }
   }
 }
