@@ -428,7 +428,9 @@ export default {
       return style
     },
     notTouchDevice() {
-      return !('ontouchstart' in document.documentElement)
+      return typeof document === 'undefined'
+        ? true
+        : !('ontouchstart' in document.documentElement)
     }
   },
   beforeMount() {
