@@ -29,21 +29,21 @@
     <h3>带切换动画和指示器</h3>
     <section>
       <main>
-        <v-switcher :headers="headers.slice(0, 5)" :swipe="true" :autoplay="2000" item-width="600px">
+        <v-switcher :headers="headers.slice(0, 5)" :swipe="true" :disabled-swipe="true" :autoplay="2000" item-width="600px">
           <div :style="{ height: '400px', backgroundColor: 'rgba(21,174,103,.5)' }" slot="0">
-            第一个tab
+            <button @click="handleClick">第一个tab</button>
           </div>
           <div :style="{ height: '400px', backgroundColor: 'rgba(245,163,59,.5)' }" slot="1">
-            第二个tab
+            <button @click="handleClick">第二个tab</button>
           </div>
           <div :style="{ height: '400px', backgroundColor: 'rgba(255,230,135,.5)' }" slot="2">
-            第三个tab
+            <button @click="handleClick">第三个tab</button>
           </div>
           <div :style="{ height: '400px', backgroundColor: 'rgba(194,217,78,.5)' }" slot="3">
-            第四个tab
+            <button @click="handleClick">第四个tab</button>
           </div>
           <div :style="{ height: '400px', backgroundColor: 'rgba(195,123,177,.5)' }" slot="4">
-            第五个tab
+            <button @click="handleClick">第五个tab</button>
           </div>
         </v-switcher>
       </main>
@@ -107,6 +107,9 @@ export default {
     forward() {
       const result = this.$refs.switch.forward()
       console.log(result)
+    },
+    handleClick() {
+      console.log('handleClick')
     }
   }
 }

@@ -275,11 +275,6 @@ export default function Swipe(container, options) {
 
     },
     start: function (event) {
-      if (disabled) {
-        event.preventDefault()
-        return
-      }
-
       var touches = event.touches[0];
 
       // measure start values
@@ -306,6 +301,10 @@ export default function Swipe(container, options) {
 
     },
     move: function (event) {
+      if (disabled) {
+        event.preventDefault()
+        return
+      }
 
       // ensure swiping with one touch and not pinching
       if (event.touches.length > 1 || event.scale && event.scale !== 1) return
