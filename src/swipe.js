@@ -275,6 +275,10 @@ export default function Swipe(container, options) {
 
     },
     start: function (event) {
+      if (disabled) {
+        return
+      }
+
       var touches = event.touches[0];
 
       // measure start values
@@ -302,7 +306,6 @@ export default function Swipe(container, options) {
     },
     move: function (event) {
       if (disabled) {
-        event.preventDefault()
         return
       }
 
