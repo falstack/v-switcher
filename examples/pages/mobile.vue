@@ -126,6 +126,7 @@
         <v-scroller
           v-for="(item, index) in headers2"
           ref="scroll"
+          reg="v-switcher-header"
           :key="index"
           :slot="`${index}`"
           @top="handlePullDown"
