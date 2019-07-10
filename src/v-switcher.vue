@@ -63,11 +63,12 @@
     }
 
     &-scroll {
-      overflow: auto;
       -webkit-overflow-scrolling: touch;
       height: 110%;
       padding-bottom: 10%;
       box-sizing: content-box;
+      overflow-x: auto;
+      overflow-y: hidden;
     }
 
     &-before,
