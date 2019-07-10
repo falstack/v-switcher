@@ -134,11 +134,6 @@
           @bottom="handleLoadMore"
         >
           <ul class="ul-wrap">
-            <scroll :scroll-x="true" :stop="true">
-              <div class="item-wrap">
-                <div v-for="item in 10" :key="item" class="item" :style="{ backgroundColor: getRandomColor() }">{{ item }}</div>
-              </div>
-            </scroll>
             <flow-loader
               ref="loader"
               func="getListByPage"
@@ -168,7 +163,6 @@
 </template>
 
 <script>
-import Scroll from '../VueScroll'
 import ItemComponent from '../Item'
 import VScroller from 'h5-vue-scroller'
 import VueFlowRender from 'vue-flow-render'
@@ -176,7 +170,6 @@ import VueFlowRender from 'vue-flow-render'
 export default {
   name: 'Mobile',
   components: {
-    Scroll,
     VScroller,
     VueFlowRender
   },
