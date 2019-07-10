@@ -4175,10 +4175,10 @@ gzip-size@^5.0.0:
     duplexer "^0.1.1"
     pify "^3.0.0"
 
-h5-vue-scroller@^0.1.11:
-  version "0.1.11"
-  resolved "https://registry.yarnpkg.com/h5-vue-scroller/-/h5-vue-scroller-0.1.11.tgz#ed268d25832d885ad00e01567b494830f377bc8b"
-  integrity sha512-O9+Ogr6uDG3PaZxD2ZDttmlCbSlDHWmktHvERac6lIKB2bkroCZTyNHqfWViHaXMa5G5S1iA/yhtaA9BLYvanw==
+h5-vue-scroller@^0.1.13:
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/h5-vue-scroller/-/h5-vue-scroller-0.1.13.tgz#59f0195cc411fc4b592c19987697466aa01b38d1"
+  integrity sha512-g9zA14bYJrud+Eekr5JcP54tN4UWbTgZdQ0Rh22Awq5DLt8SKs2TYsez1cNuBzZuIYgvikHOPLQBs2tj9M/PxA==
   dependencies:
     throttle-debounce "^2.1.0"
     vue "^2.6.10"

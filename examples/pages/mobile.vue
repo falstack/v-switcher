@@ -133,6 +133,7 @@
           @scroll="handleScroll"
           @scroll-down="handlePullUp"
           @bottom="handleLoadMore"
+          @refresh="handleRefresh"
         >
           <ul class="ul-wrap">
             <flow-loader
@@ -261,6 +262,9 @@ export default {
     },
     handleBtnClick() {
       alert(1)
+    },
+    handleRefresh() {
+      this.isActive = false
     }
   }
 }
