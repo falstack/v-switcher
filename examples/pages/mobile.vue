@@ -65,18 +65,25 @@
       margin: 0;
       padding: 0;
 
-      li {
-        height: 40px;
-        line-height: 40px;
+      .hoz-wrap {
+        width: 100%;
+        height: 150px;
+        overflow: hidden;
       }
 
       .item-wrap {
         display: inline-block;
         white-space: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        height: 200%;
+        padding-bottom: 100%;
+        box-sizing: border-box;
+        width: 100%;
 
         .item {
-          height: 50px;
-          line-height: 50px;
+          height: 150px;
+          line-height: 150px;
           font-size: 24px;
           display: inline-block;
           text-align: center;
@@ -136,6 +143,17 @@
           @refresh="handleRefresh"
         >
           <ul class="ul-wrap">
+            <li class="hoz-wrap">
+              <div class="item-wrap" @touchstart.stop @touchmove.stop>
+                <div
+                  v-for="item in 10"
+                  :key="item"
+                  :style="{ backgroundColor: getRandomColor() }"
+                  @click="click++"
+                  class="item"
+                >{{ item }} - {{ click }}</div>
+              </div>
+            </li>
             <flow-loader
               ref="loader"
               func="getListByPage"
@@ -189,6 +207,7 @@ export default {
       'tab-9'
     ]
     return {
+      click: 0,
       ItemComponent,
       isActive: false,
       headers1: [
@@ -261,7 +280,7 @@ export default {
       }
     },
     handleBtnClick() {
-      alert(1)
+      alert('筛选')
     },
     handleRefresh() {
       this.isActive = false

@@ -4175,10 +4175,10 @@ gzip-size@^5.0.0:
     duplexer "^0.1.1"
     pify "^3.0.0"
 
-h5-vue-scroller@^0.1.13:
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/h5-vue-scroller/-/h5-vue-scroller-0.1.13.tgz#59f0195cc411fc4b592c19987697466aa01b38d1"
-  integrity sha512-g9zA14bYJrud+Eekr5JcP54tN4UWbTgZdQ0Rh22Awq5DLt8SKs2TYsez1cNuBzZuIYgvikHOPLQBs2tj9M/PxA==
+h5-vue-scroller@^0.1.14:
+  version "0.1.14"
+  resolved "https://registry.yarnpkg.com/h5-vue-scroller/-/h5-vue-scroller-0.1.14.tgz#03514fa0e329167afe5b490f9fb4c8a90c65c34c"
+  integrity sha512-Bl2mm8YydgFffD1N5MbQXiimgImpQYIC9y/o9opdkvYyahvmULVhdHYj0xp+BgICRD0tXHvwJJCkjQLDoNd1dA==
   dependencies:
     throttle-debounce "^2.1.0"
     vue "^2.6.10"
@@ -8700,11 +8700,12 @@ vue-loader@^15.7.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-mixin-store@^1.1.34:
-  version "1.1.34"
-  resolved "https://registry.yarnpkg.com/vue-mixin-store/-/vue-mixin-store-1.1.34.tgz#b8bfb28aae969b2f303864c6a0239a1319eeb7eb"
-  integrity sha512-ilhSeYE+HIMvFZxVkmuOEdDMy7hNxfzxGi4NJgFV2sqvrWf4rnQsrIhAYTZZdIVueSaTF/dF8rf2ZOmz8TqJjA==
+vue-mixin-store@^1.1.36:
+  version "1.1.36"
+  resolved "https://registry.yarnpkg.com/vue-mixin-store/-/vue-mixin-store-1.1.36.tgz#602071f5f94585e57b0c6b95f04c0e83f0e0d747"
+  integrity sha512-Do0osrCKHswd5VYcoJqiiD5b+/qkBOdswO7gBCEJ+CCLvNRzo6cwvk9URMaHCx5zuGvLsXJGwawJ8MH+gpsfdQ==
   dependencies:
+    throttle-debounce "^2.1.0"
     vue "^2.6.6"
 
 vue-router@^3.0.7:

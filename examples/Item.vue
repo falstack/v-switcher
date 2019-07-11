@@ -13,8 +13,8 @@
 
 <template>
   <div v-if="item" class="comp-item">
-    <div :style="{ backgroundColor: item.style.color }">
-      count：{{ index + 1 }}，id：{{ item.data.number_id }}
+    <div :style="{ backgroundColor: item.style.color }" @click="handleClick">
+      count：{{ index + 1 }}，id：{{ item.data.number_id }}，{{ click }}
     </div>
   </div>
 </template>
@@ -30,6 +30,16 @@ export default {
     index: {
       type: Number,
       required: true
+    }
+  },
+  data() {
+    return {
+      click: 0
+    }
+  },
+  methods: {
+    handleClick() {
+      this.click++
     }
   }
 }
