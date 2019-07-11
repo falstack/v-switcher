@@ -64,6 +64,7 @@
 
     &-scroll {
       -webkit-overflow-scrolling: touch;
+      width: 100%;
       height: 110%;
       padding-bottom: 10%;
       box-sizing: content-box;
@@ -113,6 +114,7 @@
       overflow: hidden;
       flex-grow: 1;
       height: 100%;
+      width: 100%;
     }
 
     &-item {
@@ -189,8 +191,8 @@
             `v-switcher-header-${notTouchDevice ? 'translate' : 'scroll'}`
           ]"
           :style="headerStyle"
-          @touchstart="_handleHeaderTouchStart"
-          @touchmove="_handleHeaderTouchMove"
+          @touchstart.stop="_handleHeaderTouchStart"
+          @touchmove.stop="_handleHeaderTouchMove"
           @scroll="_setHeaderLeft"
         >
           <li

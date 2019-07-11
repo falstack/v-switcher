@@ -76,10 +76,11 @@
         white-space: nowrap;
         overflow-x: auto;
         overflow-y: hidden;
-        height: 200%;
-        padding-bottom: 100%;
-        box-sizing: border-box;
+        height: 110%;
+        padding-bottom: 10%;
+        box-sizing: content-box;
         width: 100%;
+        -webkit-overflow-scrolling: touch;
 
         .item {
           height: 150px;
@@ -133,7 +134,6 @@
         <v-scroller
           v-for="(item, index) in headers2"
           ref="scroll"
-          reg="v-switcher-header"
           :key="index"
           :slot="`${index}`"
           @top="handlePullDown"
