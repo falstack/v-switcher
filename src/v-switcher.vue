@@ -232,8 +232,8 @@
         class="v-switcher-content"
         :class="[{ 'v-switcher-content-animated': animated && !swipe }]"
         :style="contentStyle"
-        @touchstart="_handleContentTouchStart"
-        @touchmove="_handleContentTouchMove"
+        @touchstart.stop="_handleContentTouchStart"
+        @touchmove.stop="_handleContentTouchMove"
       >
         <div
           v-for="(item, index) in headers"

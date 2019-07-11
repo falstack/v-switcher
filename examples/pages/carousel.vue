@@ -10,7 +10,7 @@
     <h3>最简单的模式</h3>
     <section class="many">
       <main>
-        <v-switcher ref="switch" :headers="headers" align="start" header-animation="scroll">
+        <v-switcher ref="switch" :headers="headers" align="start">
           <template slot="header-after">
             <button @click="backward">向后</button>
             <button @click="forward">向前</button>
