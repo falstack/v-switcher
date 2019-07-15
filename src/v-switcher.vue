@@ -274,6 +274,23 @@ const getMatchedRouteIndex = (headers, path) => {
   return result
 }
 
+const checkInView = (child, parent) => {
+  const childRect = child.getBoundingClientRect()
+  const parentRect = parent.getBoundingClientRect()
+  const result = {
+    top: childRect.top - parentRect.top,
+    bottom: childRect.bottom - parentRect.bottom,
+    left: childRect.left - parentRect.left,
+    right: childRect.right - parentRect.right
+  }
+  result.ok =
+    result.top >= 0 &&
+    result.bottom <= 0 &&
+    result.left >= 0 &&
+    result.right <= 0
+  return result
+}
+
 export default {
   name: 'VSwitcher',
   mixins: [affix],
@@ -300,7 +317,7 @@ export default {
     },
     align: {
       type: String,
-      default: 'around',
+      default: 'start',
       validator: val =>
         ~['around', 'start', 'center', 'end', 'vertical'].indexOf(val)
     },
@@ -452,11 +469,11 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this._computeAnchorStyle(this.focusIndex)
-      this._computeHeaderStyle(0)
+      this._computeHeaderSize()
+      this._computeHeaderStyle()
       this._initSwipe()
       this._initCarousel()
       this._computeMaxScreenCount()
-      this._computeHeaderSize()
       if (this.align === 'start') {
         window.addEventListener('resize', () => {
           this._computeMaxScreenCount()
@@ -509,46 +526,39 @@ export default {
       }
       this.swiper.slide(this.focusIndex, this.duration)
     },
-    _computeHeaderStyle(lastFocusIndex) {
+    _computeHeaderStyle() {
+      /**
+       * 只支持 align 是 start
+       */
       if (this.align !== 'start') {
         return
       }
       const index = this.focusIndex
+      /**
+       * 如果已经到头了，或者已经到最后一个了，就 return
+       */
+      if (!index || index === this.headerCount - 1) {
+        return
+      }
       const tabs = this.$refs.tab
-      const isToRight = index > lastFocusIndex
-      let checkTab
-      if (isToRight) {
-        checkTab =
-          index === this.headerCount - 1 ? tabs[index] : tabs[index + 1]
-      } else {
-        checkTab = index ? tabs[index - 1] : tabs[0]
-      }
-      if (!checkTab) {
-        return
-      }
       const headerWrap = this.$refs.tabWrap
-      if (!headerWrap) {
+      if (!tabs || !headerWrap) {
         return
       }
-      let { offsetLeft, offsetWidth } = checkTab
-      const rect = checkTab.getBoundingClientRect()
-      const headerWrapRect = headerWrap.getBoundingClientRect()
-      const rectLeft = rect.left - headerWrapRect.left
-      const rectRight = rect.right - headerWrapRect.left
-      const innerWidth = headerWrap.offsetWidth
+      const beforeTab = tabs[index - 1]
+      const afterTab = tabs[index + 1]
       let left = this.headerLeft
-      if (
-        isToRight &&
-        !(rectLeft < innerWidth && rectRight < innerWidth) &&
-        offsetWidth + offsetLeft > innerWidth
-      ) {
-        left = innerWidth - offsetWidth - offsetLeft
+      const leftRect = checkInView(beforeTab, headerWrap)
+      const rightRect = checkInView(afterTab, headerWrap)
+      if (!leftRect.ok) {
+        left -= leftRect.left
       }
-      if (!isToRight && (rectLeft < 0 || rect.right < 0)) {
-        left = -offsetLeft
+      if (!rightRect.ok) {
+        left -= rightRect.right
       }
       this._setHeaderScroll(left)
       this._computeCurrentScreenIndex(left)
+      this.headerLeft = left
     },
     _setHeaderScroll(left) {
       if (this.notTouchDevice) {
@@ -665,13 +675,12 @@ export default {
       if (index >= this.headerCount) {
         newIndex = (newIndex - this.headerCount) % 2 ? this.headerCount - 1 : 0
       }
-      const lastIndex = this.focusIndex
       if (this.focusIndex !== newIndex) {
         this.focusIndex = newIndex
         this.$emit('change', newIndex)
       }
       this._computeAnchorStyle(newIndex)
-      this._computeHeaderStyle(lastIndex)
+      this._computeHeaderStyle()
       move && this._triggerSwiper()
     },
     _switchTrigger(isNext) {
