@@ -545,16 +545,20 @@ export default {
       if (!tabs || !headerWrap) {
         return
       }
-      const beforeTab = tabs[index - 1]
-      const afterTab = tabs[index + 1]
       let left = this.headerLeft
-      const leftRect = checkInView(beforeTab, headerWrap)
-      const rightRect = checkInView(afterTab, headerWrap)
-      if (!leftRect.ok) {
-        left -= leftRect.left
+      const beforeTab = tabs[index - 1]
+      if (beforeTab) {
+        const leftRect = checkInView(beforeTab, headerWrap)
+        if (!leftRect.ok) {
+          left -= leftRect.left
+        }
       }
-      if (!rightRect.ok) {
-        left -= rightRect.right
+      const afterTab = tabs[index + 1]
+      if (afterTab) {
+        const rightRect = checkInView(afterTab, headerWrap)
+        if (!rightRect.ok) {
+          left -= rightRect.right
+        }
       }
       this._setHeaderScroll(left)
       this._computeCurrentScreenIndex(left)
