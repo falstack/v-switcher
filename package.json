@@ -29,10 +29,11 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.9.2",
     "@vue/cli-plugin-eslint": "^3.9.2",
-    "@vue/cli-service": "^3.9.2",
-    "@vue/eslint-config-prettier": "^4.0.1",
+    "@vue/cli-service": "^3.9.3",
+    "@vue/eslint-config-prettier": "^5.0.0",
     "babel-eslint": "^10.0.2",
-    "eslint": "^6.0.1",
+    "eslint": "^6.1.0",
+    "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-vue": "^5.2.3",
     "faker": "^4.1.0",
     "h5-vue-scroller": "^0.1.19",
@@ -41,7 +42,7 @@
     "sass-loader": "^7.1.0",
     "throttle-debounce": "^2.1.0",
     "vue-flow-render": "^0.1.27",
-    "vue-mixin-store": "^1.1.36",
+    "vue-mixin-store": "^1.1.49",
     "vue-router": "^3.0.7",
     "vue-template-compiler": "^2.5.21",
     "vuex": "^3.1.1"
