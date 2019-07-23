@@ -23,7 +23,7 @@ Vue.component(VSwitcher.name, VSwitcher)
 | routable | Boolean | false | N | 设为 true 则为路由模式 |
 | animated | Boolean | false | N | 是否支持切换动画 | 
 | duration | Number | 300 | N | 切换动画的时长，ms |
-| align | String | around | N | tab 的展示模式 ['around', 'start', 'center', 'end', 'vertical'] |
+| align | String | start | N | tab 的展示模式 ['around', 'start', 'center', 'end', 'vertical'] |
 | swipe | Boolean | false | N | 是否支持左右手势滑动 | 
 | headerTrigger | String | click | N | 头部动画触发的方式 ['click', 'hover'] |
 | anchorTrigger | String | click | N | 锚点动画触发的方式 ['click', 'hover'] |
