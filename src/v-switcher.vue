@@ -546,7 +546,7 @@ export default {
       } else {
         const tabs = this.$refs.tab
         const headerWrap = this.$refs.tabWrap
-        if (!tabs || !headerWrap) {
+        if (!tabs || !headerWrap || !tabs[oldIndex] || !tabs[index]) {
           return
         }
         const oldTabRect = tabs[oldIndex].getBoundingClientRect()
