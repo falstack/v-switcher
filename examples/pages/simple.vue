@@ -19,7 +19,7 @@
     <h3>header 展开</h3>
     <section>
       <main>
-        <v-switcher :headers="headers">
+        <v-switcher :headers="headers" align="around">
           <div class="demo-item" slot="0">
             第一个tab
           </div>

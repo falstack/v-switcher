@@ -198,13 +198,13 @@ export default {
     const headers2 = [
       'tab-0',
       'tab-1',
-      'tab-2',
-      'tab-3',
-      'tab-4',
+      'tab-2奥术大师',
+      'tab',
+      'tab-4答',
       'tab-5',
-      'tab-6',
+      'tab-6阿斯达稍等',
       'tab-7',
-      'tab-8',
+      'tab-8奥术大',
       'tab-9'
     ]
     return {

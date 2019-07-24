@@ -400,7 +400,7 @@
     <h3>面板</h3>
     <section>
       <main class="bangumi">
-        <v-switcher :headers="headers2">
+        <v-switcher :headers="headers2" align="around">
           <div
             slot="header-before"
             class="header-before"
