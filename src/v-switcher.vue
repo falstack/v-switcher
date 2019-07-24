@@ -542,6 +542,9 @@ export default {
       if (!index) {
         left = 0
       } else if (index === this.headerCount - 1) {
+        if (this.headerSize < this.$refs.tabWrap.offsetWidth) {
+          return
+        }
         left = this.$refs.tabWrap.offsetWidth - this.headerSize
       } else {
         const tabs = this.$refs.tab
