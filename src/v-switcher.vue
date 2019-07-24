@@ -470,7 +470,7 @@ export default {
     this.$nextTick(() => {
       this._computeAnchorStyle(this.focusIndex)
       this._computeHeaderSize()
-      this._computeHeaderStyle()
+      this._computeHeaderStyle(Math.max(this.focusIndex, 0))
       this._initSwipe()
       this._initCarousel()
       this._computeMaxScreenCount()
@@ -526,7 +526,7 @@ export default {
       }
       this.swiper.slide(this.focusIndex, this.duration)
     },
-    _computeHeaderStyle() {
+    _computeHeaderStyle(oldIndex) {
       /**
        * 只支持 align 是 start
        */
@@ -534,30 +534,39 @@ export default {
         return
       }
       const index = this.focusIndex
-      /**
-       * 如果已经到头了，或者已经到最后一个了，就 return
-       */
-      if (!index || index === this.headerCount - 1) {
+      if (oldIndex === index) {
         return
       }
-      const tabs = this.$refs.tab
-      const headerWrap = this.$refs.tabWrap
-      if (!tabs || !headerWrap) {
-        return
-      }
+
       let left = this.headerLeft
-      const beforeTab = tabs[index - 1]
-      if (beforeTab) {
-        const leftRect = checkInView(beforeTab, headerWrap)
-        if (!leftRect.ok) {
-          left -= leftRect.left
+      if (!index) {
+        left = 0
+      } else if (index === this.headerCount - 1) {
+        left = this.$refs.tabWrap.offsetWidth - this.headerSize
+      } else {
+        const tabs = this.$refs.tab
+        const headerWrap = this.$refs.tabWrap
+        if (!tabs || !headerWrap) {
+          return
         }
-      }
-      const afterTab = tabs[index + 1]
-      if (afterTab) {
-        const rightRect = checkInView(afterTab, headerWrap)
-        if (!rightRect.ok) {
-          left -= rightRect.right
+        const oldTabRect = tabs[oldIndex].getBoundingClientRect()
+        const newTabRect = tabs[index].getBoundingClientRect()
+        if (oldTabRect.left < newTabRect.left) {
+          const afterTab = tabs[index + 1]
+          if (afterTab) {
+            const rightRect = checkInView(afterTab, headerWrap)
+            if (!rightRect.ok) {
+              left -= rightRect.right
+            }
+          }
+        } else {
+          const beforeTab = tabs[index - 1]
+          if (beforeTab) {
+            const leftRect = checkInView(beforeTab, headerWrap)
+            if (!leftRect.ok) {
+              left -= leftRect.left
+            }
+          }
         }
       }
       this._setHeaderScroll(left)
@@ -675,6 +684,7 @@ export default {
       if (this.routable && !force) {
         return
       }
+      const oldIndex = this.focusIndex
       let newIndex = index
       if (index >= this.headerCount) {
         newIndex = (newIndex - this.headerCount) % 2 ? this.headerCount - 1 : 0
@@ -684,7 +694,7 @@ export default {
         this.$emit('change', newIndex)
       }
       this._computeAnchorStyle(newIndex)
-      this._computeHeaderStyle()
+      this._computeHeaderStyle(oldIndex)
       move && this._triggerSwiper()
     },
     _switchTrigger(isNext) {
