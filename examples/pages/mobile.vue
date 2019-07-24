@@ -135,6 +135,7 @@
           v-for="(item, index) in headers2"
           ref="scroll"
           :key="index"
+          :event-step="30"
           :slot="`${index}`"
           @top="handlePullDown"
           @scroll="handleScroll"

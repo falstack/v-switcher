@@ -4189,10 +4189,10 @@ gzip-size@^5.0.0:
     duplexer "^0.1.1"
     pify "^3.0.0"
 
-h5-vue-scroller@^0.1.19:
-  version "0.1.19"
-  resolved "https://registry.npm.taobao.org/h5-vue-scroller/download/h5-vue-scroller-0.1.19.tgz#cd5f45b9cc51015ca3c62673bd88d850430ea496"
-  integrity sha1-zV9FucxRAVyjxiZzvYjYUEMOpJY=
+h5-vue-scroller@^0.1.21:
+  version "0.1.21"
+  resolved "https://registry.npm.taobao.org/h5-vue-scroller/download/h5-vue-scroller-0.1.21.tgz#a7841f44539d1fb7d5f0094ecd6a60cd3df02035"
+  integrity sha1-p4QfRFOdH7fV8AlOzWpgzT3wIDU=
   dependencies:
     throttle-debounce "^2.1.0"
     vue "^2.6.10"
@@ -8736,10 +8736,10 @@ vue-loader@^15.7.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-mixin-store@^1.1.49:
-  version "1.1.49"
-  resolved "https://registry.npm.taobao.org/vue-mixin-store/download/vue-mixin-store-1.1.49.tgz#1c0e57efddaa906e4ef40d34d212649b3b9310e5"
-  integrity sha1-HA5X792qkG5O9A000hJkmzuTEOU=
+vue-mixin-store@^1.1.52:
+  version "1.1.52"
+  resolved "https://registry.npm.taobao.org/vue-mixin-store/download/vue-mixin-store-1.1.52.tgz#d355287f78e893e2be5e74198e9392c4f5e51497"
+  integrity sha1-01Uof3jok+K+XnQZjpOSxPXlFJc=
   dependencies:
     throttle-debounce "^2.1.0"
     vue "^2.6.6"
