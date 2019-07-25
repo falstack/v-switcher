@@ -416,15 +416,10 @@ export default {
         height: `${this.headerHeight}px`,
         lineHeight: `${this.headerHeight}px`
       }
-      if (this.align !== 'around') {
-        return result
+      if (this.align === 'around') {
+        result.width = `${100 / this.headerCount}%`
       }
-      return Object.assign(result, this.aroundHeaderWidth)
-    },
-    aroundHeaderWidth() {
-      return {
-        width: `${100 / this.headerCount}%`
-      }
+      return result
     },
     contentWrapStyle() {
       const style = {}
@@ -596,7 +591,9 @@ export default {
         }
       }
       if (this.animated) {
-        return this.aroundHeaderWidth
+        return {
+          width: `${100 / this.headerCount}%`
+        }
       }
       if (this.focusIndex !== index) {
         return {
@@ -829,11 +826,11 @@ export default {
     },
     _computeHeaderSize() {
       this.$nextTick(() => {
-        if (!this.$refs.tab) {
-          return
-        }
         const tabs = this.$refs.tab
         const lastIndex = tabs.length - 1
+        if (!tabs || !tabs[0] || !tabs[lastIndex]) {
+          return
+        }
         this.headerSize =
           this.align === 'vertical'
             ? tabs[0].getBoundingClientRect().top -
