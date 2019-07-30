@@ -4189,10 +4189,10 @@ gzip-size@^5.0.0:
     duplexer "^0.1.1"
     pify "^3.0.0"
 
-h5-vue-scroller@^0.1.21:
-  version "0.1.21"
-  resolved "https://registry.npm.taobao.org/h5-vue-scroller/download/h5-vue-scroller-0.1.21.tgz#a7841f44539d1fb7d5f0094ecd6a60cd3df02035"
-  integrity sha1-p4QfRFOdH7fV8AlOzWpgzT3wIDU=
+h5-vue-scroller@^0.1.22:
+  version "0.1.22"
+  resolved "https://registry.npm.taobao.org/h5-vue-scroller/download/h5-vue-scroller-0.1.22.tgz#0e025c0735ebebb80cae78e382f9fb68dfe0796c"
+  integrity sha1-DgJcBzXr67gMrnjjgvn7aN/geWw=
   dependencies:
     throttle-debounce "^2.1.0"
     vue "^2.6.10"
@@ -8713,10 +8713,10 @@ vue-eslint-parser@^5.0.0:
     esquery "^1.0.1"
     lodash "^4.17.11"
 
-vue-flow-render@^0.1.27:
-  version "0.1.27"
-  resolved "https://registry.yarnpkg.com/vue-flow-render/-/vue-flow-render-0.1.27.tgz#89618bae8e7b509f18e64518a31b9ec2e01cacf8"
-  integrity sha512-6vn9+LDZT3N53X8FeYd3ovPWTpaNCZYaSreHIrR7K9C/KR1izo1ZRicVQcP+1ikZjhrYufPEFq4AAsEjn5uiXw==
+vue-flow-render@^0.1.28:
+  version "0.1.28"
+  resolved "https://registry.npm.taobao.org/vue-flow-render/download/vue-flow-render-0.1.28.tgz#598a42102bea852f2dd4104c6d6a7ab176f782d3"
+  integrity sha1-WYpCECvqhS8t1BBMbWp6sXb3gtM=
   dependencies:
     vue "^2.6.10"
 
@@ -8736,10 +8736,10 @@ vue-loader@^15.7.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-mixin-store@^1.1.52:
-  version "1.1.52"
-  resolved "https://registry.npm.taobao.org/vue-mixin-store/download/vue-mixin-store-1.1.52.tgz#d355287f78e893e2be5e74198e9392c4f5e51497"
-  integrity sha1-01Uof3jok+K+XnQZjpOSxPXlFJc=
+vue-mixin-store@^1.1.57:
+  version "1.1.57"
+  resolved "https://registry.npm.taobao.org/vue-mixin-store/download/vue-mixin-store-1.1.57.tgz#7329b242ebf5bcaafaabaec7ad8e411c57b33c15"
+  integrity sha1-cymyQuv1vKr6q67HrY5BHFezPBU=
   dependencies:
     throttle-debounce "^2.1.0"
     vue "^2.6.6"

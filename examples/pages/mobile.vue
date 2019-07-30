@@ -125,7 +125,6 @@
         :headers="headers2"
         :swipe="true"
         :sticky="true"
-        align="start"
         @change="handleTabSwitch"
       >
         <template slot="header-after">
@@ -164,17 +163,22 @@
                 id: item,
                 count: 10
               }"
+              :callback="handleCallback"
             >
-              <template #default="{ flow, count }">
-                <vue-flow-render
-                  ref="render"
-                  :height="110"
-                  :remain="30"
-                  :total="count"
-                  :item="ItemComponent"
-                  :getter="getItemProps"
+              <vue-flow-render
+                ref="render"
+                :remain="30"
+                :total="count"
+                slot-scope="{ flow, count }"
+              >
+                <ItemComponent
+                  v-for="(item, index) in flow"
+                  :key="item.id"
+                  :item="item"
+                  :index="index"
+                  :style="{ height: '110px' }"
                 />
-              </template>
+              </vue-flow-render>
             </flow-loader>
           </ul>
         </v-scroller>
@@ -192,7 +196,8 @@ export default {
   name: 'Mobile',
   components: {
     VScroller,
-    VueFlowRender
+    VueFlowRender,
+    ItemComponent
   },
   data() {
     const headers2 = [
@@ -263,6 +268,14 @@ export default {
       this.activeIndex = index
       this.$nextTick(() => {
         this.$refs.loader[index].initData()
+      })
+    },
+    handleBeforeSwitch(index) {
+      this.activeIndex = index
+    },
+    handleCallback() {
+      this.$nextTick(() => {
+        const index = this.activeIndex
         this.$refs.render[index].setWrap(this.$refs.scroll[index].$el)
       })
     },
@@ -271,14 +284,6 @@ export default {
     },
     handleScroll({ offsetTop, isUp }) {
       this.$refs.render[this.activeIndex].scroll(offsetTop, isUp)
-    },
-    getItemProps(index) {
-      return {
-        props: {
-          item: this.$refs.loader[this.activeIndex].source.result[index],
-          index
-        }
-      }
     },
     handleBtnClick() {
       alert('筛选')

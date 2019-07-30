@@ -234,6 +234,7 @@
         :style="contentStyle"
         @touchstart="_handleContentTouchStart"
         @touchmove="_handleContentTouchMove"
+        @touchend="_handleContentTouchEnd"
       >
         <div
           v-for="(item, index) in headers"
@@ -387,13 +388,20 @@ export default {
       headerLeft: 0,
       headerSize: 0,
       headerLastPoint: 0,
-      contentLastPoint: {
+      contentStartPoint: {
+        x: 0,
+        y: 0
+      },
+      contentDeltaPoint: {
         x: 0,
         y: 0
       },
       swiper: null,
       curScreenIndex: 0,
       maxScreenCount: 1,
+      headerTabsWidth: 0,
+      headerWrapWidth: 0,
+      headerListWidth: 0,
       lastSlide: 0
     }
   },
@@ -457,21 +465,19 @@ export default {
       if (this.routable) {
         this.focusIndex = getMatchedRouteIndex(newVal, this.$route.path)
       }
-      this._computeMaxScreenCount()
-      this._computeHeaderSize()
+      this._computeComponentSize()
     })
   },
   mounted() {
     this.$nextTick(() => {
+      this._computeComponentSize()
       this._computeAnchorStyle(this.focusIndex)
-      this._computeHeaderSize()
       this._computeHeaderStyle(Math.max(this.focusIndex, 0))
       this._initSwipe()
       this._initCarousel()
-      this._computeMaxScreenCount()
       if (this.align === 'start') {
         window.addEventListener('resize', () => {
-          this._computeMaxScreenCount()
+          this._computeComponentSize()
         })
       }
       this.$emit('change', this.focusIndex)
@@ -537,10 +543,10 @@ export default {
       if (!index) {
         left = 0
       } else if (index === this.headerCount - 1) {
-        if (this.headerSize < this.$refs.tabWrap.offsetWidth) {
+        if (this.headerSize < this.headerTabsWidth) {
           return
         }
-        left = this.$refs.tabWrap.offsetWidth - this.headerSize
+        left = this.headerTabsWidth - this.headerSize
       } else {
         const tabs = this.$refs.tab
         const headerWrap = this.$refs.tabWrap
@@ -614,8 +620,7 @@ export default {
       const tabRect = tab.getBoundingClientRect()
       const fullWidth =
         tabRect.left + tabRect.width - header.getBoundingClientRect().left
-      const { offsetWidth } = header
-      this.maxScreenCount = Math.ceil(fullWidth / offsetWidth)
+      this.maxScreenCount = Math.ceil(fullWidth / this.headerListWidth)
       this.$emit('calc-screen-count', this.maxScreenCount)
     },
     _computeAnchorStyle(index, loop = 0) {
@@ -633,7 +638,7 @@ export default {
       if (this.align === 'vertical') {
         const header = this.$refs.header
         this.anchorStyle = {
-          width: `${header.offsetWidth}px`,
+          width: `${this.headerListWidth}px`,
           height: `${tab.offsetHeight - anchorPadding * 2}px`,
           transform: `translateY(${tab.getBoundingClientRect().top -
             header.getBoundingClientRect().top +
@@ -726,7 +731,7 @@ export default {
       }
     },
     _moveHeader(targetScreenCount) {
-      const left = -targetScreenCount * this.$refs.header.offsetWidth
+      const left = -targetScreenCount * this.headerListWidth
       this._setHeaderScroll(left)
       this.headerLeft = left
       this.curScreenIndex = targetScreenCount
@@ -740,7 +745,7 @@ export default {
         return
       }
       const point = e.touches ? e.touches[0] : e
-      this.contentLastPoint = {
+      this.contentStartPoint = {
         x: point.pageX,
         y: point.pageY
       }
@@ -750,19 +755,18 @@ export default {
         return
       }
       const point = e.touches ? e.touches[0] : e
-      const lastPoint = this.contentLastPoint
-      const curPoint = {
-        x: point.pageX,
-        y: point.pageY
+      const lastPoint = this.contentStartPoint
+      this.contentDeltaPoint = {
+        x: point.pageX - lastPoint.x,
+        y: point.pageY - lastPoint.y
       }
-      const delta = {
-        x: curPoint.x - lastPoint.x,
-        y: curPoint.y - lastPoint.y
-      }
+    },
+    _handleContentTouchEnd() {
+      const delta = this.contentDeltaPoint
       if (Math.abs(delta.x) < Math.abs(delta.y)) {
         return
       }
-      if (Math.abs(delta.x) * 3 < this.$el.clientWidth) {
+      if (Math.abs(delta.x) * 3 < this.headerWrapWidth) {
         return
       }
       if (delta.x > 0) {
@@ -777,7 +781,6 @@ export default {
         this.next()
       }
       this.lastSlide = Date.now()
-      this.contentLastPoint = lastPoint
     },
     _handleHeaderTouchStart(e) {
       if (!this.notTouchDevice) {
@@ -808,11 +811,8 @@ export default {
         // 到开头了
         if (left > 0 && delta > 0) {
           left = 0
-        } else if (
-          delta < 0 &&
-          left + this.headerSize < this.$refs.tabWrap.offsetWidth
-        ) {
-          left = this.$refs.tabWrap.offsetWidth - this.headerSize
+        } else if (delta < 0 && left + this.headerSize < this.headerTabsWidth) {
+          left = this.headerTabsWidth - this.headerSize
         }
       }
       this.headerLeft = left
@@ -820,23 +820,30 @@ export default {
       this._computeCurrentScreenIndex(left)
     },
     _computeCurrentScreenIndex(left) {
-      this.curScreenIndex = Math.round(
-        Math.abs(left / this.$refs.headerWrap.offsetWidth)
-      )
+      this.curScreenIndex = Math.round(Math.abs(left / this.headerWrapWidth))
     },
-    _computeHeaderSize() {
+    _computeComponentSize() {
       this.$nextTick(() => {
         const tabs = this.$refs.tab
         const lastIndex = tabs.length - 1
-        if (!tabs || !tabs[0] || !tabs[lastIndex]) {
-          return
+        if (tabs && tabs[0] && tabs[lastIndex]) {
+          this.headerSize =
+            this.align === 'vertical'
+              ? tabs[0].getBoundingClientRect().top -
+                tabs[lastIndex].getBoundingClientRect().bottom
+              : tabs[lastIndex].getBoundingClientRect().right -
+                tabs[0].getBoundingClientRect().left
         }
-        this.headerSize =
-          this.align === 'vertical'
-            ? tabs[0].getBoundingClientRect().top -
-              tabs[lastIndex].getBoundingClientRect().bottom
-            : tabs[lastIndex].getBoundingClientRect().right -
-              tabs[0].getBoundingClientRect().left
+        if (this.$refs.tabWrap) {
+          this.headerTabsWidth = this.$refs.tabWrap.offsetWidth
+        }
+        if (this.$refs.headerWrap) {
+          this.headerWrapWidth = this.$refs.headerWrap.offsetWidth
+        }
+        if (this.$refs.header) {
+          this.headerListWidth = this.$refs.header.offsetWidth
+          this._computeMaxScreenCount()
+        }
       })
     },
     next() {
@@ -873,12 +880,6 @@ export default {
         }
       }
       return this._moveHeader(this.curScreenIndex - 1)
-    },
-    setupSwipe() {
-      if (!this.swipe) {
-        return
-      }
-      this.swiper.refreshShadowSlide()
     }
   }
 }
