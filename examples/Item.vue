@@ -1,8 +1,13 @@
 <style lang="scss">
 .comp-item {
-  padding: 10px 10px 0;
+  padding: 0 10px;
+  height: 110px;
 
-  div {
+  .outer {
+    padding-top: 10px;
+  }
+
+  .inner {
     border-radius: 5px;
     height: 100px;
     line-height: 100px;
@@ -13,8 +18,10 @@
 
 <template>
   <div v-if="item" class="comp-item">
-    <div :style="{ backgroundColor: item.style.color }" @click="handleClick">
-      count：{{ index + 1 }}，id：{{ item.data.number_id }}，{{ click }}
+    <div class="outer">
+      <div class="inner" :style="{ backgroundColor: item.style.color }" @click="handleClick">
+        count：{{ index + 1 }}，id：{{ item.id }}，click：{{ click }}
+      </div>
     </div>
   </div>
 </template>

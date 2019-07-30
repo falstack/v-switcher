@@ -275,9 +275,7 @@ const getMatchedRouteIndex = (headers, path) => {
   return result
 }
 
-const checkInView = (child, parent) => {
-  const childRect = child.getBoundingClientRect()
-  const parentRect = parent.getBoundingClientRect()
+const checkInView = (childRect, parentRect) => {
   const result = {
     top: childRect.top - parentRect.top,
     bottom: childRect.bottom - parentRect.bottom,
@@ -386,7 +384,6 @@ export default {
       fixedHeaderStyle: {},
       timer: 0,
       headerLeft: 0,
-      headerSize: 0,
       headerLastPoint: 0,
       contentStartPoint: {
         x: 0,
@@ -397,12 +394,19 @@ export default {
         y: 0
       },
       swiper: null,
-      curScreenIndex: 0,
-      maxScreenCount: 1,
-      headerTabsWidth: 0,
-      headerWrapWidth: 0,
-      headerListWidth: 0,
-      lastSlide: 0
+      lastSlide: 0,
+      sizeCache: {
+        tabs: [],
+        headerWrap: null,
+        tabsWrap: null,
+        header: null,
+        headerSize: 0,
+        headerTabsWidth: 0,
+        headerWrapWidth: 0,
+        headerListWidth: 0,
+        curScreenIndex: 0,
+        maxScreenCount: 1
+      }
     }
   },
   computed: {
@@ -465,21 +469,19 @@ export default {
       if (this.routable) {
         this.focusIndex = getMatchedRouteIndex(newVal, this.$route.path)
       }
-      this._computeComponentSize()
+      this._cacheComponentSize()
     })
   },
   mounted() {
     this.$nextTick(() => {
-      this._computeComponentSize()
+      this._cacheComponentSize()
       this._computeAnchorStyle(this.focusIndex)
       this._computeHeaderStyle(Math.max(this.focusIndex, 0))
       this._initSwipe()
       this._initCarousel()
-      if (this.align === 'start') {
-        window.addEventListener('resize', () => {
-          this._computeComponentSize()
-        })
-      }
+      window.addEventListener('resize', () => {
+        this._cacheComponentSize()
+      })
       this.$emit('change', this.focusIndex)
     })
   },
@@ -543,30 +545,29 @@ export default {
       if (!index) {
         left = 0
       } else if (index === this.headerCount - 1) {
-        if (this.headerSize < this.headerTabsWidth) {
+        if (this.sizeCache.headerSize < this.sizeCache.headerTabsWidth) {
           return
         }
-        left = this.headerTabsWidth - this.headerSize
+        left = this.sizeCache.headerTabsWidth - this.sizeCache.headerSize
       } else {
-        const tabs = this.$refs.tab
-        const headerWrap = this.$refs.tabWrap
-        if (!tabs || !headerWrap || !tabs[oldIndex] || !tabs[index]) {
+        const oldTabRect = this._getComponentSize('tabs', oldIndex)
+        const newTabRect = this._getComponentSize('tabs', index)
+        const headerWrap = this._getComponentSize('headerWrap')
+        if (!headerWrap || !oldTabRect || !newTabRect) {
           return
         }
-        const oldTabRect = tabs[oldIndex].getBoundingClientRect()
-        const newTabRect = tabs[index].getBoundingClientRect()
-        if (oldTabRect.left < newTabRect.left) {
-          const afterTab = tabs[index + 1]
+        if (oldTabRect.rect.left < newTabRect.rect.left) {
+          const afterTab = this._getComponentSize('tabs', index + 1)
           if (afterTab) {
-            const rightRect = checkInView(afterTab, headerWrap)
+            const rightRect = checkInView(afterTab.rect, headerWrap)
             if (!rightRect.ok) {
               left -= rightRect.right
             }
           }
         } else {
-          const beforeTab = tabs[index - 1]
+          const beforeTab = this._getComponentSize('tabs', index - 1)
           if (beforeTab) {
-            const leftRect = checkInView(beforeTab, headerWrap)
+            const leftRect = checkInView(beforeTab.rect, headerWrap)
             if (!leftRect.ok) {
               left -= leftRect.left
             }
@@ -612,20 +613,18 @@ export default {
       if (this.align !== 'start') {
         return
       }
-      const tab = this.$refs.tab[this.headerCount - 1]
-      const header = this.$refs.header
-      if (!tab || !header) {
+      const tabSize = this._getComponentSize('tabs', this.headerCount - 1)
+      const header = this._getComponentSize('header')
+      if (!tabSize || !header) {
         return
       }
-      const tabRect = tab.getBoundingClientRect()
-      const fullWidth =
-        tabRect.left + tabRect.width - header.getBoundingClientRect().left
-      this.maxScreenCount = Math.ceil(fullWidth / this.headerListWidth)
-      this.$emit('calc-screen-count', this.maxScreenCount)
+      const fullWidth = tabSize.rect.left + tabSize.rect.width - header.left
+      this.sizeCache.maxScreenCount = Math.ceil(fullWidth / header.width)
+      this.$emit('calc-screen-count', this.sizeCache.maxScreenCount)
     },
     _computeAnchorStyle(index, loop = 0) {
-      const tab = this.$refs.tab[index]
-      if (!tab) {
+      const tabSize = this._getComponentSize('tabs', index)
+      if (!tabSize) {
         // 这个地方 DOM 可能还没渲染好，refs 不存在，循环 5 次来取值
         if (loop < 5) {
           setTimeout(() => {
@@ -636,19 +635,19 @@ export default {
       }
       const anchorPadding = +this.anchorPadding
       if (this.align === 'vertical') {
-        const header = this.$refs.header
+        const header = this._getComponentSize('header')
         this.anchorStyle = {
-          width: `${this.headerListWidth}px`,
-          height: `${tab.offsetHeight - anchorPadding * 2}px`,
-          transform: `translateY(${tab.getBoundingClientRect().top -
-            header.getBoundingClientRect().top +
+          width: `${this.sizeCache.headerListWidth}px`,
+          height: `${tabSize.offset.height - anchorPadding * 2}px`,
+          transform: `translateY(${tabSize.rect.top -
+            header.top +
             anchorPadding}px)`,
           transitionDuration: `${this.duration}ms`
         }
       } else {
         this.anchorStyle = {
-          width: `${tab.offsetWidth - anchorPadding * 2}px`,
-          transform: `translateX(${tab.offsetLeft + anchorPadding}px)`,
+          width: `${tabSize.rect.width - anchorPadding * 2}px`,
+          transform: `translateX(${tabSize.offset.left + anchorPadding}px)`,
           transitionDuration: `${this.duration}ms`
         }
       }
@@ -698,9 +697,11 @@ export default {
         this.focusIndex = newIndex
         this.$emit('change', newIndex)
       }
-      this._computeAnchorStyle(newIndex)
-      this._computeHeaderStyle(oldIndex)
       move && this._triggerSwiper()
+      setTimeout(() => {
+        this._computeAnchorStyle(newIndex)
+        this._computeHeaderStyle(oldIndex)
+      }, 0)
     },
     _switchTrigger(isNext) {
       if (Date.now() - this.lastSlide < this.duration) {
@@ -731,13 +732,13 @@ export default {
       }
     },
     _moveHeader(targetScreenCount) {
-      const left = -targetScreenCount * this.headerListWidth
+      const left = -targetScreenCount * this.sizeCache.headerListWidth
       this._setHeaderScroll(left)
       this.headerLeft = left
-      this.curScreenIndex = targetScreenCount
+      this.sizeCache.curScreenIndex = targetScreenCount
       return {
         is_begin: targetScreenCount === 0,
-        is_end: targetScreenCount + 1 === this.maxScreenCount
+        is_end: targetScreenCount + 1 === this.sizeCache.maxScreenCount
       }
     },
     _handleContentTouchStart(e) {
@@ -766,7 +767,7 @@ export default {
       if (Math.abs(delta.x) < Math.abs(delta.y)) {
         return
       }
-      if (Math.abs(delta.x) * 3 < this.headerWrapWidth) {
+      if (Math.abs(delta.x) * 3 < this.sizeCache.headerWrapWidth) {
         return
       }
       if (delta.x > 0) {
@@ -811,8 +812,11 @@ export default {
         // 到开头了
         if (left > 0 && delta > 0) {
           left = 0
-        } else if (delta < 0 && left + this.headerSize < this.headerTabsWidth) {
-          left = this.headerTabsWidth - this.headerSize
+        } else if (
+          delta < 0 &&
+          left + this.sizeCache.headerSize < this.sizeCache.headerTabsWidth
+        ) {
+          left = this.sizeCache.headerTabsWidth - this.sizeCache.headerSize
         }
       }
       this.headerLeft = left
@@ -820,31 +824,95 @@ export default {
       this._computeCurrentScreenIndex(left)
     },
     _computeCurrentScreenIndex(left) {
-      this.curScreenIndex = Math.round(Math.abs(left / this.headerWrapWidth))
+      this.sizeCache.curScreenIndex = Math.round(
+        Math.abs(left / this.sizeCache.headerWrapWidth)
+      )
     },
     _computeComponentSize() {
-      this.$nextTick(() => {
-        const tabs = this.$refs.tab
-        const lastIndex = tabs.length - 1
-        if (tabs && tabs[0] && tabs[lastIndex]) {
-          this.headerSize =
-            this.align === 'vertical'
-              ? tabs[0].getBoundingClientRect().top -
-                tabs[lastIndex].getBoundingClientRect().bottom
-              : tabs[lastIndex].getBoundingClientRect().right -
-                tabs[0].getBoundingClientRect().left
+      const lastRect = this._getComponentSize('tabs', this.headerCount - 1)
+      const firstRect = this._getComponentSize('tabs', 0)
+      if (!firstRect || !lastRect) {
+        return
+      }
+      this.sizeCache.headerSize =
+        this.align === 'vertical'
+          ? firstRect.rect.top - lastRect.rect.bottom
+          : lastRect.rect.right - firstRect.rect.left
+    },
+    _cacheComponentSize() {
+      const tabs = this.$refs.tab
+      if (tabs) {
+        const tabSize = []
+        tabs.forEach(tab => {
+          const rect = tab.getBoundingClientRect()
+          tabSize.push({
+            rect: {
+              top: rect.top,
+              left: rect.left,
+              right: rect.right,
+              bottom: rect.bottom,
+              width: rect.width,
+              height: rect.height
+            },
+            offset: {
+              left: tab.offsetLeft
+            }
+          })
+        })
+        this.sizeCache.tabs = tabSize
+        this._computeComponentSize()
+      }
+      const headerWrap = this.$refs.headerWrap
+      if (headerWrap) {
+        const headerWrapRect = headerWrap.getBoundingClientRect()
+        this.sizeCache.headerWrap = {
+          top: headerWrapRect.top,
+          left: headerWrapRect.left,
+          right: headerWrapRect.right,
+          bottom: headerWrapRect.bottom,
+          width: headerWrapRect.width,
+          height: headerWrapRect.height
         }
-        if (this.$refs.tabWrap) {
-          this.headerTabsWidth = this.$refs.tabWrap.offsetWidth
+        this.sizeCache.headerWrapWidth = headerWrapRect.width
+      }
+      const tabsWrap = this.$refs.tabWrap
+      if (tabsWrap) {
+        const tabsWrapRect = tabsWrap.getBoundingClientRect()
+        this.sizeCache.tabsWrap = {
+          top: tabsWrapRect.top,
+          left: tabsWrapRect.left,
+          right: tabsWrapRect.right,
+          bottom: tabsWrapRect.bottom,
+          width: tabsWrapRect.width,
+          height: tabsWrapRect.height
         }
-        if (this.$refs.headerWrap) {
-          this.headerWrapWidth = this.$refs.headerWrap.offsetWidth
+        this.sizeCache.headerTabsWidth = tabsWrapRect.width
+      }
+      const header = this.$refs.header
+      if (header) {
+        const headerRect = header.getBoundingClientRect()
+        this.sizeCache.header = {
+          top: headerRect.top,
+          left: headerRect.left,
+          right: headerRect.right,
+          bottom: headerRect.bottom
         }
-        if (this.$refs.header) {
-          this.headerListWidth = this.$refs.header.offsetWidth
-          this._computeMaxScreenCount()
+        this.sizeCache.headerListWidth = headerRect.width
+        this._computeMaxScreenCount()
+      }
+    },
+    _getComponentSize(type, index = -1) {
+      const value = this.sizeCache[type]
+      if (!value) {
+        return null
+      }
+      if (index >= 0) {
+        if (!value[index]) {
+          return null
         }
-      })
+        return value[index]
+      }
+      return value
     },
     next() {
       if (this.swiper) {
@@ -863,23 +931,23 @@ export default {
     forward() {
       if (
         this.align !== 'start' ||
-        this.curScreenIndex + 1 >= this.maxScreenCount
+        this.sizeCache.curScreenIndex + 1 >= this.sizeCache.maxScreenCount
       ) {
         return {
           is_begin: false,
           is_end: true
         }
       }
-      return this._moveHeader(this.curScreenIndex + 1)
+      return this._moveHeader(this.sizeCache.curScreenIndex + 1)
     },
     backward() {
-      if (this.align !== 'start' || this.curScreenIndex === 0) {
+      if (this.align !== 'start' || this.sizeCache.curScreenIndex === 0) {
         return {
           is_begin: true,
           is_end: false
         }
       }
-      return this._moveHeader(this.curScreenIndex - 1)
+      return this._moveHeader(this.sizeCache.curScreenIndex - 1)
     }
   }
 }
