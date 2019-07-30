@@ -446,14 +446,16 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this._cacheComponentSize()
-      this._computeAnchorStyle(this.focusIndex)
-      this._computeHeaderStyle(Math.max(this.focusIndex, 0))
       this._initSwipe()
       this._initCarousel()
       window.addEventListener('resize', () => {
         this._cacheComponentSize()
       })
       this.$emit('change', this.focusIndex)
+      setTimeout(() => {
+        this._computeAnchorStyle(this.focusIndex)
+        this._computeHeaderStyle(Math.max(this.focusIndex, 0))
+      }, 0)
     })
   },
   beforeDestroy() {
@@ -508,7 +510,7 @@ export default {
         return
       }
       const index = this.focusIndex
-      if (oldIndex === index) {
+      if (oldIndex === index || index < 0 || oldIndex < 0) {
         return
       }
 
@@ -602,6 +604,9 @@ export default {
       this.$emit('calc-screen-count', this.sizeCache.maxScreenCount)
     },
     _computeAnchorStyle(index, loop = 0) {
+      if (index < 0) {
+        return
+      }
       const tabSize = this._getComponentSize('tabs', index)
       if (!tabSize) {
         // 这个地方 DOM 可能还没渲染好，refs 不存在，循环 5 次来取值
