@@ -253,42 +253,7 @@
 import Swipe from './swipe.js'
 import affix from './affix.js'
 import scroll from './scroll.js'
-
-if (!String.prototype.startsWith) {
-  Object.defineProperty(String.prototype, 'startsWith', {
-    value: function(search, pos) {
-      pos = !pos || pos < 0 ? 0 : +pos
-      return this.substring(pos, pos + search.length) === search
-    }
-  })
-}
-
-const getMatchedRouteIndex = (headers, path) => {
-  let result = -1
-  headers
-    .map(_ => _.route)
-    .forEach((route, index) => {
-      if (path.startsWith(route)) {
-        result = index
-      }
-    })
-  return result
-}
-
-const checkInView = (childRect, parentRect) => {
-  const result = {
-    top: childRect.top - parentRect.top,
-    bottom: childRect.bottom - parentRect.bottom,
-    left: childRect.left - parentRect.left,
-    right: childRect.right - parentRect.right
-  }
-  result.ok =
-    result.top >= 0 &&
-    result.bottom <= 0 &&
-    result.left >= 0 &&
-    result.right <= 0
-  return result
-}
+import { getMatchedRouteIndex, checkInView } from './utils'
 
 export default {
   name: 'VSwitcher',
@@ -363,6 +328,9 @@ export default {
     continuousSwipe: {
       type: Boolean,
       default: false
+    },
+    fixedTop: {
+      type: Number
     }
   },
   data() {
