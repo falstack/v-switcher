@@ -10,7 +10,9 @@ export const getMatchedRouteIndex = (headers, path) => {
   return result
 }
 
-export const checkInView = (childRect, parentRect) => {
+export const checkInView = (child, parent) => {
+  const childRect = child.getBoundingClientRect()
+  const parentRect = parent.getBoundingClientRect()
   const result = {
     top: childRect.top - parentRect.top,
     bottom: childRect.bottom - parentRect.bottom,
@@ -96,7 +98,7 @@ export const getScrollTarget = dom => {
     el.tagName !== 'HTML' &&
     el.tagName !== 'BOYD' &&
     el.nodeType === 1
-    ) {
+  ) {
     const overflowY = window.getComputedStyle(el).overflowY
     if (overflowY === 'scroll' || overflowY === 'auto') {
       if (el.tagName === 'HTML' || el.tagName === 'BODY') {

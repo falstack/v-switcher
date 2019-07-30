@@ -1,4 +1,4 @@
-import { on, off, getScroll, getOffset, getScrollTarget } from "./utils";
+import { on, off, getScroll, getOffset, getScrollTarget } from './utils'
 
 export default {
   mounted() {

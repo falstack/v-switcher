@@ -254,6 +254,7 @@ import Swipe from './swipe.js'
 import affix from './affix.js'
 import scroll from './scroll.js'
 import { getMatchedRouteIndex, checkInView } from './utils'
+import { throttle } from 'throttle-debounce'
 
 export default {
   name: 'VSwitcher',
@@ -329,7 +330,7 @@ export default {
       type: Boolean,
       default: false
     },
-    fixedTop: {
+    fixedTop: { // eslint-disable-line
       type: Number
     }
   },
@@ -429,10 +430,12 @@ export default {
     }
   },
   beforeMount() {
-    this.$watch('$route', newVal => {
-      const currentIndex = getMatchedRouteIndex(this.headers, newVal.path)
-      this._handleTabSwitch(currentIndex, true)
-    })
+    if (this.routable) {
+      this.$watch('$route', newVal => {
+        const currentIndex = getMatchedRouteIndex(this.headers, newVal.path)
+        this._handleTabSwitch(currentIndex, true)
+      })
+    }
     this.$watch('headers', newVal => {
       if (this.routable) {
         this.focusIndex = getMatchedRouteIndex(newVal, this.$route.path)
@@ -527,7 +530,10 @@ export default {
         if (oldTabRect.rect.left < newTabRect.rect.left) {
           const afterTab = this._getComponentSize('tabs', index + 1)
           if (afterTab) {
-            const rightRect = checkInView(afterTab.rect, headerWrap)
+            const rightRect = checkInView(
+              this.$refs.tab[index + 1],
+              this.$refs.headerWrap
+            )
             if (!rightRect.ok) {
               left -= rightRect.right
             }
@@ -535,7 +541,10 @@ export default {
         } else {
           const beforeTab = this._getComponentSize('tabs', index - 1)
           if (beforeTab) {
-            const leftRect = checkInView(beforeTab.rect, headerWrap)
+            const leftRect = checkInView(
+              this.$refs.tab[index - 1],
+              this.$refs.headerWrap
+            )
             if (!leftRect.ok) {
               left -= leftRect.left
             }
@@ -587,7 +596,9 @@ export default {
         return
       }
       const fullWidth = tabSize.rect.left + tabSize.rect.width - header.left
-      this.sizeCache.maxScreenCount = Math.ceil(fullWidth / header.width)
+      this.sizeCache.maxScreenCount = Math.ceil(
+        fullWidth / this.sizeCache.headerListWidth
+      )
       this.$emit('calc-screen-count', this.sizeCache.maxScreenCount)
     },
     _computeAnchorStyle(index, loop = 0) {
@@ -649,8 +660,10 @@ export default {
       return result
     },
     _swipeCallback(index) {
-      this.lastSlide = Date.now()
-      this._handleTabSwitch(index, false, false)
+      this.$nextTick(() => {
+        this.lastSlide = Date.now()
+        this._handleTabSwitch(index, false, false)
+      })
     },
     _handleTabSwitch(index, force = false, move = true) {
       if (this.routable && !force) {
@@ -666,11 +679,12 @@ export default {
         this.$emit('change', newIndex)
       }
       move && this._triggerSwiper()
-      setTimeout(() => {
-        this._computeAnchorStyle(newIndex)
-        this._computeHeaderStyle(oldIndex)
-      }, 0)
+      this._afterTabSwitch(oldIndex)
     },
+    _afterTabSwitch: throttle(250, function(oldIndex) {
+      this._computeAnchorStyle(this.focusIndex)
+      this._computeHeaderStyle(oldIndex)
+    }),
     _switchTrigger(isNext) {
       if (Date.now() - this.lastSlide < this.duration) {
         return
