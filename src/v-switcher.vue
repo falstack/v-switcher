@@ -627,7 +627,7 @@ export default {
         return
       }
       let newIndex = index
-      if (index >= this.headerCount) {
+      if (this.autoplay && index >= this.headerCount) {
         newIndex = (newIndex - this.headerCount) % 2 ? this.headerCount - 1 : 0
       }
       if (this.focusIndex !== newIndex) {
