@@ -419,10 +419,14 @@ export default {
       })
     }
     this.$watch('headers', newVal => {
-      if (this.routable) {
-        this.focusIndex = getMatchedRouteIndex(newVal, this.$route.path)
-      }
-      this._cacheComponentSize()
+      this.$nextTick(() => {
+        this._cacheComponentSize()
+        if (this.routable) {
+          this.focusIndex = getMatchedRouteIndex(newVal, this.$route.path)
+        }
+        this._computeAnchorStyle(this.focusIndex)
+        this._computeHeaderStyle()
+      })
     })
   },
   mounted() {
@@ -517,10 +521,10 @@ export default {
       this._computeCurrentScreenIndex(left)
       this.headerLeft = left
     },
-    _setHeaderScroll(left) {
+    _setHeaderScroll(left, duration = true) {
       this.headerStyle = {
         transform: `translateX(${left}px)`,
-        transitionDuration: `${this.duration}ms`
+        transitionDuration: `${duration ? this.duration : 0}ms`
       }
     },
     _computePanelStyle(index) {
@@ -733,7 +737,7 @@ export default {
       const point = e.touches ? e.touches[0] : e
       const isVertical = this.align === 'vertical'
       const curPoint = isVertical ? point.pageY : point.pageX
-      const delta = (curPoint - this.headerLastPoint) * 3
+      const delta = curPoint - this.headerLastPoint
       this.headerLastPoint = curPoint
       let left = this.headerLeft + delta
       if (isVertical) {
@@ -755,7 +759,7 @@ export default {
         }
       }
       this.headerLeft = left
-      this._setHeaderScroll(left)
+      this._setHeaderScroll(left, false)
     },
     _handleHeaderTouchEnd() {
       this._computeCurrentScreenIndex(this.headerLeft)

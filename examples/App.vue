@@ -144,17 +144,21 @@ export default {
         {
           name: '自动轮播',
           route: '/carousel'
-        },
-        {
-          name: '生产实例',
-          route: '/usage'
-        },
-        {
-          name: 'H5实例',
-          route: '/mobile'
         }
       ]
     }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.headers.push({
+        name: '生产实例',
+        route: '/usage'
+      })
+      this.headers.push({
+        name: 'H5实例',
+        route: '/mobile'
+      })
+    }, 1000)
   }
 }
 </script>
