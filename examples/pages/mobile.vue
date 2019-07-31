@@ -61,6 +61,12 @@
     height: 100%;
     box-sizing: border-box;
 
+    .v-switcher-header-anchor {
+      height: 2px;
+      bottom: 0;
+      background-color: palevioletred;
+    }
+
     .ul-wrap {
       margin: 0;
       padding: 0;
@@ -125,6 +131,7 @@
         :headers="headers2"
         :swipe="true"
         :sticky="true"
+        :anchor-padding="20"
         @change="handleTabSwitch"
       >
         <template slot="header-after">

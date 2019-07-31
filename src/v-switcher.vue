@@ -46,30 +46,17 @@
     padding: 0;
     margin: 0;
     white-space: nowrap;
+    flex-grow: 1;
 
-    &-translate {
-      flex-grow: 1;
+    &-start {
+      text-align: left;
+      display: flex;
+      flex-direction: row;
+      @include transition();
 
-      .v-switcher-header-start {
-        text-align: left;
-        display: flex;
-        flex-direction: row;
-        @include transition();
-
-        .v-switcher-header-item {
-          flex-shrink: 0;
-        }
+      .v-switcher-header-item {
+        flex-shrink: 0;
       }
-    }
-
-    &-scroll {
-      -webkit-overflow-scrolling: touch;
-      width: 100%;
-      height: 110%;
-      padding-bottom: 10%;
-      box-sizing: content-box;
-      overflow-x: auto;
-      overflow-y: hidden;
     }
 
     &-before,
@@ -186,14 +173,10 @@
         <ul
           ref="header"
           class="v-switcher-header"
-          :class="[
-            `v-switcher-header-${align}`,
-            `v-switcher-header-${notTouchDevice ? 'translate' : 'scroll'}`
-          ]"
+          :class="[`v-switcher-header-${align}`, `v-switcher-header-translate`]"
           :style="headerStyle"
           @touchstart.stop="_handleHeaderTouchStart"
           @touchmove.stop="_handleHeaderTouchMove"
-          @scroll="_setHeaderLeft"
         >
           <li
             v-for="(item, index) in formatHeaders"
@@ -252,9 +235,7 @@
 <script>
 import Swipe from './swipe.js'
 import affix from './affix.js'
-import scroll from './scroll.js'
-import { getMatchedRouteIndex, checkInView } from './utils'
-import { throttle } from 'throttle-debounce'
+import { getMatchedRouteIndex } from './utils'
 
 export default {
   name: 'VSwitcher',
@@ -452,10 +433,10 @@ export default {
         this._cacheComponentSize()
       })
       this.$emit('change', this.focusIndex)
-      setTimeout(() => {
+      this.$nextTick(() => {
         this._computeAnchorStyle(this.focusIndex)
-        this._computeHeaderStyle(Math.max(this.focusIndex, 0))
-      }, 0)
+        this._computeHeaderStyle()
+      })
     })
   },
   beforeDestroy() {
@@ -502,15 +483,18 @@ export default {
       }
       this.swiper.slide(this.focusIndex, this.duration)
     },
-    _computeHeaderStyle(oldIndex) {
+    _computeHeaderStyle() {
       /**
        * 只支持 align 是 start
        */
-      if (this.align !== 'start') {
+      if (
+        this.align !== 'start' ||
+        this.sizeCache.headerSize < this.sizeCache.headerTabsWidth
+      ) {
         return
       }
       const index = this.focusIndex
-      if (oldIndex === index || index < 0 || oldIndex < 0) {
+      if (index < 0) {
         return
       }
 
@@ -518,39 +502,14 @@ export default {
       if (!index) {
         left = 0
       } else if (index === this.headerCount - 1) {
-        if (this.sizeCache.headerSize < this.sizeCache.headerTabsWidth) {
-          return
-        }
         left = this.sizeCache.headerTabsWidth - this.sizeCache.headerSize
       } else {
-        const oldTabRect = this._getComponentSize('tabs', oldIndex)
-        const newTabRect = this._getComponentSize('tabs', index)
-        const headerWrap = this._getComponentSize('headerWrap')
-        if (!headerWrap || !oldTabRect || !newTabRect) {
-          return
-        }
-        if (oldTabRect.rect.left < newTabRect.rect.left) {
-          const afterTab = this._getComponentSize('tabs', index + 1)
-          if (afterTab) {
-            const rightRect = checkInView(
-              this.$refs.tab[index + 1],
-              this.$refs.headerWrap
-            )
-            if (!rightRect.ok) {
-              left -= rightRect.right
-            }
-          }
-        } else {
-          const beforeTab = this._getComponentSize('tabs', index - 1)
-          if (beforeTab) {
-            const leftRect = checkInView(
-              this.$refs.tab[index - 1],
-              this.$refs.headerWrap
-            )
-            if (!leftRect.ok) {
-              left -= leftRect.left
-            }
-          }
+        const firstTabRect = this._getComponentSize('tabs', 0)
+        const checkTabRect = this._getComponentSize('tabs', index)
+        left = firstTabRect.rect.left - checkTabRect.rect.left
+        const max = this.sizeCache.headerTabsWidth - this.sizeCache.headerSize
+        if (left < max) {
+          left = max
         }
       }
       this._setHeaderScroll(left)
@@ -558,17 +517,10 @@ export default {
       this.headerLeft = left
     },
     _setHeaderScroll(left) {
-      if (this.notTouchDevice) {
-        this.headerStyle = {
-          transform: `translateX(${left}px)`,
-          transitionDuration: `${this.duration}ms`
-        }
-      } else {
-        scroll(this.$refs.header, -left, this.duration)
+      this.headerStyle = {
+        transform: `translateX(${left}px)`,
+        transitionDuration: `${this.duration}ms`
       }
-    },
-    _setHeaderLeft(evt) {
-      this.headerLeft = -evt.target.scrollLeft
     },
     _computePanelStyle(index) {
       if (this.swipe) {
@@ -674,7 +626,6 @@ export default {
       if (this.routable && !force) {
         return
       }
-      const oldIndex = this.focusIndex
       let newIndex = index
       if (index >= this.headerCount) {
         newIndex = (newIndex - this.headerCount) % 2 ? this.headerCount - 1 : 0
@@ -684,12 +635,14 @@ export default {
         this.$emit('change', newIndex)
       }
       move && this._triggerSwiper()
-      this._afterTabSwitch(oldIndex)
+      this._afterTabSwitch()
     },
-    _afterTabSwitch: throttle(250, function(oldIndex) {
-      this._computeAnchorStyle(this.focusIndex)
-      this._computeHeaderStyle(oldIndex)
-    }),
+    _afterTabSwitch() {
+      this.$nextTick(() => {
+        this._computeAnchorStyle(this.focusIndex)
+        this._computeHeaderStyle()
+      })
+    },
     _switchTrigger(isNext) {
       if (Date.now() - this.lastSlide < this.duration) {
         return
@@ -771,17 +724,11 @@ export default {
       this.lastSlide = Date.now()
     },
     _handleHeaderTouchStart(e) {
-      if (!this.notTouchDevice) {
-        return
-      }
       const point = e.touches ? e.touches[0] : e
       this.headerLastPoint =
         this.align === 'vertical' ? point.pageY : point.pageX
     },
     _handleHeaderTouchMove(e) {
-      if (!this.notTouchDevice) {
-        return
-      }
       const point = e.touches ? e.touches[0] : e
       const isVertical = this.align === 'vertical'
       const curPoint = isVertical ? point.pageY : point.pageX

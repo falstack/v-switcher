@@ -10,23 +10,6 @@ export const getMatchedRouteIndex = (headers, path) => {
   return result
 }
 
-export const checkInView = (child, parent) => {
-  const childRect = child.getBoundingClientRect()
-  const parentRect = parent.getBoundingClientRect()
-  const result = {
-    top: childRect.top - parentRect.top,
-    bottom: childRect.bottom - parentRect.bottom,
-    left: childRect.left - parentRect.left,
-    right: childRect.right - parentRect.right
-  }
-  result.ok =
-    result.top >= 0 &&
-    result.bottom <= 0 &&
-    result.left >= 0 &&
-    result.right <= 0
-  return result
-}
-
 export const on = (function() {
   if (typeof window === 'undefined') {
     return
