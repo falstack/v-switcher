@@ -10,7 +10,7 @@
     <h3>最简单的模式</h3>
     <section class="many">
       <main>
-        <v-switcher ref="switch" :headers="headers" align="start">
+        <v-switcher ref="switch" :headers="headers" align="start" @header-move="handleHeaderMove">
           <template slot="header-after">
             <button @click="backward">向后</button>
             <button @click="forward">向前</button>
@@ -100,13 +100,14 @@ export default {
       ]
       return colors[~~(Math.random() * colors.length)]
     },
+    handleHeaderMove(data) {
+      console.log(data)
+    },
     backward() {
-      const result = this.$refs.switch.backward()
-      console.log(result)
+      this.$refs.switch.backward()
     },
     forward() {
-      const result = this.$refs.switch.forward()
-      console.log(result)
+      this.$refs.switch.forward()
     },
     handleClick() {
       console.log('handleClick')

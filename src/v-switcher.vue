@@ -177,6 +177,7 @@
           :style="headerStyle"
           @touchstart.stop="_handleHeaderTouchStart"
           @touchmove.stop="_handleHeaderTouchMove"
+          @touchend.stop="_handleHeaderTouchEnd"
         >
           <li
             v-for="(item, index) in formatHeaders"
@@ -676,10 +677,10 @@ export default {
       this._setHeaderScroll(left)
       this.headerLeft = left
       this.sizeCache.curScreenIndex = targetScreenCount
-      return {
-        is_begin: targetScreenCount === 0,
-        is_end: targetScreenCount + 1 === this.sizeCache.maxScreenCount
-      }
+      this.$emit('header-move', {
+        is_first: targetScreenCount === 0,
+        is_last: targetScreenCount + 1 === this.sizeCache.maxScreenCount
+      })
     },
     _handleContentTouchStart(e) {
       if (this.swipe || !this.animated) {
@@ -755,12 +756,17 @@ export default {
       }
       this.headerLeft = left
       this._setHeaderScroll(left)
-      this._computeCurrentScreenIndex(left)
+    },
+    _handleHeaderTouchEnd() {
+      this._computeCurrentScreenIndex(this.headerLeft)
     },
     _computeCurrentScreenIndex(left) {
-      this.sizeCache.curScreenIndex = Math.round(
-        Math.abs(left / this.sizeCache.headerWrapWidth)
-      )
+      const result = Math.round(Math.abs(left / this.sizeCache.headerWrapWidth))
+      this.sizeCache.curScreenIndex = result
+      this.$emit('header-move', {
+        is_first: result === 0,
+        is_last: result + 1 === this.sizeCache.maxScreenCount
+      })
     },
     _computeComponentSize() {
       const lastRect = this._getComponentSize('tabs', this.headerCount - 1)
@@ -867,21 +873,23 @@ export default {
         this.align !== 'start' ||
         this.sizeCache.curScreenIndex + 1 >= this.sizeCache.maxScreenCount
       ) {
-        return {
-          is_begin: false,
-          is_end: true
-        }
+        this.$emit('header-move', {
+          is_first: false,
+          is_last: true
+        })
+      } else {
+        this._moveHeader(this.sizeCache.curScreenIndex + 1)
       }
-      return this._moveHeader(this.sizeCache.curScreenIndex + 1)
     },
     backward() {
       if (this.align !== 'start' || this.sizeCache.curScreenIndex === 0) {
-        return {
-          is_begin: true,
-          is_end: false
-        }
+        this.$emit('header-move', {
+          is_first: true,
+          is_last: false
+        })
+      } else {
+        this._moveHeader(this.sizeCache.curScreenIndex - 1)
       }
-      return this._moveHeader(this.sizeCache.curScreenIndex - 1)
     }
   }
 }
