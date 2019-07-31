@@ -59,13 +59,6 @@
       }
     }
 
-    &-before,
-    &-after {
-      position: relative;
-      flex-shrink: 0;
-      z-index: 1;
-    }
-
     &-wrap {
       box-sizing: border-box;
       display: flex;
@@ -99,9 +92,26 @@
 
     &-tabs {
       overflow: hidden;
-      flex-grow: 1;
       height: 100%;
-      width: 100%;
+      flex-grow: 1;
+      order: 1;
+    }
+
+    &-before,
+    &-after {
+      position: relative;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    &-before {
+      float: left;
+      order: 0;
+    }
+
+    &-after {
+      float: right;
+      order: 3;
     }
 
     &-item {
@@ -169,6 +179,9 @@
       <div class="v-switcher-header-before">
         <slot name="header-before"></slot>
       </div>
+      <div class="v-switcher-header-after">
+        <slot name="header-after"></slot>
+      </div>
       <div ref="tabWrap" class="v-switcher-header-tabs">
         <ul
           ref="header"
@@ -199,9 +212,6 @@
             <slot name="anchor"></slot>
           </li>
         </ul>
-      </div>
-      <div class="v-switcher-header-after">
-        <slot name="header-after"></slot>
       </div>
     </div>
     <div v-show="showFixedShim" ref="fixed" :style="fixedShimStyle" />
