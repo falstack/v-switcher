@@ -189,6 +189,7 @@
       </div>
       <div ref="tabWrap" class="v-switcher-header-tabs">
         <ul
+          v-show="!hiddenTabs"
           ref="header"
           class="v-switcher-header"
           :class="[`v-switcher-header-${align}`, `v-switcher-header-translate`]"
@@ -376,6 +377,9 @@ export default {
     }
   },
   computed: {
+    hiddenTabs() {
+      return this.autoplay && !this.headerCount
+    },
     formatHeaders() {
       const result = []
       this.headers.forEach((item, index) => {
