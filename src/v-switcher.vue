@@ -378,7 +378,7 @@ export default {
   },
   computed: {
     hiddenTabs() {
-      return this.autoplay && !this.headerCount
+      return this.autoplay && this.headerCount <= 1
     },
     formatHeaders() {
       const result = []
