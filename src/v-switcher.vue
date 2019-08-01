@@ -502,10 +502,7 @@ export default {
       /**
        * 只支持 align 是 start
        */
-      if (
-        this.align !== 'start' ||
-        this.sizeCache.headerSize < this.sizeCache.headerTabsWidth
-      ) {
+      if (this.align !== 'start' || this.sizeCache.maxScreenCount <= 1) {
         return
       }
       const index = this.focusIndex
@@ -739,6 +736,9 @@ export default {
       this.lastSlide = Date.now()
     },
     _handleHeaderTouchStart(e) {
+      if (this.sizeCache.maxScreenCount <= 1) {
+        return
+      }
       const point = e.touches ? e.touches[0] : e
       this.headerLastPoint =
         this.align === 'vertical' ? point.pageY : point.pageX
