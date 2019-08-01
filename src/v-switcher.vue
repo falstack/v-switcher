@@ -65,6 +65,7 @@
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
+      overflow: hidden;
 
       &-fixed {
         background-color: #fff;
@@ -131,6 +132,10 @@
       display: flex;
       flex-direction: row;
       @include transition();
+    }
+
+    &-panel {
+      overflow: hidden;
     }
 
     &-swipe {
