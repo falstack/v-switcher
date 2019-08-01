@@ -744,6 +744,9 @@ export default {
         this.align === 'vertical' ? point.pageY : point.pageX
     },
     _handleHeaderTouchMove(e) {
+      if (this.sizeCache.maxScreenCount <= 1) {
+        return
+      }
       const point = e.touches ? e.touches[0] : e
       const isVertical = this.align === 'vertical'
       const curPoint = isVertical ? point.pageY : point.pageX
@@ -772,6 +775,9 @@ export default {
       this._setHeaderScroll(left, false)
     },
     _handleHeaderTouchEnd() {
+      if (this.sizeCache.maxScreenCount <= 1) {
+        return
+      }
       this._computeCurrentScreenIndex(this.headerLeft)
     },
     _computeCurrentScreenIndex(left) {
