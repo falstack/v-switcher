@@ -93,6 +93,7 @@
       left: 0;
       @include transition();
       transition-property: width, height, transform;
+      will-change: transform;
       pointer-events: none;
     }
 
@@ -141,6 +142,7 @@
 
     &-panel {
       overflow: hidden;
+      will-change: transform;
     }
 
     &-swipe {

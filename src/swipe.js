@@ -136,8 +136,7 @@ export default function Swipe(container, options) {
     style.webkitTransitionDuration = style.MozTransitionDuration = style.msTransitionDuration = style.OTransitionDuration = style.transitionDuration =
       speed + 'ms'
 
-    style.webkitTransform = 'translate(' + dist + 'px,0)' + 'translateZ(0)'
-    style.msTransform = style.MozTransform = style.OTransform =
+    style.webkitTransform = style.msTransform = style.MozTransform = style.OTransform =
       'translateX(' + dist + 'px)'
   }
 
@@ -151,7 +150,7 @@ export default function Swipe(container, options) {
 
   function stop() {
     delay = 0
-    clearTimeout(interval)
+    interval && clearTimeout(interval)
   }
 
   // setup initial vars
