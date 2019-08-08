@@ -112,7 +112,6 @@
 
 <template>
   <div id="h5" :class="{ 'active': isActive }">
-    <!--
     <div class="carousel">
       <v-switcher :headers="headers1" :swipe="true" :autoplay="2000" align="end" :header-height="18">
         <a
@@ -127,7 +126,6 @@
         </a>
       </v-switcher>
     </div>
-    -->
     <div class="content">
       <v-switcher
         :headers="headers2"

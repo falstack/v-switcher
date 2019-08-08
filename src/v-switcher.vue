@@ -866,8 +866,8 @@ export default {
             left: rect.left,
             right: rect.right,
             bottom: rect.bottom,
-            width: tab.clientWidth,
-            height: tab.clientHeight
+            width: rect.width,
+            height: rect.height
           })
         })
         this.sizeCache.tabs = tabSize
@@ -890,7 +890,7 @@ export default {
           right: headerRect.right,
           bottom: headerRect.bottom
         }
-        this.sizeCache.headerListWidth = header.offsetWidth
+        this.sizeCache.headerListWidth = headerRect.width
         this._computeMaxScreenCount()
       }
       this.sizeCache.headerScrollHeight =
