@@ -17,6 +17,11 @@
 
       &-item {
         display: block;
+        white-space: normal;
+      }
+
+      &-anchor {
+        top: 0;
       }
     }
 
@@ -357,13 +362,12 @@ export default {
       lastSlide: 0,
       sizeCache: {
         tabs: [],
-        headerWrap: null,
-        tabsWrap: null,
         header: null,
         headerSize: 0,
         headerTabsWidth: 0,
         headerWrapWidth: 0,
         headerListWidth: 0,
+        headerScrollHeight: 0,
         curScreenIndex: 0,
         maxScreenCount: 1
       }
@@ -387,9 +391,10 @@ export default {
       return this.headers.length
     },
     headerItemStyle() {
-      const result = {
-        height: `${this.headerHeight}px`,
-        lineHeight: `${this.headerHeight}px`
+      const result = {}
+      if (!this.autoplay && this.align !== 'vertical') {
+        result.height = `${this.headerHeight}px`
+        result.lineHeight = `${this.headerHeight}px`
       }
       if (this.align === 'around') {
         result.width = `${100 / this.headerCount}%`
@@ -432,18 +437,21 @@ export default {
     }
     this.$watch('headers', newVal => {
       this.$nextTick(() => {
+        const beforeIndex = this.focusIndex
         this._cacheComponentSize()
         if (this.routable) {
           this.focusIndex = getMatchedRouteIndex(newVal, this.$route.path)
         }
-        this._computeAnchorStyle(this.focusIndex)
-        this._computeHeaderStyle()
+        if (beforeIndex !== this.focusIndex) {
+          this._computeAnchorStyle(this.focusIndex)
+          this._computeHeaderStyle(beforeIndex)
+        }
       })
     })
-    this.$watch('focusIndex', () => {
-      this._computeAnchorStyle(this.focusIndex)
-      this._computeHeaderStyle()
-      this.$emit('change', this.focusIndex)
+    this.$watch('focusIndex', (newVal, oldVal) => {
+      this._computeAnchorStyle(newVal)
+      this._computeHeaderStyle(oldVal)
+      this.$emit('change', newVal)
     })
   },
   mounted() {
@@ -454,7 +462,7 @@ export default {
       this.$emit('change', this.focusIndex)
       this.$nextTick(() => {
         this._computeAnchorStyle(this.focusIndex)
-        this._computeHeaderStyle()
+        this._computeHeaderStyle(0)
       })
       on(window, 'resize', this._cacheComponentSize)
     })
@@ -504,7 +512,7 @@ export default {
       }
       this.swiper.slide(this.focusIndex, this.duration)
     },
-    _computeHeaderStyle() {
+    _computeHeaderStyle(beforeIndex) {
       /**
        * 只支持 align 是 start
        */
@@ -516,19 +524,69 @@ export default {
         return
       }
 
+      /**
+       * left <= 0
+       */
       let left = this.headerLeft
+      const max = 0
+      const min = this.sizeCache.headerScrollHeight
       if (!index) {
-        left = 0
+        left = max
       } else if (index === this.headerCount - 1) {
-        left = this.sizeCache.headerTabsWidth - this.sizeCache.headerSize
+        left = min
       } else {
-        const firstTabRect = this._getComponentSize('tabs', 0)
-        const checkTabRect = this._getComponentSize('tabs', index)
-        left = firstTabRect.rect.left - checkTabRect.rect.left
-        const max = this.sizeCache.headerTabsWidth - this.sizeCache.headerSize
-        if (left < max) {
-          left = max
+        /**
+         * 如果设置了 beforeHeader 则 tabs[0].left 不为 0
+         */
+        const baseLeft = this._getComponentSize('tabs', 0).left
+        const curTabRect = this._getComponentSize('tabs', index)
+        if (beforeIndex > index) {
+          /**
+           * 向前切换
+           * 取当前 focus 的前一个 tab 来 check
+           * 如果 checkTab 的左边在视口外，则重置 left
+           */
+          const checkTabRect = this._getComponentSize('tabs', index - 1)
+          if (checkTabRect.left + left < baseLeft) {
+            left = baseLeft - checkTabRect.left
+          }
+          /**
+           * 如果下一个 tab 的宽度过大
+           * 导致当前 tab 无法完全展示在屏幕内
+           * 则重置 left
+           */
+          const condition =
+            curTabRect.right - baseLeft - this.sizeCache.headerTabsWidth
+          if (condition > left > 0) {
+            left = -condition
+          }
+        } else {
+          /**
+           * 向后切换
+           * 取当前 focus 的后一个 tab 来 check
+           * 如果 checkTab 的右边
+           */
+          const checkTabRect = this._getComponentSize('tabs', index + 1)
+          const result =
+            checkTabRect.right - baseLeft - this.sizeCache.headerTabsWidth
+          if (result > 0) {
+            left = -result
+          }
+          /**
+           * 如果上一个 tab 的宽度过大
+           * 导致当前 tab 无法完全展示在屏幕内
+           * 则重置 left 为当前 tab 的 left
+           */
+          const condition = curTabRect.left - baseLeft
+          if (left + condition < 0) {
+            left = -condition
+          }
         }
+      }
+      if (left < min) {
+        left = min
+      } else if (left > max) {
+        left = max
       }
       this._setHeaderScroll(left)
       this._computeCurrentScreenIndex(left)
@@ -567,7 +625,7 @@ export default {
       if (!tabSize || !header) {
         return
       }
-      const fullWidth = tabSize.rect.left + tabSize.rect.width - header.left
+      const fullWidth = tabSize.left + tabSize.width - header.left
       this.sizeCache.maxScreenCount = Math.ceil(
         fullWidth / this.sizeCache.headerListWidth
       )
@@ -588,20 +646,22 @@ export default {
         return
       }
       const anchorPadding = +this.anchorPadding
+      const firstTab = this._getComponentSize('tabs', 0)
       if (this.align === 'vertical') {
         const header = this._getComponentSize('header')
         this.anchorStyle = {
-          width: `${this.sizeCache.headerListWidth}px`,
-          height: `${tabSize.offset.height - anchorPadding * 2}px`,
-          transform: `translateY(${tabSize.rect.top -
+          height: `${tabSize.height - anchorPadding * 2}px`,
+          transform: `translateY(${tabSize.top -
             header.top +
             anchorPadding}px)`,
           transitionDuration: `${this.duration}ms`
         }
       } else {
         this.anchorStyle = {
-          width: `${tabSize.rect.width - anchorPadding * 2}px`,
-          transform: `translateX(${tabSize.offset.left + anchorPadding}px)`,
+          width: `${tabSize.width - anchorPadding * 2}px`,
+          transform: `translateX(${tabSize.left -
+            firstTab.left +
+            anchorPadding}px)`,
           transitionDuration: `${this.duration}ms`
         }
       }
@@ -764,7 +824,7 @@ export default {
           delta < 0 &&
           left + this.sizeCache.headerSize < this.sizeCache.headerTabsWidth
         ) {
-          left = this.sizeCache.headerTabsWidth - this.sizeCache.headerSize
+          left = this.sizeCache.headerScrollHeight
         }
       }
       this.headerLeft = left
@@ -792,8 +852,8 @@ export default {
       }
       this.sizeCache.headerSize =
         this.align === 'vertical'
-          ? firstRect.rect.top - lastRect.rect.bottom
-          : lastRect.rect.right - firstRect.rect.left
+          ? firstRect.top - lastRect.bottom
+          : lastRect.right - firstRect.left
     },
     _cacheComponentSize() {
       const tabs = this.$refs.tab
@@ -802,17 +862,12 @@ export default {
         tabs.forEach(tab => {
           const rect = tab.getBoundingClientRect()
           tabSize.push({
-            rect: {
-              top: rect.top,
-              left: rect.left,
-              right: rect.right,
-              bottom: rect.bottom,
-              width: rect.width,
-              height: rect.height
-            },
-            offset: {
-              left: tab.offsetLeft
-            }
+            top: rect.top,
+            left: rect.left,
+            right: rect.right,
+            bottom: rect.bottom,
+            width: tab.clientWidth,
+            height: tab.clientHeight
           })
         })
         this.sizeCache.tabs = tabSize
@@ -820,29 +875,11 @@ export default {
       }
       const headerWrap = this.$refs.headerWrap
       if (headerWrap) {
-        const headerWrapRect = headerWrap.getBoundingClientRect()
-        this.sizeCache.headerWrap = {
-          top: headerWrapRect.top,
-          left: headerWrapRect.left,
-          right: headerWrapRect.right,
-          bottom: headerWrapRect.bottom,
-          width: headerWrapRect.width,
-          height: headerWrapRect.height
-        }
-        this.sizeCache.headerWrapWidth = headerWrapRect.width
+        this.sizeCache.headerWrapWidth = headerWrap.clientWidth
       }
       const tabsWrap = this.$refs.tabWrap
       if (tabsWrap) {
-        const tabsWrapRect = tabsWrap.getBoundingClientRect()
-        this.sizeCache.tabsWrap = {
-          top: tabsWrapRect.top,
-          left: tabsWrapRect.left,
-          right: tabsWrapRect.right,
-          bottom: tabsWrapRect.bottom,
-          width: tabsWrapRect.width,
-          height: tabsWrapRect.height
-        }
-        this.sizeCache.headerTabsWidth = tabsWrapRect.width
+        this.sizeCache.headerTabsWidth = tabsWrap.clientWidth
       }
       const header = this.$refs.header
       if (header) {
@@ -853,9 +890,11 @@ export default {
           right: headerRect.right,
           bottom: headerRect.bottom
         }
-        this.sizeCache.headerListWidth = headerRect.width
+        this.sizeCache.headerListWidth = header.offsetWidth
         this._computeMaxScreenCount()
       }
+      this.sizeCache.headerScrollHeight =
+        this.sizeCache.headerTabsWidth - this.sizeCache.headerSize
     },
     _getComponentSize(type, index = -1) {
       const value = this.sizeCache[type]

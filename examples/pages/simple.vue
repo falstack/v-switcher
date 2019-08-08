@@ -8,6 +8,15 @@
     .v-switcher-header-anchor {
       background-color: #ff6881;
       opacity: 0.1;
+      width: 100%;
+    }
+
+    .v-switcher-header-item {
+      padding: 10px 20px;
+    }
+
+    .v-switcher-header-wrap {
+      width: 100px;
     }
   }
 }
@@ -156,7 +165,7 @@
     <h3>header 垂直</h3>
     <section>
       <main class="vertical">
-        <v-switcher :headers="headers" align="vertical">
+        <v-switcher :headers="headers2" align="vertical">
           <div class="demo-item" slot="0">
             第一个tab
           </div>
@@ -201,6 +210,17 @@ export default {
         'tab-3',
         'tab-4',
         'tab-5',
+        'tab-6',
+        'tab-7',
+        'tab-8',
+        'tab-9'
+      ],
+      headers2: [
+        'tab-1',
+        'tab-2',
+        'tab-3',
+        'tab-4',
+        'tab-5啊啊啊啊啊啊啊啊啊5啊啊啊啊啊啊啊啊啊',
         'tab-6',
         'tab-7',
         'tab-8',

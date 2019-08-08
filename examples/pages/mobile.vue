@@ -112,6 +112,7 @@
 
 <template>
   <div id="h5" :class="{ 'active': isActive }">
+    <!--
     <div class="carousel">
       <v-switcher :headers="headers1" :swipe="true" :autoplay="2000" align="end" :header-height="18">
         <a
@@ -126,6 +127,7 @@
         </a>
       </v-switcher>
     </div>
+    -->
     <div class="content">
       <v-switcher
         :headers="headers2"
@@ -134,6 +136,9 @@
         :anchor-padding="20"
         @change="handleTabSwitch"
       >
+        <template slot="header-before">
+          <button @click="handleBtnClick">筛选</button>
+        </template>
         <template slot="header-after">
           <button @click="handleBtnClick">筛选</button>
         </template>
@@ -187,14 +192,14 @@ export default {
     const headers2 = [
       'tab-0',
       'tab-1',
-      'tab-2奥术大师',
-      'tab',
-      'tab-4答',
       'tab-5',
-      'tab-6阿斯达稍等',
-      'tab-7',
+      'tab-9',
+      'tab-4答',
       'tab-8奥术大',
-      'tab-9'
+      'tab-2奥术大师',
+      'tab-乔斯达乔瑟夫',
+      'tab-6阿斯达稍等',
+      'tab-7乔斯达乔纳森',
     ]
     return {
       click: 0,
