@@ -37,4 +37,4 @@ Vue.component(VSwitcher.name, VSwitcher)
 | continuousSwipe | Boolean | false | N | 当使用 swipe 的时候，是否是无限滚动模式，如果 autoplay > 0 则强制为 true |
 
 ### example
-> 用例比较多，比较复杂，就不写了，把项目 clone 到本地，然后执行以下脚本来看 demo 吧
+> 用例比较多，比较复杂，等之后有时间了补在线 demo，现在先把项目 clone 到本地 npm run dev 查看吧
