@@ -252,7 +252,7 @@
 <script>
 import Swipe from './swipe.js'
 import affix from './affix.js'
-import { getMatchedRouteIndex } from './utils'
+import { getMatchedRouteIndex, on, off } from './utils'
 
 export default {
   name: 'VSwitcher',
@@ -327,9 +327,6 @@ export default {
     continuousSwipe: {
       type: Boolean,
       default: false
-    },
-    fixedTop: { // eslint-disable-line
-      type: Number
     }
   },
   data() {
@@ -345,10 +342,6 @@ export default {
       focusIndex,
       anchorStyle: {},
       headerStyle: {},
-      isFixed: false,
-      showFixedShim: false,
-      fixedShimStyle: {},
-      fixedHeaderStyle: {},
       timer: 0,
       headerLeft: 0,
       headerLastPoint: 0,
@@ -447,23 +440,27 @@ export default {
         this._computeHeaderStyle()
       })
     })
+    this.$watch('focusIndex', () => {
+      this._computeAnchorStyle(this.focusIndex)
+      this._computeHeaderStyle()
+      this.$emit('change', this.focusIndex)
+    })
   },
   mounted() {
     this.$nextTick(() => {
       this._cacheComponentSize()
       this._initSwipe()
       this._initCarousel()
-      window.addEventListener('resize', () => {
-        this._cacheComponentSize()
-      })
       this.$emit('change', this.focusIndex)
       this.$nextTick(() => {
         this._computeAnchorStyle(this.focusIndex)
         this._computeHeaderStyle()
       })
+      on(window, 'resize', this._cacheComponentSize)
     })
   },
   beforeDestroy() {
+    off(window, 'resize', this._cacheComponentSize)
     if (this.timer) {
       window.clearInterval(this.timer)
     }
@@ -638,10 +635,8 @@ export default {
       return result
     },
     _swipeCallback(index) {
-      this.$nextTick(() => {
-        this.lastSlide = Date.now()
-        this._handleTabSwitch(index, false, false)
-      })
+      this.lastSlide = Date.now()
+      this._handleTabSwitch(index, false, false)
     },
     _handleTabSwitch(index, force = false, move = true) {
       if (this.routable && !force) {
@@ -653,16 +648,8 @@ export default {
       }
       if (this.focusIndex !== newIndex) {
         this.focusIndex = newIndex
-        this.$emit('change', newIndex)
       }
       move && this._triggerSwiper()
-      this._afterTabSwitch()
-    },
-    _afterTabSwitch() {
-      this.$nextTick(() => {
-        this._computeAnchorStyle(this.focusIndex)
-        this._computeHeaderStyle()
-      })
     },
     _switchTrigger(isNext) {
       if (Date.now() - this.lastSlide < this.duration) {

@@ -1,6 +1,19 @@
 import { on, off, getScroll, getOffset, getScrollTarget } from './utils'
 
 export default {
+  props: {
+    fixedTop: { // eslint-disable-line
+      type: Number
+    }
+  },
+  data() {
+    return {
+      isFixed: false,
+      showFixedShim: false,
+      fixedShimStyle: {},
+      fixedHeaderStyle: {}
+    }
+  },
   mounted() {
     if (this.fixedTop !== undefined) {
       const target = getScrollTarget(this.$el)

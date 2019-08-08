@@ -143,24 +143,9 @@
           :key="index"
           :event-step="30"
           :slot="`${index}`"
-          @top="handlePullDown"
-          @scroll="handleScroll"
-          @scroll-down="handlePullUp"
           @bottom="handleLoadMore"
-          @refresh="handleRefresh"
         >
-          <ul class="ul-wrap">
-            <li class="hoz-wrap">
-              <div class="item-wrap" @touchstart.stop @touchmove.stop>
-                <div
-                  v-for="item in 10"
-                  :key="item"
-                  :style="{ backgroundColor: getRandomColor() }"
-                  @click="click++"
-                  class="item"
-                >{{ item }} - {{ click }}</div>
-              </div>
-            </li>
+          <div class="ul-wrap">
             <flow-loader
               ref="loader"
               func="getListByPage"
@@ -170,14 +155,8 @@
                 id: item,
                 count: 10
               }"
-              :callback="handleCallback"
             >
-              <vue-flow-render
-                ref="render"
-                :remain="30"
-                :total="count"
-                slot-scope="{ flow, count }"
-              >
+              <div slot-scope="{ flow }">
                 <ItemComponent
                   v-for="(item, index) in flow"
                   :key="item.id"
@@ -185,9 +164,9 @@
                   :index="index"
                   :style="{ height: '110px' }"
                 />
-              </vue-flow-render>
+              </div>
             </flow-loader>
-          </ul>
+          </div>
         </v-scroller>
       </v-switcher>
     </div>
@@ -197,13 +176,11 @@
 <script>
 import ItemComponent from '../Item'
 import VScroller from 'h5-vue-scroller'
-import VueFlowRender from 'vue-flow-render'
 
 export default {
   name: 'Mobile',
   components: {
     VScroller,
-    VueFlowRender,
     ItemComponent
   },
   data() {
@@ -249,10 +226,6 @@ export default {
       activeIndex: 0
     }
   },
-  computed: {},
-  watch: {},
-  created() {},
-  mounted() {},
   methods: {
     getRandomColor() {
       var colors = [
@@ -265,38 +238,17 @@ export default {
       ]
       return colors[~~(Math.random() * colors.length)]
     },
-    handlePullDown() {
-      this.isActive = false
-    },
-    handlePullUp() {
-      this.isActive = true
-    },
     handleTabSwitch(index) {
       this.activeIndex = index
       this.$nextTick(() => {
         this.$refs.loader[index].initData()
       })
     },
-    handleBeforeSwitch(index) {
-      this.activeIndex = index
-    },
-    handleCallback() {
-      this.$nextTick(() => {
-        const index = this.activeIndex
-        this.$refs.render[index].setWrap(this.$refs.scroll[index].$el)
-      })
-    },
     handleLoadMore() {
       this.$refs.loader[this.activeIndex].loadMore()
     },
-    handleScroll({ offsetTop, isUp }) {
-      this.$refs.render[this.activeIndex].scroll(offsetTop, isUp)
-    },
     handleBtnClick() {
       alert('筛选')
-    },
-    handleRefresh() {
-      this.isActive = false
     }
   }
 }

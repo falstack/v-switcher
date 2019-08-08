@@ -44,6 +44,9 @@ export default {
       click: 0
     }
   },
+  beforeUpdate() {
+    console.log('item re-render')
+  },
   methods: {
     handleClick() {
       this.click++
