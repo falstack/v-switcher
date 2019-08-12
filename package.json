@@ -41,10 +41,10 @@
     "h5-vue-scroller": "^1.0.0",
     "less-loader": "^5.0.0",
     "node-sass": "^4.12.0",
-    "sass-loader": "^7.1.0",
+    "sass-loader": "^7.2.0",
     "vue-flow-render": "^1.0.2",
-    "vue-mixin-store": "^1.1.59",
-    "vue-router": "^3.1.1",
+    "vue-mixin-store": "^1.1.61",
+    "vue-router": "^3.1.2",
     "vue-template-compiler": "^2.5.21",
     "vuepress": "^1.0.3",
     "vuex": "^3.1.1"
