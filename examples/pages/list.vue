@@ -22,92 +22,96 @@
     <h1>start</h1>
     <div class="test" ref="test">
       <div style="background-color: #00a1d6">
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
-        <p>111</p>
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
+        <Test text="111" />
       </div>
       <div style="background-color: #4fc08d">
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
-        <p>222</p>
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
+        <Test text="222" />
       </div>
       <div style="background-color: #657786">
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
-        <p>333</p>
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
+        <Test text="333" />
       </div>
       <div style="background-color: goldenrod">
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
-        <p>444</p>
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
+        <Test text="444" />
       </div>
     </div>
     <p>list</p>
@@ -216,10 +220,13 @@
 
 <script>
 import Slide from '../../src/slide'
+import Test from '../Test'
 
 export default {
   name: '',
-  components: {},
+  components: {
+    Test
+  },
   props: {},
   data() {
     return {}
