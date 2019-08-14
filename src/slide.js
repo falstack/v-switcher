@@ -17,8 +17,11 @@ export default class {
     this.curentLeft = 0
     this.calcMaxLeft()
     this.prefix = this._calcPrefix()
-    this.init()
     this.scrolling = false
+    function run(fn) {
+      return new Worker(URL.createObjectURL(new Blob(['(' + fn + ')()'])))
+    }
+    run(this.init())
     return this
   }
 
