@@ -21,18 +21,20 @@ export default class {
   }
 
   init() {
-    const { el } = this
+    const { el, style } = this
     el.addEventListener('touchstart', this._start.bind(this), {
       capture: true,
       passive: true
     })
     el.addEventListener('touchmove', this._move.bind(this), {
-      capture: true
+      capture: true,
+      passive: false
     })
     el.addEventListener('touchend', this._end.bind(this), {
       capture: true,
       passive: true
     })
+    style.willChange = 'transform'
   }
 
   _start(event) {
