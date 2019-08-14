@@ -204,6 +204,7 @@
           @touchstart.stop="_handleHeaderTouchStart"
           @touchmove.stop="_handleHeaderTouchMove"
           @touchend.stop="_handleHeaderTouchEnd"
+          @mouseleave="_resetAnchorStyle"
         >
           <li
             v-for="(item, index) in formatHeaders"
@@ -434,7 +435,12 @@ export default {
     if (this.routable) {
       this.$watch('$route', newVal => {
         const currentIndex = getMatchedRouteIndex(this.headers, newVal.path)
-        this._handleTabSwitch(currentIndex, true)
+        if (currentIndex < 0) {
+          this.focusIndex = -1
+          this._resetAnchorStyle()
+        } else {
+          this._handleTabSwitch(currentIndex, true)
+        }
       })
     }
     this.$watch('headers', newVal => {
@@ -666,6 +672,16 @@ export default {
             anchorPadding}px)`,
           transitionDuration: `${this.duration}ms`
         }
+      }
+    },
+    _resetAnchorStyle() {
+      if (this.focusIndex > -1) {
+        return
+      }
+      if (this.align === 'vertical') {
+        this.anchorStyle.transform = 'translateY(-100%)'
+      } else {
+        this.anchorStyle.transform = 'translateX(-100%)'
       }
     },
     _computeItemText(item, curIndex) {

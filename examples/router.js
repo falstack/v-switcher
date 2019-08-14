@@ -9,6 +9,11 @@ export default new VueRouter({
     {
       path: '/',
       name: 'index',
+      redirect: '/homepage'
+    },
+    {
+      path: '/homepage',
+      name: 'homepage',
       component: () => import('./pages/index')
     },
     {

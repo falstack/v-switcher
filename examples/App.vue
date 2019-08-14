@@ -102,7 +102,7 @@ body {
 <template>
   <div id="app">
     <div class="container header">
-      <v-switcher :headers="headers" :routable="true" align="start" anchor-trigger="hover">
+      <v-switcher :headers="headers" :routable="true" anchor-trigger="hover">
         <router-link
           v-for="(item, index) in headers"
           :key="index"
@@ -110,6 +110,9 @@ body {
           :to="item.route"
           v-text="item.name"
         ></router-link>
+        <router-link slot="header-after" to="/list">
+          测试列表
+        </router-link>
       </v-switcher>
     </div>
     <div class="banner">vue layout tab</div>
@@ -127,7 +130,7 @@ export default {
       headers: [
         {
           name: '首页',
-          route: '/'
+          route: '/homepage'
         },
         {
           name: '简单用例',
