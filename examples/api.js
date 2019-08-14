@@ -1,6 +1,7 @@
 import ItemFactory from './item-factory'
 
-export const getListByPage = ({ page, count }) => {
+export const getListByPage = ({ page, count, index }) => {
+  console.log('getListByPage', index)
   return new Promise(resolve => {
     const total = 1024
     const hasFetch = (page - 1) * count

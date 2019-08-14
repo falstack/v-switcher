@@ -40,6 +40,11 @@ export default new VueRouter({
       path: '/mobile',
       name: 'mobile',
       component: () => import('./pages/mobile')
+    },
+    {
+      path: '/list',
+      name: 'list',
+      component: () => import('./pages/list')
     }
   ]
 })

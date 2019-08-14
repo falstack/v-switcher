@@ -137,7 +137,9 @@
         @change="handleTabSwitch"
       >
         <template slot="header-before">
-          <button @click="handleBtnClick">筛选</button>
+          <router-link to="/list">
+            <button>筛选</button>
+          </router-link>
         </template>
         <template slot="header-after">
           <button @click="handleBtnClick">筛选</button>
@@ -158,8 +160,10 @@
               :auto="0"
               :query="{
                 id: item,
-                count: 10
+                count: 10,
+                index
               }"
+              :callback="handleCallback"
             >
               <div slot-scope="{ flow }">
                 <ItemComponent
@@ -244,6 +248,7 @@ export default {
       return colors[~~(Math.random() * colors.length)]
     },
     handleTabSwitch(index) {
+      console.log('handleTabSwitch', index)
       this.activeIndex = index
       this.$nextTick(() => {
         this.$refs.loader[index].initData()
@@ -254,6 +259,9 @@ export default {
     },
     handleBtnClick() {
       alert('筛选')
+    },
+    handleCallback(data) {
+      console.log('callback', data)
     }
   }
 }
