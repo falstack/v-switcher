@@ -14,14 +14,11 @@ export default class {
       y: 0
     }
     this.lastLeft = 0
-    this.curentLeft = 0
-    this.calcMaxLeft()
-    this.prefix = this._calcPrefix()
+    this.currentLeft = 0
+    this.maxLeft = this.calcMaxLeft()
+    this.prefix = this._calcCssPrefix()
     this.scrolling = false
-    function run(fn) {
-      return new Worker(URL.createObjectURL(new Blob(['(' + fn + ')()'])))
-    }
-    run(this.init())
+    this.init()
     return this
   }
 
@@ -69,13 +66,16 @@ export default class {
     } else if (resultX + this.maxLeft < 0) {
       resultX = -this.maxLeft
     }
-    this._translate(resultX)
-    this.curentLeft = resultX
     this.deltaPoint = delta
+    if (resultX === this.currentLeft) {
+      return
+    }
+    this._translate(resultX)
+    this.currentLeft = resultX
   }
 
   _end() {
-    this.lastLeft = this.curentLeft
+    this.lastLeft = this.currentLeft
     this.scrolling = false
   }
 
@@ -89,7 +89,7 @@ export default class {
     return Math.abs(delta.x) < Math.abs(delta.y) * 3
   }
 
-  _calcPrefix() {
+  _calcCssPrefix() {
     const regex = /^(Webkit|Khtml|Moz|ms|O)(?=[A-Z])/
     const styleDeclaration = document.getElementsByTagName('script')[0].style
     for (const prop in styleDeclaration) {
@@ -108,6 +108,6 @@ export default class {
   }
 
   calcMaxLeft() {
-    this.maxLeft = this.el.offsetWidth - window.screen.width
+    return this.el.offsetWidth - window.screen.width
   }
 }
