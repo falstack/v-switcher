@@ -9622,10 +9622,10 @@ vue-loader@^15.2.4, vue-loader@^15.7.0:
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
 
-vue-mixin-store@^1.1.62:
-  version "1.1.62"
-  resolved "https://registry.npm.taobao.org/vue-mixin-store/download/vue-mixin-store-1.1.62.tgz#5eeb7bc19019dbf1b619803a8fce85fea3a765bc"
-  integrity sha1-Xut7wZAZ2/G2GYA6j86F/qOnZbw=
+vue-mixin-store@^1.1.64:
+  version "1.1.64"
+  resolved "https://registry.yarnpkg.com/vue-mixin-store/-/vue-mixin-store-1.1.64.tgz#2dc4dde1fcd7953a485477f7b21c0760c0c6f703"
+  integrity sha512-qEEEGgLOIyu4ngV3cAA7q4q3er3O5x+8u/tauIpQEV85ZaSW0cKYZW5AcsQ1TN9wXQTSgHpEvBRBEG9KzhRnRg==
   dependencies:
     throttle-debounce "^2.1.0"
     vue "^2.6.6"

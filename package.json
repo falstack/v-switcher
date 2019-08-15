@@ -42,7 +42,7 @@
     "node-sass": "^4.12.0",
     "sass-loader": "^7.2.0",
     "vue-flow-render": "^1.0.5",
-    "vue-mixin-store": "^1.1.62",
+    "vue-mixin-store": "^1.1.64",
     "vue-router": "^3.1.2",
     "vue-template-compiler": "^2.5.21",
     "vuepress": "^1.0.3",
