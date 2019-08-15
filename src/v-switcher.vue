@@ -241,7 +241,7 @@
         :class="[{ 'v-switcher-content-animated': animated && !swipe }]"
         :style="contentStyle"
         @touchstart="_handleContentTouchStart"
-        @touchmove="_handleContentTouchMove"
+        @touchmove.stop="_handleContentTouchMove"
         @touchend="_handleContentTouchEnd"
       >
         <div
