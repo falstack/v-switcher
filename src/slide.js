@@ -4,7 +4,7 @@ export default class {
       return
     }
     this.el = options.el
-    this.style = this.el.style
+    this.style = options.el.style
     this.startPoint = {
       x: 0,
       y: 0
@@ -15,14 +15,22 @@ export default class {
     }
     this.lastLeft = 0
     this.currentLeft = 0
-    this.maxLeft = this.calcMaxLeft()
-    this.prefix = this._calcCssPrefix()
-    this.scrolling = false
-    this.init()
+    this.duration =
+      options.duration === undefined ? 300 : Math.abs(options.duration)
+    this.sticky = options.sticky === undefined ? true : options.sticky
+    this.swipe = options.swipe === undefined ? true : options.swipe
+    this.disabled = options.disabled || false
+    this.callback = options.callback
+    this.touching = false
+    this.moving = false
+    this._calcCssPrefix()
+    this._setUpConst()
+    this._setupIndex(options.index)
+    this._setupEvent()
     return this
   }
 
-  init() {
+  _setupEvent() {
     const { el, style } = this
     el.addEventListener('touchstart', this._start.bind(this), {
       capture: true,
@@ -33,10 +41,37 @@ export default class {
       capture: true,
       passive: true
     })
+    window.addEventListener('resize', this._setUpConst.bind(this), {
+      capture: false,
+      passive: true
+    })
     style.willChange = 'transform'
   }
 
+  _setupIndex(index) {
+    this.activeIndex = index
+      ? Math.max(Math.min(index, this.slideCount - 1), 0)
+      : 0
+    if (!this.activeIndex) {
+      return
+    }
+    const left = (-this.activeIndex * this.maxLeft) / (this.slideCount - 1)
+    this.lastLeft = left
+    this.currentLeft = left
+    this._translate(left)
+  }
+
+  _setUpConst() {
+    const { offsetWidth, children } = this.el
+    this.slideCount = Math.max(children.length, 1)
+    this.slideWidth = offsetWidth / this.slideCount
+    this.maxLeft = offsetWidth - this.slideWidth
+  }
+
   _start(event) {
+    if (this.moving || this.disabled) {
+      return
+    }
     const point = event.touches[0]
     this.startPoint = {
       x: point.pageX,
@@ -45,7 +80,10 @@ export default class {
   }
 
   _move(event) {
-    if (this.scrolling) {
+    if (this.moving || this.disabled) {
+      return
+    }
+    if (this.touching) {
       event.preventDefault()
       event.stopPropagation()
     }
@@ -55,10 +93,11 @@ export default class {
       x: point.pageX - start.x,
       y: point.pageY - start.y
     }
-    if (this._condition(delta)) {
+    this.deltaPoint = delta
+    if (this._isVerticalScroll(delta)) {
       return
     }
-    this.scrolling = true
+    this.touching = true
     const lastLeft = this.lastLeft
     let resultX = delta.x + lastLeft
     if (resultX > 0) {
@@ -66,48 +105,118 @@ export default class {
     } else if (resultX + this.maxLeft < 0) {
       resultX = -this.maxLeft
     }
-    this.deltaPoint = delta
     if (resultX === this.currentLeft) {
       return
     }
-    this._translate(resultX)
-    this.currentLeft = resultX
+    if (this.sticky) {
+      this._translate(resultX)
+      this.currentLeft = resultX
+    }
   }
 
   _end() {
+    if (this.moving || this.disabled) {
+      return
+    }
     this.lastLeft = this.currentLeft
-    this.scrolling = false
+    this.touching = false
+    const delta = this.deltaPoint
+    if (!this.sticky && this._isVerticalScroll(delta)) {
+      return
+    }
+    if (this.swipe) {
+      delta.x > 0 ? this.prev(false) : this.next(false)
+    }
+  }
+
+  prev(custom = true) {
+    if (this.activeIndex === 0) {
+      return
+    }
+    if (custom) {
+      this.activeIndex--
+    } else if (!this._slideCondition(this.deltaPoint)) {
+      this._calcActiveIndex(false)
+    }
+    this._animation()
+  }
+
+  next(custom = true) {
+    if (this.activeIndex === this.slideCount - 1) {
+      return
+    }
+    if (custom) {
+      this.activeIndex++
+    } else if (!this._slideCondition(this.deltaPoint)) {
+      this._calcActiveIndex(true)
+    }
+    this._animation()
+  }
+
+  destroy() {
+    // TODO unbind event
+  }
+
+  _animation() {
+    if (this.moving) {
+      return
+    }
+    this.moving = true
+    const { cssPrefix, duration, activeIndex } = this
+    const left = -activeIndex * this.slideWidth
+    requestAnimationFrame(() => {
+      this.style[`${cssPrefix}transition-duration`] = `${duration}ms`
+      this.style[`${cssPrefix}transform`] = `translateX(${left}px)`
+      setTimeout(() => {
+        this.style[`${cssPrefix}transition-duration`] = ''
+        this.currentLeft = left
+        this.lastLeft = left
+        this.moving = false
+        this.callback && this.callback(activeIndex)
+      }, duration)
+    })
   }
 
   _translate(left) {
     requestAnimationFrame(() => {
-      this.style[`${this.prefix}transform`] = `translateX(${left}px)`
+      this.style[`${this.cssPrefix}transform`] = `translateX(${left}px)`
     })
   }
 
-  _condition(delta) {
+  _isVerticalScroll(delta) {
     return Math.abs(delta.x) < Math.abs(delta.y) * 3
   }
 
   _calcCssPrefix() {
+    let result = ''
     const regex = /^(Webkit|Khtml|Moz|ms|O)(?=[A-Z])/
     const styleDeclaration = document.getElementsByTagName('script')[0].style
     for (const prop in styleDeclaration) {
       if (regex.test(prop)) {
-        return '-' + prop.match(regex)[0].toLowerCase() + '-'
+        result = '-' + prop.match(regex)[0].toLowerCase() + '-'
       }
     }
 
-    if ('WebkitOpacity' in styleDeclaration) {
-      return '-webkit-'
+    if (!result && 'WebkitOpacity' in styleDeclaration) {
+      result = '-webkit-'
     }
-    if ('KhtmlOpacity' in styleDeclaration) {
-      return '-khtml-'
+    if (!result && 'KhtmlOpacity' in styleDeclaration) {
+      result = '-khtml-'
     }
-    return ''
+    this.cssPrefix = result
   }
 
-  calcMaxLeft() {
-    return this.el.offsetWidth - window.screen.width
+  _calcActiveIndex(isNext) {
+    if (this.sticky) {
+      this.activeIndex = isNext
+        ? Math.ceil(Math.abs(this.currentLeft) / this.slideWidth)
+        : Math.floor(Math.abs(this.currentLeft) / this.slideWidth)
+    } else {
+      isNext ? this.activeIndex++ : this.activeIndex--
+    }
+  }
+
+  _slideCondition(delta) {
+    return Math.abs(delta.x) < this.slideWidth / 2
   }
 }

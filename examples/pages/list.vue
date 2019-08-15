@@ -238,6 +238,9 @@ export default {
     const slide = new Slide({
       el: this.$refs.test
     })
+    setTimeout(() => {
+      slide.destroy()
+    }, 10000)
   },
   methods: {}
 }
