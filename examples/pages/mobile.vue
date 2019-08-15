@@ -153,6 +153,20 @@
           @bottom="handleLoadMore"
         >
           <div class="ul-wrap">
+            <div class="carousel" @touchstart.stop @touchmove.stop>
+              <v-switcher :headers="headers1" :swipe="true" :autoplay="2000" align="end" :header-height="18">
+                <a
+                  v-for="(item, index) in headers1"
+                  :key="index"
+                  :slot="`${index}`"
+                  :style="{ backgroundColor: getRandomColor() }"
+                  class="c-item"
+                  href="javascript:;"
+                >
+                  {{ item.title }}
+                </a>
+              </v-switcher>
+            </div>
             <flow-loader
               ref="loader"
               func="getListByPage"
