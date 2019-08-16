@@ -19,19 +19,26 @@ export default class {
 
   _setupEvent() {
     const { el } = this
-    el.addEventListener('touchstart', this._start.bind(this), {
+    const events = {
+      touchstart: this._start.bind(this),
+      touchmove: this._move.bind(this),
+      touchend: this._end.bind(this),
+      resize: this._setupSizes.bind(this)
+    }
+    el.addEventListener('touchstart', events.touchstart, {
       capture: true,
       passive: true
     })
-    el.addEventListener('touchmove', this._move.bind(this), true)
-    el.addEventListener('touchend', this._end.bind(this), {
+    el.addEventListener('touchmove', events.touchmove, true)
+    el.addEventListener('touchend', events.touchend, {
       capture: true,
       passive: true
     })
-    window.addEventListener('resize', this._setupSizes.bind(this), {
+    window.addEventListener('resize', events.resize, {
       capture: false,
       passive: true
     })
+    this.events = events
   }
 
   _setupConst() {
@@ -184,7 +191,20 @@ export default class {
   }
 
   destroy() {
-    // TODO unbind event
+    const { el, events } = this
+    el.removeEventListener('touchstart', events.touchstart, {
+      capture: true,
+      passive: true
+    })
+    el.removeEventListener('touchmove', events.touchmove, true)
+    el.removeEventListener('touchend', events.touchend, {
+      capture: true,
+      passive: true
+    })
+    window.removeEventListener('resize', events.resize, {
+      capture: false,
+      passive: true
+    })
   }
 
   _animation() {
