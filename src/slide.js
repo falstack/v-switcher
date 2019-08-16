@@ -47,6 +47,7 @@ export default class {
     this.currentLeft = 0
     this.touching = false
     this.moving = false
+    this.startAt = 0
   }
 
   _setupProps(options) {
@@ -103,6 +104,7 @@ export default class {
       x: point.pageX,
       y: point.pageY
     }
+    this.startAt = +new Date()
   }
 
   _move(event) {
@@ -163,7 +165,7 @@ export default class {
     }
     if (custom) {
       this.activeIndex--
-    } else if (!this._slideCondition(this.deltaPoint)) {
+    } else if (this._isValidSlide()) {
       this._calcActiveIndex(false)
     }
     this._animation()
@@ -175,7 +177,7 @@ export default class {
     }
     if (custom) {
       this.activeIndex++
-    } else if (!this._slideCondition(this.deltaPoint)) {
+    } else if (this._isValidSlide()) {
       this._calcActiveIndex(true)
     }
     this._animation()
@@ -244,7 +246,11 @@ export default class {
     }
   }
 
-  _slideCondition(delta) {
-    return Math.abs(delta.x) < this.slideWidth / 2
+  _isValidSlide() {
+    const x = Math.abs(this.deltaPoint.x)
+    return (
+      (Number(+new Date() - this.startAt) < 250 && x > 20) ||
+      x < this.slideWidth / 2
+    )
   }
 }
