@@ -3,14 +3,11 @@
   overflow: hidden;
 
   .test {
-    width: 400%;
     height: 300px;
+    overflow: hidden;
 
     >div {
-      float: left;
-      width: 25%;
       height: 100%;
-      overflow-x: hidden;
       overflow-y: auto;
     }
   }
@@ -230,7 +227,8 @@ export default {
   },
   data() {
     return {
-      slide: null
+      slide: null,
+      active: 0
     }
   },
   mounted() {
@@ -238,7 +236,12 @@ export default {
       el: this.$refs.test,
       swipe: true,
       sticky: true,
-      duration: 300
+      duration: 300,
+      count: 4,
+      index: this.active,
+      callback: index => {
+        this.active = index
+      }
     })
   },
   methods: {

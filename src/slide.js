@@ -7,30 +7,12 @@ export default class {
     if (!(options.el instanceof Element)) {
       return
     }
-    this.el = options.el
-    this.style = options.el.style
-    this.startPoint = {
-      x: 0,
-      y: 0
-    }
-    this.deltaPoint = {
-      x: 0,
-      y: 0
-    }
-    this.lastLeft = 0
-    this.currentLeft = 0
-    this.duration =
-      options.duration === undefined ? 300 : Math.abs(options.duration)
-    this.sticky = options.sticky === undefined ? true : options.sticky
-    this.swipe = options.swipe === undefined ? true : options.swipe
-    this.disabled = options.disabled || false
-    this.callback = options.callback
-    this.touching = false
-    this.moving = false
     this._calcCssPrefix()
     this._setupConst()
-    this._setupStyle()
+    this._setupProps(options)
+    this._setupSizes(options.count)
     this._setupIndex(options.index)
+    this._setupStyle()
     this._setupEvent()
     return this
   }
@@ -46,15 +28,50 @@ export default class {
       capture: true,
       passive: true
     })
-    window.addEventListener('resize', this._setupConst.bind(this), {
+    window.addEventListener('resize', this._setupSizes.bind(this), {
       capture: false,
       passive: true
     })
   }
 
+  _setupConst() {
+    this.startPoint = {
+      x: 0,
+      y: 0
+    }
+    this.deltaPoint = {
+      x: 0,
+      y: 0
+    }
+    this.lastLeft = 0
+    this.currentLeft = 0
+    this.touching = false
+    this.moving = false
+  }
+
+  _setupProps(options) {
+    this.el = options.el
+    this.style = options.el.style
+    this.duration =
+      options.duration === undefined ? 300 : Math.abs(options.duration)
+    this.sticky = options.sticky === undefined ? true : options.sticky
+    this.swipe = options.swipe === undefined ? true : options.swipe
+    this.disabled = options.disabled || false
+    this.callback = options.callback
+  }
+
   _setupStyle() {
-    const { style } = this
+    const { style, slideCount, slideWidth } = this
     style.willChange = 'transform'
+    style.width = `${slideCount * 100}%`
+    if (slideCount > 1) {
+      const children = this.el.children
+      ;[].forEach.call(children, item => {
+        const { style } = item
+        style.width = `${slideWidth}px`
+        style.float = 'left'
+      })
+    }
   }
 
   _setupIndex(index) {
@@ -70,11 +87,11 @@ export default class {
     this._translate(left)
   }
 
-  _setupConst() {
-    const { offsetWidth, children } = this.el
-    this.slideCount = Math.max(children.length, 1)
-    this.slideWidth = offsetWidth / this.slideCount
-    this.maxLeft = offsetWidth - this.slideWidth
+  _setupSizes(slideCount) {
+    const offsetWidth = this.el.parentNode.offsetWidth
+    this.slideCount = Math.max(slideCount || 1, 1)
+    this.slideWidth = offsetWidth
+    this.maxLeft = offsetWidth * slideCount - offsetWidth
   }
 
   _start(event) {
