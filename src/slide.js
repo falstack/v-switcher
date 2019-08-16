@@ -1,5 +1,3 @@
-import { throttle } from 'throttle-debounce'
-
 export default class {
   /**
    *  sticky：默认为 true，滑动的时候会跟随手指
@@ -70,6 +68,7 @@ export default class {
     this.touching = false
     this.moving = false
     this.startAt = 0
+    this.timeoutLock = 0
     this.events = {}
   }
 
@@ -124,11 +123,11 @@ export default class {
       event.stopPropagation()
       return
     }
+    clearTimeout(this.timeoutLock)
     this.scrolling = true
-    throttle(250, () => {
-      console.log('throttle')
+    this.timeoutLock = setTimeout(() => {
       this.scrolling = false
-    })
+    }, 250)
   }
 
   _start(event) {
