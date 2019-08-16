@@ -1,4 +1,8 @@
 export default class {
+  /**
+   *  sticky：默认为 true，滑动的时候会跟随手指
+   *  swipe：默认为 true，touchend 时会翻到下一页或返回上一页
+   */
   constructor(options = {}) {
     if (!(options.el instanceof Element)) {
       return
@@ -24,14 +28,15 @@ export default class {
     this.touching = false
     this.moving = false
     this._calcCssPrefix()
-    this._setUpConst()
+    this._setupConst()
+    this._setupStyle()
     this._setupIndex(options.index)
     this._setupEvent()
     return this
   }
 
   _setupEvent() {
-    const { el, style } = this
+    const { el } = this
     el.addEventListener('touchstart', this._start.bind(this), {
       capture: true,
       passive: true
@@ -41,10 +46,14 @@ export default class {
       capture: true,
       passive: true
     })
-    window.addEventListener('resize', this._setUpConst.bind(this), {
+    window.addEventListener('resize', this._setupConst.bind(this), {
       capture: false,
       passive: true
     })
+  }
+
+  _setupStyle() {
+    const { style } = this
     style.willChange = 'transform'
   }
 
@@ -61,7 +70,7 @@ export default class {
     this._translate(left)
   }
 
-  _setUpConst() {
+  _setupConst() {
     const { offsetWidth, children } = this.el
     this.slideCount = Math.max(children.length, 1)
     this.slideWidth = offsetWidth / this.slideCount
@@ -126,6 +135,8 @@ export default class {
     }
     if (this.swipe) {
       delta.x > 0 ? this.prev(false) : this.next(false)
+    } else {
+      this._calcActiveIndex(delta.x < 0)
     }
   }
 

@@ -20,6 +20,8 @@
 <template>
   <div id="list">
     <h1>start</h1>
+    <button @click="prev">prev</button>
+    <button @click="next">next</button>
     <div class="test" ref="test">
       <div style="background-color: #00a1d6">
         <Test text="111" />
@@ -223,26 +225,30 @@ import Slide from '../../src/slide'
 import Test from '../Test'
 
 export default {
-  name: '',
   components: {
     Test
   },
-  props: {},
   data() {
-    return {}
+    return {
+      slide: null
+    }
   },
-  computed: {},
-  watch: {},
-  created() {},
   mounted() {
-    const slide = new Slide({
-      el: this.$refs.test
+    this.slide = new Slide({
+      el: this.$refs.test,
+      swipe: true,
+      sticky: true,
+      duration: 300
     })
-    setTimeout(() => {
-      slide.destroy()
-    }, 10000)
   },
-  methods: {}
+  methods: {
+    prev() {
+      this.slide.prev()
+    },
+    next() {
+      this.slide.next()
+    }
+  }
 }
 </script>
 
