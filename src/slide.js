@@ -1,3 +1,5 @@
+import { throttle } from 'throttle-debounce'
+
 export default class {
   /**
    *  sticky：默认为 true，滑动的时候会跟随手指
@@ -10,21 +12,20 @@ export default class {
     this._calcCssPrefix()
     this._setupConst()
     this._setupProps(options)
-    this._setupSizes(options.count)
-    this._setupIndex(options.index)
+    this._setupSizes()
+    this._setupIndex()
     this._setupStyle()
-    this._setupEvent()
+    this._setupTouchEvents()
+    this._setupScrollEvent()
+    this._setupResizeEvent()
     return this
   }
 
-  _setupEvent() {
-    const { el } = this
-    const events = {
-      touchstart: this._start.bind(this),
-      touchmove: this._move.bind(this),
-      touchend: this._end.bind(this),
-      resize: this._setupSizes.bind(this)
-    }
+  _setupTouchEvents() {
+    const { el, events } = this
+    events.touchstart = this._start.bind(this)
+    events.touchmove = this._move.bind(this)
+    events.touchend = this._end.bind(this)
     el.addEventListener('touchstart', events.touchstart, {
       capture: true,
       passive: true
@@ -34,11 +35,24 @@ export default class {
       capture: true,
       passive: true
     })
-    window.addEventListener('resize', events.resize, {
+  }
+
+  _setupScrollEvent() {
+    if (this.slideCount > 1) {
+      const scroll = this._scroll.bind(this)
+      this.events.scroll = scroll
+      ;[].forEach.call(this.el.children, item => {
+        item.addEventListener('scroll', scroll, true)
+      })
+    }
+  }
+
+  _setupResizeEvent() {
+    this.events.resize = this._setupSizes.bind(this)
+    window.addEventListener('resize', this.events.resize, {
       capture: false,
       passive: true
     })
-    this.events = events
   }
 
   _setupConst() {
@@ -52,9 +66,11 @@ export default class {
     }
     this.lastLeft = 0
     this.currentLeft = 0
+    this.scrolling = false
     this.touching = false
     this.moving = false
     this.startAt = 0
+    this.events = {}
   }
 
   _setupProps(options) {
@@ -66,6 +82,10 @@ export default class {
     this.swipe = options.swipe === undefined ? true : options.swipe
     this.disabled = options.disabled || false
     this.callback = options.callback
+    this.slideCount = Math.max(options.count || 1, 1)
+    this.activeIndex = options.index
+      ? Math.max(Math.min(options.index, this.slideCount - 1), 0)
+      : 0
   }
 
   _setupStyle() {
@@ -82,10 +102,7 @@ export default class {
     }
   }
 
-  _setupIndex(index) {
-    this.activeIndex = index
-      ? Math.max(Math.min(index, this.slideCount - 1), 0)
-      : 0
+  _setupIndex() {
     if (!this.activeIndex) {
       return
     }
@@ -95,15 +112,27 @@ export default class {
     this._translate(left)
   }
 
-  _setupSizes(slideCount) {
+  _setupSizes() {
     const offsetWidth = this.el.parentNode.offsetWidth
-    this.slideCount = Math.max(slideCount || 1, 1)
     this.slideWidth = offsetWidth
-    this.maxLeft = offsetWidth * slideCount - offsetWidth
+    this.maxLeft = offsetWidth * this.slideCount - offsetWidth
+  }
+
+  _scroll(event) {
+    if (this.touching) {
+      event.preventDefault()
+      event.stopPropagation()
+      return
+    }
+    this.scrolling = true
+    throttle(250, () => {
+      console.log('throttle')
+      this.scrolling = false
+    })
   }
 
   _start(event) {
-    if (this.moving || this.disabled) {
+    if (this.moving || this.disabled || this.scrolling) {
       return
     }
     const point = event.touches[0]
@@ -115,12 +144,8 @@ export default class {
   }
 
   _move(event) {
-    if (this.moving || this.disabled) {
+    if (this.moving || this.disabled || this.scrolling) {
       return
-    }
-    if (this.touching) {
-      event.preventDefault()
-      event.stopPropagation()
     }
     const point = event.touches[0]
     const start = this.startPoint
@@ -150,7 +175,7 @@ export default class {
   }
 
   _end() {
-    if (this.moving || this.disabled) {
+    if (this.moving || this.disabled || this.scrolling) {
       return
     }
     this.lastLeft = this.currentLeft
@@ -205,6 +230,12 @@ export default class {
       capture: false,
       passive: true
     })
+    if (this.slideCount > 1) {
+      const scroll = this.events.scroll
+      ;[].forEach.call(this.el.children, item => {
+        item.removeEventListener('scroll', scroll, true)
+      })
+    }
   }
 
   _animation() {

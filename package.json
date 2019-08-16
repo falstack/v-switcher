@@ -25,6 +25,7 @@
     "docs:build": "vuepress build docs"
   },
   "dependencies": {
+    "throttle-debounce": "^2.1.0",
     "vue": "^2.6.6"
   },
   "devDependencies": {

@@ -19,6 +19,7 @@
     <h1>start</h1>
     <button @click="prev">prev</button>
     <button @click="next">next</button>
+    <button @click="destroy">destroy</button>
     <div class="test" ref="test">
       <div style="background-color: #00a1d6">
         <Test text="111" />
@@ -250,6 +251,9 @@ export default {
     },
     next() {
       this.slide.next()
+    },
+    destroy() {
+      this.slide.destroy()
     }
   }
 }
