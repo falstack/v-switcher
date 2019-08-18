@@ -191,7 +191,7 @@ export default class {
   }
 
   prev(custom = true) {
-    if (this.activeIndex === 0) {
+    if (this.activeIndex === 0 || this.moving) {
       return
     }
     if (custom) {
@@ -203,7 +203,7 @@ export default class {
   }
 
   next(custom = true) {
-    if (this.activeIndex === this.slideCount - 1) {
+    if (this.activeIndex === this.slideCount - 1 || this.moving) {
       return
     }
     if (custom) {
@@ -238,9 +238,6 @@ export default class {
   }
 
   _animation() {
-    if (this.moving) {
-      return
-    }
     this.moving = true
     const { cssPrefix, duration, activeIndex } = this
     const left = -activeIndex * this.slideWidth
@@ -300,7 +297,7 @@ export default class {
     const x = Math.abs(this.deltaPoint.x)
     return (
       (Number(+new Date() - this.startAt) < 250 && x > 20) ||
-      x < this.slideWidth / 2
+      x > this.slideWidth / 2
     )
   }
 }
