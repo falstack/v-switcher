@@ -146,6 +146,7 @@ export default class {
     if (this.moving || this.disabled || this.scrolling) {
       return
     }
+    this.touching = true
     const point = event.touches[0]
     const start = this.startPoint
     const delta = {
@@ -153,10 +154,6 @@ export default class {
       y: point.pageY - start.y
     }
     this.deltaPoint = delta
-    if (this._isVerticalScroll(delta)) {
-      return
-    }
-    this.touching = true
     const lastLeft = this.lastLeft
     let resultX = delta.x + lastLeft
     if (resultX > 0) {
@@ -177,8 +174,8 @@ export default class {
     if (this.moving || this.disabled || this.scrolling) {
       return
     }
-    this.lastLeft = this.currentLeft
     this.touching = false
+    this.lastLeft = this.currentLeft
     const delta = this.deltaPoint
     if (!this.sticky && this._isVerticalScroll(delta)) {
       return
