@@ -11,6 +11,7 @@
       overflow-y: auto;
       user-select: none;
       touch-action: none;
+      -webkit-overflow-scrolling: touch;
     }
   }
 }

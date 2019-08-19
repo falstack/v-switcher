@@ -14,7 +14,6 @@ export default class {
     this._setupIndex()
     this._setupStyle()
     this._setupTouchEvents()
-    this._setupScrollEvent()
     this._setupResizeEvent()
     return this
   }
@@ -35,16 +34,6 @@ export default class {
     })
   }
 
-  _setupScrollEvent() {
-    if (this.slideCount > 1) {
-      const scroll = this._scroll.bind(this)
-      this.events.scroll = scroll
-      ;[].forEach.call(this.el.children, item => {
-        item.addEventListener('scroll', scroll, true)
-      })
-    }
-  }
-
   _setupResizeEvent() {
     this.events.resize = this._setupSizes.bind(this)
     window.addEventListener('resize', this.events.resize, {
@@ -62,13 +51,12 @@ export default class {
       x: 0,
       y: 0
     }
+    this.maxDeltaPointX = 0
     this.lastLeft = 0
     this.currentLeft = 0
-    this.scrolling = false
-    this.touching = false
     this.moving = false
+    this.sliding = false
     this.startAt = 0
-    this.timeoutLock = 0
     this.events = {}
   }
 
@@ -85,6 +73,7 @@ export default class {
     this.activeIndex = options.index
       ? Math.max(Math.min(options.index, this.slideCount - 1), 0)
       : 0
+    this.slides = options.el.children
   }
 
   _setupStyle() {
@@ -117,21 +106,8 @@ export default class {
     this.maxLeft = offsetWidth * this.slideCount - offsetWidth
   }
 
-  _scroll(event) {
-    if (this.touching) {
-      event.preventDefault()
-      event.stopPropagation()
-      return
-    }
-    clearTimeout(this.timeoutLock)
-    this.scrolling = true
-    this.timeoutLock = setTimeout(() => {
-      this.scrolling = false
-    }, 250)
-  }
-
   _start(event) {
-    if (this.moving || this.disabled || this.scrolling) {
+    if (this.moving || this.disabled) {
       return
     }
     const point = event.touches[0]
@@ -143,15 +119,22 @@ export default class {
   }
 
   _move(event) {
-    if (this.moving || this.disabled || this.scrolling) {
+    if (this.moving || this.disabled) {
       return
     }
-    this.touching = true
     const point = event.touches[0]
     const start = this.startPoint
     const delta = {
       x: point.pageX - start.x,
       y: point.pageY - start.y
+    }
+    this.maxDeltaPointX = Math.max(this.maxDeltaPointX , Math.abs(delta.x))
+    if (this._isVerticalScroll(this.maxDeltaPointX, delta.y)) {
+      return
+    }
+    if (!this.sliding) {
+      this._lockSlidesTouch()
+      this.sliding = true
     }
     this.deltaPoint = delta
     const lastLeft = this.lastLeft
@@ -171,13 +154,15 @@ export default class {
   }
 
   _end() {
-    if (this.moving || this.disabled || this.scrolling) {
+    if (this.moving || this.disabled) {
       return
     }
-    this.touching = false
+    this.sliding = false
     this.lastLeft = this.currentLeft
+    this.maxDeltaPointX = 0
+    this._unlockSlidesTouch()
     const delta = this.deltaPoint
-    if (!this.sticky && this._isVerticalScroll(delta)) {
+    if (!this.sticky && this._isVerticalScroll(delta.x, delta.y)) {
       return
     }
     if (this.swipe) {
@@ -226,12 +211,6 @@ export default class {
       capture: false,
       passive: true
     })
-    if (this.slideCount > 1) {
-      const scroll = this.events.scroll
-      ;[].forEach.call(this.el.children, item => {
-        item.removeEventListener('scroll', scroll, true)
-      })
-    }
   }
 
   _animation() {
@@ -257,8 +236,20 @@ export default class {
     })
   }
 
-  _isVerticalScroll(delta) {
-    return Math.abs(delta.x) < Math.abs(delta.y) * 3
+  _lockSlidesTouch() {
+    [].forEach.call(this.slides, dom => {
+      dom.style['pointer-events'] = 'none'
+    })
+  }
+
+  _unlockSlidesTouch() {
+    [].forEach.call(this.slides, dom => {
+      dom.style['pointer-events'] = 'auto'
+    })
+  }
+
+  _isVerticalScroll(x, y) {
+    return Math.abs(x) < Math.abs(y) * 3
   }
 
   _calcCssPrefix() {
