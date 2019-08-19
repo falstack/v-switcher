@@ -51,7 +51,10 @@ export default class {
       x: 0,
       y: 0
     }
-    this.maxDeltaPointX = 0
+    this.maxDeltaPoint = {
+      x: 0,
+      y: 0
+    }
     this.lastLeft = 0
     this.currentLeft = 0
     this.moving = false
@@ -124,12 +127,16 @@ export default class {
     }
     const point = event.touches[0]
     const start = this.startPoint
+    const max = this.maxDeltaPoint
     const delta = {
       x: point.pageX - start.x,
       y: point.pageY - start.y
     }
-    this.maxDeltaPointX = Math.max(this.maxDeltaPointX , Math.abs(delta.x))
-    if (this._isVerticalScroll(this.maxDeltaPointX, delta.y)) {
+    this.maxDeltaPoint = {
+      x: Math.max(max.x , Math.abs(delta.x)),
+      y: Math.max(max.y , Math.abs(delta.y))
+    }
+    if (this._isVerticalScroll(this.maxDeltaPoint)) {
       return
     }
     if (!this.sliding) {
@@ -159,10 +166,13 @@ export default class {
     }
     this.sliding = false
     this.lastLeft = this.currentLeft
-    this.maxDeltaPointX = 0
+    this.maxDeltaPoint = {
+      x: 0,
+      y: 0
+    }
     this._unlockSlidesTouch()
     const delta = this.deltaPoint
-    if (!this.sticky && this._isVerticalScroll(delta.x, delta.y)) {
+    if (!this.sticky && this._isVerticalScroll(delta)) {
       return
     }
     if (this.swipe) {
@@ -248,8 +258,8 @@ export default class {
     })
   }
 
-  _isVerticalScroll(x, y) {
-    return Math.abs(x) < Math.abs(y) * 3
+  _isVerticalScroll(delta) {
+    return Math.abs(delta.x) < Math.abs(delta.y) * 3
   }
 
   _calcCssPrefix() {
