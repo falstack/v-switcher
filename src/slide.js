@@ -14,6 +14,7 @@ export default class {
     this._setupIndex()
     this._setupStyle()
     this._setupTouchEvents()
+    this._setupScrollEvent()
     this._setupResizeEvent()
     return this
   }
@@ -32,6 +33,17 @@ export default class {
       capture: true,
       passive: true
     })
+  }
+
+  _setupScrollEvent() {
+    if (this.slideCount <= 1) {
+      return
+    }
+    const scroll = this._scroll.bind(this);
+    [].forEach.call(this.slides, item => {
+      item.addEventListener('scroll', scroll, true)
+    })
+    this.events.scroll = scroll
   }
 
   _setupResizeEvent() {
@@ -59,6 +71,8 @@ export default class {
     this.currentLeft = 0
     this.moving = false
     this.sliding = false
+    this.scrolling = false
+    this.scrollLock = 0
     this.startAt = 0
     this.events = {}
   }
@@ -110,7 +124,7 @@ export default class {
   }
 
   _start(event) {
-    if (this.moving || this.disabled) {
+    if (this.moving || this.disabled || this.scrolling) {
       return
     }
     const point = event.touches[0]
@@ -122,7 +136,7 @@ export default class {
   }
 
   _move(event) {
-    if (this.moving || this.disabled) {
+    if (this.moving || this.disabled || this.scrolling) {
       return
     }
     const point = event.touches[0]
@@ -161,7 +175,7 @@ export default class {
   }
 
   _end() {
-    if (this.moving || this.disabled) {
+    if (this.moving || this.disabled || this.scrolling) {
       return
     }
     this.sliding = false
@@ -180,6 +194,19 @@ export default class {
     } else {
       this._calcActiveIndex(delta.x < 0)
     }
+  }
+
+  _scroll(evt) {
+    if (this.sliding) {
+      evt.stopPropagation()
+      evt.preventDefault()
+      return
+    }
+    this.scrolling = true
+    this.scrollLock && clearTimeout(this.scrollLock)
+    this.scrollLock = setTimeout(() => {
+      this.scrolling = false
+    }, 250)
   }
 
   prev(custom = true) {
@@ -207,7 +234,7 @@ export default class {
   }
 
   destroy() {
-    const { el, events } = this
+    const { el, events, slides, slideCount } = this
     el.removeEventListener('touchstart', events.touchstart, {
       capture: true,
       passive: true
@@ -221,6 +248,11 @@ export default class {
       capture: false,
       passive: true
     })
+    if (slideCount > 1) {
+      [].forEach.call(slides, item => {
+        item.removeEventListener('scroll', events.scroll, true)
+      })
+    }
   }
 
   _animation() {
