@@ -9,8 +9,6 @@
     >div {
       height: 100%;
       overflow-y: auto;
-      user-select: none;
-      touch-action: none;
       -webkit-overflow-scrolling: touch;
     }
   }
@@ -23,7 +21,7 @@
     <button @click="prev">prev</button>
     <button @click="next">next</button>
     <button @click="destroy">destroy</button>
-    <span>active：{{ active }}</span>
+    <button>active：{{ active }}</button>
     <div class="test" ref="test">
       <div style="background-color: #00a1d6">
         <Test text="111111" />

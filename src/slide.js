@@ -14,9 +14,61 @@ export default class {
     this._setupIndex()
     this._setupStyle()
     this._setupTouchEvents()
-    this._setupScrollEvent()
     this._setupResizeEvent()
     return this
+  }
+
+  prev(custom = true) {
+    if (this.activeIndex === 0 || this.moving) {
+      return
+    }
+    if (custom) {
+      this.activeIndex--
+    } else if (this._isValidSlide()) {
+      this._calcActiveIndex(false)
+    }
+    this._animation()
+  }
+
+  next(custom = true) {
+    if (this.activeIndex === this.slideCount - 1 || this.moving) {
+      return
+    }
+    if (custom) {
+      this.activeIndex++
+    } else if (this._isValidSlide()) {
+      this._calcActiveIndex(true)
+    }
+    this._animation()
+  }
+
+  slide(index) {
+    if (
+      index < 0 ||
+      index > this.slideCount - 1 ||
+      index === this.activeIndex
+    ) {
+      return
+    }
+    this.activeIndex = index
+    this._animation()
+  }
+
+  destroy() {
+    const { el, events } = this
+    el.removeEventListener('touchstart', events.touchstart, {
+      capture: true,
+      passive: true
+    })
+    el.removeEventListener('touchmove', events.touchmove, true)
+    el.removeEventListener('touchend', events.touchend, {
+      capture: true,
+      passive: true
+    })
+    window.removeEventListener('resize', events.resize, {
+      capture: false,
+      passive: true
+    })
   }
 
   _setupTouchEvents() {
@@ -33,17 +85,6 @@ export default class {
       capture: true,
       passive: true
     })
-  }
-
-  _setupScrollEvent() {
-    if (this.slideCount <= 1) {
-      return
-    }
-    const scroll = this._scroll.bind(this)
-    ;[].forEach.call(this.slides, item => {
-      item.addEventListener('scroll', scroll, true)
-    })
-    this.events.scroll = scroll
   }
 
   _setupResizeEvent() {
@@ -70,9 +111,6 @@ export default class {
     this.lastLeft = 0
     this.currentLeft = 0
     this.moving = false
-    this.sliding = false
-    this.scrolling = false
-    this.scrollLock = 0
     this.startAt = 0
     this.events = {}
   }
@@ -90,7 +128,6 @@ export default class {
     this.activeIndex = options.index
       ? Math.max(Math.min(options.index, this.slideCount - 1), 0)
       : 0
-    this.slides = options.el.children
   }
 
   _setupStyle() {
@@ -124,7 +161,7 @@ export default class {
   }
 
   _start(event) {
-    if (this.moving || this.disabled || this.scrolling) {
+    if (this.moving || this.disabled) {
       return
     }
     const point = event.touches[0]
@@ -133,10 +170,11 @@ export default class {
       y: point.pageY
     }
     this.startAt = +new Date()
+    this._lockedSwipeEvents()
   }
 
   _move(event) {
-    if (this.moving || this.disabled || this.scrolling) {
+    if (this.moving || this.disabled) {
       return
     }
     const point = event.touches[0]
@@ -152,10 +190,6 @@ export default class {
     }
     if (this._isVerticalScroll(this.maxDeltaPoint)) {
       return
-    }
-    if (!this.sliding) {
-      this._lockSlidesTouch()
-      this.sliding = true
     }
     this.deltaPoint = delta
     const lastLeft = this.lastLeft
@@ -175,16 +209,15 @@ export default class {
   }
 
   _end() {
-    if (this.moving || this.disabled || this.scrolling) {
+    if (this.moving || this.disabled) {
       return
     }
-    this.sliding = false
     this.lastLeft = this.currentLeft
     this.maxDeltaPoint = {
       x: 0,
       y: 0
     }
-    this._unlockSlidesTouch()
+    this._unlockSwipeEvents()
     const delta = this.deltaPoint
     if (!this.sticky && this._isVerticalScroll(delta)) {
       return
@@ -193,65 +226,6 @@ export default class {
       delta.x > 0 ? this.prev(false) : this.next(false)
     } else {
       this._calcActiveIndex(delta.x < 0)
-    }
-  }
-
-  _scroll(evt) {
-    if (this.sliding) {
-      evt.stopPropagation()
-      evt.preventDefault()
-      return
-    }
-    this.scrolling = true
-    this.scrollLock && clearTimeout(this.scrollLock)
-    this.scrollLock = setTimeout(() => {
-      this.scrolling = false
-    }, 250)
-  }
-
-  prev(custom = true) {
-    if (this.activeIndex === 0 || this.moving) {
-      return
-    }
-    if (custom) {
-      this.activeIndex--
-    } else if (this._isValidSlide()) {
-      this._calcActiveIndex(false)
-    }
-    this._animation()
-  }
-
-  next(custom = true) {
-    if (this.activeIndex === this.slideCount - 1 || this.moving) {
-      return
-    }
-    if (custom) {
-      this.activeIndex++
-    } else if (this._isValidSlide()) {
-      this._calcActiveIndex(true)
-    }
-    this._animation()
-  }
-
-  destroy() {
-    const { el, events, slides, slideCount } = this
-    el.removeEventListener('touchstart', events.touchstart, {
-      capture: true,
-      passive: true
-    })
-    el.removeEventListener('touchmove', events.touchmove, true)
-    el.removeEventListener('touchend', events.touchend, {
-      capture: true,
-      passive: true
-    })
-    window.removeEventListener('resize', events.resize, {
-      capture: false,
-      passive: true
-    })
-    if (slideCount > 1) {
-      ;[].forEach.call(slides, item => {
-        item.removeEventListener('scroll', events.scroll, true)
-      })
     }
   }
 
@@ -278,16 +252,12 @@ export default class {
     })
   }
 
-  _lockSlidesTouch() {
-    ;[].forEach.call(this.slides, dom => {
-      dom.style['pointer-events'] = 'none'
-    })
+  _lockedSwipeEvents() {
+    this.style['touch-action'] = 'none'
   }
 
-  _unlockSlidesTouch() {
-    ;[].forEach.call(this.slides, dom => {
-      dom.style['pointer-events'] = 'auto'
-    })
+  _unlockSwipeEvents() {
+    this.style['touch-action'] = 'auto'
   }
 
   _isVerticalScroll(delta) {
