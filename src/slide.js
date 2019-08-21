@@ -39,8 +39,8 @@ export default class {
     if (this.slideCount <= 1) {
       return
     }
-    const scroll = this._scroll.bind(this);
-    [].forEach.call(this.slides, item => {
+    const scroll = this._scroll.bind(this)
+    ;[].forEach.call(this.slides, item => {
       item.addEventListener('scroll', scroll, true)
     })
     this.events.scroll = scroll
@@ -147,8 +147,8 @@ export default class {
       y: point.pageY - start.y
     }
     this.maxDeltaPoint = {
-      x: Math.max(max.x , Math.abs(delta.x)),
-      y: Math.max(max.y , Math.abs(delta.y))
+      x: Math.max(max.x, Math.abs(delta.x)),
+      y: Math.max(max.y, Math.abs(delta.y))
     }
     if (this._isVerticalScroll(this.maxDeltaPoint)) {
       return
@@ -249,7 +249,7 @@ export default class {
       passive: true
     })
     if (slideCount > 1) {
-      [].forEach.call(slides, item => {
+      ;[].forEach.call(slides, item => {
         item.removeEventListener('scroll', events.scroll, true)
       })
     }
@@ -279,13 +279,13 @@ export default class {
   }
 
   _lockSlidesTouch() {
-    [].forEach.call(this.slides, dom => {
+    ;[].forEach.call(this.slides, dom => {
       dom.style['pointer-events'] = 'none'
     })
   }
 
   _unlockSlidesTouch() {
-    [].forEach.call(this.slides, dom => {
+    ;[].forEach.call(this.slides, dom => {
       dom.style['pointer-events'] = 'auto'
     })
   }

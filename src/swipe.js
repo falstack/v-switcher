@@ -49,6 +49,7 @@ export default function Swipe(container, options) {
     width = slides[0].getBoundingClientRect().width || slides[0].offsetWidth
 
     element.style.width = slides.length * width + 'px'
+    element.parentElement.style.width = width + 'px'
 
     // stack elements
     var pos = slides.length
