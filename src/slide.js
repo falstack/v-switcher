@@ -132,7 +132,6 @@ export default class {
 
   _setupStyle() {
     const { style, slideCount, slideWidth } = this
-    style.willChange = 'transform'
     style.width = `${slideCount * 100}%`
     if (slideCount > 1) {
       const children = this.el.children
@@ -254,10 +253,12 @@ export default class {
 
   _lockedSwipeEvents() {
     this.style['touch-action'] = 'none'
+    this.style.willChange = 'transform'
   }
 
   _unlockSwipeEvents() {
     this.style['touch-action'] = 'auto'
+    this.style.willChange = ''
   }
 
   _isVerticalScroll(delta) {
