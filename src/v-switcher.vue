@@ -789,6 +789,9 @@ export default {
       }
     },
     _handleContentTouchEnd() {
+      if (this.swipe || !this.animated) {
+        return
+      }
       const delta = this.contentDeltaPoint
       if (Math.abs(delta.x) < Math.abs(delta.y)) {
         return
