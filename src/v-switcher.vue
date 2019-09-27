@@ -654,9 +654,8 @@ export default {
         return
       }
       const anchorPadding = +this.anchorPadding
-      const firstTab = this._getComponentSize('tabs', 0)
+      const header = this._getComponentSize('header')
       if (this.align === 'vertical') {
-        const header = this._getComponentSize('header')
         this.anchorStyle = {
           height: `${tabSize.height - anchorPadding * 2}px`,
           transform: `translateY(${tabSize.top -
@@ -668,7 +667,7 @@ export default {
         this.anchorStyle = {
           width: `${tabSize.width - anchorPadding * 2}px`,
           transform: `translateX(${tabSize.left -
-            firstTab.left +
+            header.left +
             anchorPadding}px)`,
           transitionDuration: `${this.duration}ms`
         }

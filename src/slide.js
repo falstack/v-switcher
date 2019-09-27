@@ -187,11 +187,16 @@ export default class {
   }
 
   _setupProps(options) {
-    const duration = options.duration === undefined ? 300 : Math.abs(options.duration)
+    const duration =
+      options.duration === undefined ? 300 : Math.abs(options.duration)
     this.el = options.el
     this.style = options.el.style
     this.duration = duration
-    this.sticky = duration ? (options.sticky === undefined ? true : options.sticky) : false
+    this.sticky = duration
+      ? options.sticky === undefined
+        ? true
+        : options.sticky
+      : false
     this.swipe = options.swipe === undefined ? true : options.swipe
     this.disabled = options.disabled || false
     this.continuous = options.continuous || false
@@ -314,7 +319,15 @@ export default class {
 
   _continuousAnimation(isNext) {
     this.moving = true
-    const { cssPrefix, slideCount, duration, slideWidth, style, el, beforeCallback } = this
+    const {
+      cssPrefix,
+      slideCount,
+      duration,
+      slideWidth,
+      style,
+      el,
+      beforeCallback
+    } = this
     const slides = el.children
     const slide = isNext ? slides[0] : slides[slideCount - 1]
     const left = isNext ? -slideCount * slideWidth : slideWidth

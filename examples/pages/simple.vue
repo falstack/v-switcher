@@ -19,6 +19,14 @@
       width: 100px;
     }
   }
+
+  .center-type {
+    .v-switcher-header-anchor {
+      height: 3px;
+      background-color: red;
+      bottom: 0;
+    }
+  }
 }
 </style>
 
@@ -95,7 +103,7 @@
       </main>
     </section>
     <h3>header 居中</h3>
-    <section>
+    <section class="center-type">
       <main>
         <v-switcher :headers="headerCenter" align="center">
           <div class="demo-item" slot="0">
@@ -129,7 +137,7 @@
       </main>
     </section>
     <h3>header 居右</h3>
-    <section>
+    <section class="center-type">
       <main>
         <v-switcher :headers="headerRight" align="end">
           <div class="demo-item" slot="0">
