@@ -1,6 +1,6 @@
 {
   "name": "v-switcher",
-  "version": "1.0.80",
+  "version": "1.1.0",
   "main": "dist/v-switcher.umd.min.js",
   "files": [
     "dist"
@@ -25,27 +25,27 @@
     "docs:build": "vuepress build docs"
   },
   "dependencies": {
-    "vue": "^2.6.6"
+    "vue": "^2.6.11"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.10.0",
-    "@vue/cli-plugin-eslint": "^3.10.0",
-    "@vue/cli-service": "^3.10.0",
-    "@vue/eslint-config-prettier": "^5.0.0",
-    "babel-eslint": "^10.0.2",
-    "eslint": "^6.4.0",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-vue": "^5.2.3",
+    "@vue/cli-plugin-babel": "^4.3.1",
+    "@vue/cli-plugin-eslint": "^4.3.1",
+    "@vue/cli-service": "^4.3.1",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-vue": "^6.2.2",
     "faker": "^4.1.0",
     "h5-vue-scroller": "^1.0.2",
-    "less-loader": "^5.0.0",
-    "node-sass": "^4.12.0",
-    "sass-loader": "^8.0.0",
+    "less-loader": "^6.0.0",
+    "node-sass": "^4.14.0",
+    "sass-loader": "^8.0.2",
     "vue-flow-render": "^1.0.5",
-    "vue-mixin-store": "^1.1.67",
-    "vue-router": "^3.1.3",
-    "vue-template-compiler": "^2.5.21",
-    "vuepress": "^1.1.0",
-    "vuex": "^3.1.1"
+    "vue-mixin-store": "^1.3.9",
+    "vue-router": "^3.1.6",
+    "vue-template-compiler": "^2.6.11",
+    "vuepress": "^1.4.1",
+    "vuex": "^3.3.0"
   }
 }
