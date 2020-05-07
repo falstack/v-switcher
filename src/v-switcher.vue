@@ -712,6 +712,9 @@ export default {
       return result
     },
     _swipeCallback(index) {
+      if (isNaN(index)) {
+        return
+      }
       this.lastSlide = Date.now()
       this._handleTabSwitch(index, false, false)
     },

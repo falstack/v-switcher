@@ -22,7 +22,9 @@ module.exports = {
       new webpack.BannerPlugin(banner),
       new CopyWebpackPlugin([
         { from: './src/v-switcher.vue' },
-        { from: './src/swipe.js' }
+        { from: './src/swipe.js' },
+        { from: './src/affix.js' },
+        { from: './src/utils.js' }
       ])
     ]
   },
