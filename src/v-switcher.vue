@@ -172,21 +172,21 @@
 
 <template>
   <div
-    class="v-switcher"
-    :class="[
+      class="v-switcher"
+      :class="[
       { 'v-switcher-vertical': align === 'vertical' },
       { 'v-switcher-sticky': sticky }
     ]"
-    @mouseenter="cursorInner = true"
-    @mouseleave="cursorInner = false"
-    @touchstart="touchInner = true"
-    @touchend="touchInner = false"
+      @mouseenter="cursorInner = true"
+      @mouseleave="cursorInner = false"
+      @touchstart="touchInner = true"
+      @touchend="touchInner = false"
   >
     <div
-      ref="headerWrap"
-      class="v-switcher-header-wrap"
-      :class="{ 'v-switcher-header-wrap-fixed': isFixed }"
-      :style="[{ height: `${headerHeight}px` }, fixedHeaderStyle]"
+        ref="headerWrap"
+        class="v-switcher-header-wrap"
+        :class="{ 'v-switcher-header-wrap-fixed': isFixed }"
+        :style="[{ height: `${headerHeight}px` }, fixedHeaderStyle]"
     >
       <div class="v-switcher-header-before">
         <slot name="header-before"></slot>
@@ -196,26 +196,26 @@
       </div>
       <div ref="tabWrap" class="v-switcher-header-tabs">
         <ul
-          v-show="!hiddenTabs"
-          ref="header"
-          class="v-switcher-header"
-          :class="[`v-switcher-header-${align}`, `v-switcher-header-translate`]"
-          :style="headerStyle"
-          @touchstart.stop="_handleHeaderTouchStart"
-          @touchmove.stop="_handleHeaderTouchMove"
-          @touchend.stop="_handleHeaderTouchEnd"
-          @mouseleave="_resetAnchorStyle"
+            v-show="!hiddenTabs"
+            ref="header"
+            class="v-switcher-header"
+            :class="[`v-switcher-header-${align}`, `v-switcher-header-translate`]"
+            :style="headerStyle"
+            @touchstart.stop="_handleHeaderTouchStart"
+            @touchmove.stop="_handleHeaderTouchMove"
+            @touchend.stop="_handleHeaderTouchEnd"
+            @mouseleave="_resetAnchorStyle"
         >
           <li
-            v-for="(item, index) in formatHeaders"
-            :key="index"
-            ref="tab"
-            :style="headerItemStyle"
-            :class="{ 'is-active': index === focusIndex }"
-            class="v-switcher-header-item"
-            @mouseenter="_handleAnchorTrigger(index)"
-            @mouseleave="_handleAnchorTrigger(focusIndex)"
-            @click="_handleTabSwitch(index)"
+              v-for="(item, index) in formatHeaders"
+              :key="index"
+              ref="tab"
+              :style="headerItemStyle"
+              :class="{ 'is-active': index === focusIndex }"
+              class="v-switcher-header-item"
+              @mouseenter="_handleAnchorTrigger(index)"
+              @mouseleave="_handleAnchorTrigger(focusIndex)"
+              @click="_handleTabSwitch(index)"
           >
             <slot :name="`tab-${index}`">
               <i v-if="item.icon" :class="item.icon"></i>
@@ -230,25 +230,25 @@
     </div>
     <div v-show="showFixedShim" ref="fixed" :style="fixedShimStyle" />
     <div
-      v-if="!routable"
-      ref="content"
-      class="v-switcher-content-wrap"
-      :class="{ 'v-switcher-content-swipe': swipe }"
-      :style="contentWrapStyle"
+        v-if="!routable"
+        ref="content"
+        class="v-switcher-content-wrap"
+        :class="{ 'v-switcher-content-swipe': swipe }"
+        :style="contentWrapStyle"
     >
       <div
-        class="v-switcher-content"
-        :class="[{ 'v-switcher-content-animated': animated && !swipe }]"
-        :style="contentStyle"
-        @touchstart="_handleContentTouchStart"
-        @touchmove="_handleContentTouchMove"
-        @touchend="_handleContentTouchEnd"
+          class="v-switcher-content"
+          :class="[{ 'v-switcher-content-animated': animated && !swipe }]"
+          :style="contentStyle"
+          @touchstart="_handleContentTouchStart"
+          @touchmove="_handleContentTouchMove"
+          @touchend="_handleContentTouchEnd"
       >
         <div
-          v-for="(item, index) in headers"
-          :key="index"
-          :style="_computePanelStyle(index)"
-          class="v-switcher-content-panel"
+            v-for="(item, index) in headers"
+            :key="index"
+            :style="_computePanelStyle(index)"
+            class="v-switcher-content-panel"
         >
           <slot :name="index" />
         </div>
@@ -290,7 +290,7 @@ export default {
       type: String,
       default: 'start',
       validator: val =>
-        ~['around', 'start', 'center', 'end', 'vertical'].indexOf(val)
+          ~['around', 'start', 'center', 'end', 'vertical'].indexOf(val)
     },
     headerTrigger: {
       type: String,
@@ -420,18 +420,18 @@ export default {
       if (this.animated) {
         style.width = `${this.headerCount * 100}%`
         style.transform = `translateX(${(this.focusIndex / this.headerCount) *
-          -100}%)`
+        -100}%)`
         style.transitionDuration = `${this.duration}ms`
       }
       return style
     },
     notTouchDevice() {
       return typeof document === 'undefined'
-        ? true
-        : !('ontouchstart' in document.documentElement)
+          ? true
+          : !('ontouchstart' in document.documentElement)
     }
   },
-  beforeMount() {
+  mounted() {
     if (this.routable) {
       this.$watch('$route', newVal => {
         const currentIndex = getMatchedRouteIndex(this.headers, newVal.path)
@@ -461,8 +461,6 @@ export default {
       this._computeHeaderStyle(oldVal)
       this.$emit('change', newVal)
     })
-  },
-  mounted() {
     this.$nextTick(() => {
       this._cacheComponentSize()
       this._initSwipe()
@@ -475,7 +473,7 @@ export default {
       on(window, 'resize', this._cacheComponentSize)
     })
   },
-  beforeDestroy() {
+  beforeUnmount() {
     off(window, 'resize', this._cacheComponentSize)
     if (this.timer) {
       window.clearInterval(this.timer)
@@ -503,9 +501,10 @@ export default {
       }, this.autoplay)
     },
     _initSwipe() {
-      if (!this.swipe) {
+      if (!this.swipe || !this.headerCount) {
         return
       }
+
       this.swiper = Swipe(this.$refs.content, {
         startSlide: this.focusIndex,
         speed: this.duration,
@@ -564,7 +563,7 @@ export default {
            * 则重置 left
            */
           const condition =
-            curTabRect.right - baseLeft - this.sizeCache.headerTabsWidth
+              curTabRect.right - baseLeft - this.sizeCache.headerTabsWidth
           if (condition > left > 0) {
             left = -condition
           }
@@ -576,7 +575,7 @@ export default {
            */
           const checkTabRect = this._getComponentSize('tabs', index + 1)
           const result =
-            checkTabRect.right - baseLeft - this.sizeCache.headerTabsWidth
+              checkTabRect.right - baseLeft - this.sizeCache.headerTabsWidth
           if (result > 0) {
             left = -result
           }
@@ -635,7 +634,7 @@ export default {
       }
       const fullWidth = tabSize.left + tabSize.width - header.left
       this.sizeCache.maxScreenCount = Math.ceil(
-        fullWidth / this.sizeCache.headerListWidth
+          fullWidth / this.sizeCache.headerListWidth
       )
       this.$emit('calc-screen-count', this.sizeCache.maxScreenCount)
     },
@@ -659,16 +658,16 @@ export default {
         this.anchorStyle = {
           height: `${tabSize.height - anchorPadding * 2}px`,
           transform: `translateY(${tabSize.top -
-            header.top +
-            anchorPadding}px)`,
+          header.top +
+          anchorPadding}px)`,
           transitionDuration: `${this.duration}ms`
         }
       } else {
         this.anchorStyle = {
           width: `${tabSize.width - anchorPadding * 2}px`,
           transform: `translateX(${tabSize.left -
-            header.left +
-            anchorPadding}px)`,
+          header.left +
+          anchorPadding}px)`,
           transitionDuration: `${this.duration}ms`
         }
       }
@@ -691,7 +690,7 @@ export default {
         result = item.label || item.name || item.text
         if (this.focusIndex === curIndex) {
           const temp =
-            item['label-active'] || item['name-active'] || item['text-active']
+              item['label-active'] || item['name-active'] || item['text-active']
           if (temp) {
             result = temp
           }
@@ -820,7 +819,7 @@ export default {
       }
       const point = e.touches ? e.touches[0] : e
       this.headerLastPoint =
-        this.align === 'vertical' ? point.pageY : point.pageX
+          this.align === 'vertical' ? point.pageY : point.pageX
     },
     _handleHeaderTouchMove(e) {
       if (this.sizeCache.maxScreenCount <= 1) {
@@ -844,8 +843,8 @@ export default {
         if (left > 0 && delta > 0) {
           left = 0
         } else if (
-          delta < 0 &&
-          left + this.sizeCache.headerSize < this.sizeCache.headerTabsWidth
+            delta < 0 &&
+            left + this.sizeCache.headerSize < this.sizeCache.headerTabsWidth
         ) {
           left = this.sizeCache.headerScrollHeight
         }
@@ -874,16 +873,16 @@ export default {
         return
       }
       this.sizeCache.headerSize =
-        this.align === 'vertical'
-          ? firstRect.top - lastRect.bottom
-          : lastRect.right - firstRect.left
+          this.align === 'vertical'
+              ? firstRect.top - lastRect.bottom
+              : lastRect.right - firstRect.left
     },
     _cacheComponentSize() {
       const tabs = this.$refs.tab
       if (tabs) {
         const tabSize = []
-        tabs.forEach(tab => {
-          const rect = tab.getBoundingClientRect()
+        ;[].forEach.call(tabs, (tab) => {
+          const rect = tab instanceof Element ? tab.getBoundingClientRect() : tab.$el.getBoundingClientRect()
           tabSize.push({
             top: rect.top,
             left: rect.left,
@@ -917,7 +916,7 @@ export default {
         this._computeMaxScreenCount()
       }
       this.sizeCache.headerScrollHeight =
-        this.sizeCache.headerTabsWidth - this.sizeCache.headerSize
+          this.sizeCache.headerTabsWidth - this.sizeCache.headerSize
     },
     _getComponentSize(type, index = -1) {
       const value = this.sizeCache[type]
@@ -948,8 +947,8 @@ export default {
     },
     forward() {
       if (
-        this.align !== 'start' ||
-        this.sizeCache.curScreenIndex + 1 >= this.sizeCache.maxScreenCount
+          this.align !== 'start' ||
+          this.sizeCache.curScreenIndex + 1 >= this.sizeCache.maxScreenCount
       ) {
         this.$emit('header-move', {
           is_first: false,

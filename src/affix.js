@@ -24,7 +24,7 @@ export default {
       })
     }
   },
-  beforeDestroy() {
+  beforeUnmount() {
     if (this.fixedTop !== undefined) {
       const target = getScrollTarget(this.$el)
       off(target, 'scroll', this.handleScroll)
