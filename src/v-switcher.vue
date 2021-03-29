@@ -881,7 +881,6 @@ export default {
       if (tabs) {
         const tabSize = []
         ;[].forEach.call(tabs, (tab) => {
-          console.log(tab)
           const rect = tab instanceof Element ? tab.getBoundingClientRect() : tab.$el.getBoundingClientRect()
           tabSize.push({
             top: rect.top,
