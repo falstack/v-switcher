@@ -209,7 +209,6 @@
           <li
               v-for="(item, index) in formatHeaders"
               :key="index"
-              ref="tab"
               :style="headerItemStyle"
               :class="{ 'is-active': index === focusIndex }"
               class="v-switcher-header-item"
@@ -878,10 +877,11 @@ export default {
               : lastRect.right - firstRect.left
     },
     _cacheComponentSize() {
-      const tabs = this.$refs.tab
+      const tabs = this.$el.querySelectorAll('.v-switcher-header-item')
       if (tabs) {
         const tabSize = []
         ;[].forEach.call(tabs, (tab) => {
+          console.log(tab)
           const rect = tab instanceof Element ? tab.getBoundingClientRect() : tab.$el.getBoundingClientRect()
           tabSize.push({
             top: rect.top,
