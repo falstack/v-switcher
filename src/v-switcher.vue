@@ -514,7 +514,7 @@ export default {
       })
     },
     _triggerSwiper() {
-      if (!this.swipe) {
+      if (!this.swipe || !this.swiper) {
         return
       }
       this.swiper.slide(this.focusIndex, this.duration)
